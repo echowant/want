@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/want/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/want/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/want/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/want/images/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/want/images/favicon-16x16.png?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="grid,flex,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="概述flex:  一维布局， 一次只能处理一个维度上的元素布局，一行或者一列。grid：二维布局， 同时处理行和列上的布局，跨行跨列。 Grid示例实现如下布局： 代码：12345678&amp;lt;div class=&quot;wrapper&quot;&amp;gt;	&amp;lt;div class=&quot;large&quot;&amp;gt;海瑞&amp;lt;/div&amp;gt;	&amp;lt;div class=&quot;middle&quot;&amp;gt;徐阶&amp;lt;/div&amp;gt">
+<meta name="keywords" content="grid,flex">
+<meta property="og:type" content="article">
+<meta property="og:title" content="布局">
+<meta property="og:url" content="https://echowant.github.io/want/2018/10/18/布局/index.html">
+<meta property="og:site_name" content="不周山">
+<meta property="og:description" content="概述flex:  一维布局， 一次只能处理一个维度上的元素布局，一行或者一列。grid：二维布局， 同时处理行和列上的布局，跨行跨列。 Grid示例实现如下布局： 代码：12345678&amp;lt;div class=&quot;wrapper&quot;&amp;gt;	&amp;lt;div class=&quot;large&quot;&amp;gt;海瑞&amp;lt;/div&amp;gt;	&amp;lt;div class=&quot;middle&quot;&amp;gt;徐阶&amp;lt;/div&amp;gt">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://echowant.github.io/want/2018/10/18/布局/grid.png">
+<meta property="og:image" content="https://echowant.github.io/want/2018/10/18/布局/flex.png">
+<meta property="og:image" content="https://echowant.github.io/want/2018/10/18/布局/flex-right.gif">
+<meta property="og:image" content="https://echowant.github.io/want/2018/10/18/布局/flex-error.gif">
+<meta property="og:updated_time" content="2020-06-22T12:11:10.482Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="布局">
+<meta name="twitter:description" content="概述flex:  一维布局， 一次只能处理一个维度上的元素布局，一行或者一列。grid：二维布局， 同时处理行和列上的布局，跨行跨列。 Grid示例实现如下布局： 代码：12345678&amp;lt;div class=&quot;wrapper&quot;&amp;gt;	&amp;lt;div class=&quot;large&quot;&amp;gt;海瑞&amp;lt;/div&amp;gt;	&amp;lt;div class=&quot;middle&quot;&amp;gt;徐阶&amp;lt;/div&amp;gt">
+<meta name="twitter:image" content="https://echowant.github.io/want/2018/10/18/布局/grid.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/want/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://echowant.github.io/want/2018/10/18/布局/">
+
+
+
+
+
+  <title>布局 | 不周山</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/want/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">不周山</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Keep It Simple Stupid</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/want/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/want/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/want/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/want/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://echowant.github.io/want/want/2018/10/18/布局/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="luxia">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/want/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不周山">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">布局</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-18T19:30:35+08:00">
+                2018-10-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/want/2018/10/18/布局/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/want/2018/10/18/布局/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/want/2018/10/18/布局/" class="leancloud_visitors" data-flag-title="布局">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.6k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p><strong>flex</strong>:  一维布局， 一次只能处理一个维度上的元素布局，一行或者一列。<br><strong>grid</strong>：二维布局， 同时处理行和列上的布局，跨行跨列。</p>
+<h3 id="Grid"><a href="#Grid" class="headerlink" title="Grid"></a>Grid</h3><h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><p>实现如下布局：<br><img src="/want/2018/10/18/布局/grid.png" title="grid布局"></p>
+<p>代码：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"wrapper"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"large"</span>&gt;</span>海瑞<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"middle"</span>&gt;</span>徐阶<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"middle"</span>&gt;</span>高拱<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"large"</span>&gt;</span>嘉靖<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"middle"</span>&gt;</span>张居中<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"middle"</span>&gt;</span>裕王<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.wrapper</span> &#123;</span><br><span class="line">	<span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">	<span class="attribute">height</span>: <span class="number">100%</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="attribute">display</span>: grid;</span><br><span class="line">	<span class="attribute">grid-gap</span>: <span class="number">1rem</span>;</span><br><span class="line">	<span class="attribute">grid-template-columns</span>: <span class="built_in">repeat</span>(<span class="number">4</span>, calc((<span class="number">100%</span> / <span class="number">4</span>) - (<span class="number">3</span> / <span class="number">4</span>) * <span class="number">1rem</span>));</span><br><span class="line">	<span class="attribute">grid-template-rows</span>: <span class="built_in">repeat</span>(<span class="number">2</span>, calc((<span class="number">100%</span> / <span class="number">2</span>) - (<span class="number">1rem</span> / <span class="number">2</span>)));</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.large</span> &#123;</span><br><span class="line">	<span class="attribute">grid-row</span>: span <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.middle</span> &#123;</span><br><span class="line">	<span class="attribute">grid-row</span>: span <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.wrapper</span> &gt; <span class="selector-tag">div</span> &#123;</span><br><span class="line">	<span class="attribute">background</span>: <span class="number">#f1f1f1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="网格容器Grid-Container"><a href="#网格容器Grid-Container" class="headerlink" title="网格容器Grid Container"></a>网格容器Grid Container</h4><h5 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h5><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">display: grid | inline-grid;</span><br></pre></td></tr></table></figure>
+<h5 id="行列模板"><a href="#行列模板" class="headerlink" title="行列模板"></a>行列模板</h5><p><code>track-size</code>:   a length, a percentage, or a fraction of the free space in the grid (the <code>fr</code> unit)<br><code>line-name</code>: 网格线名称<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">grid-template-rows: &lt;track-size&gt; ... | &lt;line-name&gt; &lt;track-size&gt; ...;</span><br><span class="line">grid-template-columns: &lt;track-size&gt; ... | &lt;line-name&gt; &lt;track-size&gt; ...;</span><br></pre></td></tr></table></figure></p>
+<h5 id="区块模板-area"><a href="#区块模板-area" class="headerlink" title="区块模板 area"></a>区块模板 area</h5><p>每个区块是一个网格组合。用每个区块占领grid-template-rows/columns定义的网格位置 。<br>其中，区块（<strong>area</strong>）和网格线（<strong>line</strong>,  eg. row1-start）分别代表两种不同的维度。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 调用区块名称， 其中 . 或 none 表示空位 */</span></span><br><span class="line"><span class="selector-tag">grid-template-areas</span>: </span><br><span class="line">    "&lt;grid-area-name&gt; | . | none | ..."</span><br><span class="line">    "..."</span><br><span class="line">    "...";</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 为每个区块定义名称 */</span></span><br><span class="line"><span class="selector-tag">grid-area</span>: "&lt;<span class="selector-tag">grid-area-name</span>&gt;"</span><br></pre></td></tr></table></figure></p>
+<h5 id="隐式（默认）行列"><a href="#隐式（默认）行列" class="headerlink" title="隐式（默认）行列"></a>隐式（默认）行列</h5><p>当某个网格项，没有显式定义行列（属于显式定义之外的超出项），但也想设置<strong>默认网格项</strong>的行列值。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">grid-auto-columns</span>: &lt;<span class="selector-tag">track-size</span>&gt; ...;</span><br><span class="line"><span class="selector-tag">grid-auto-rows</span>: &lt;<span class="selector-tag">track-size</span>&gt; ...;</span><br></pre></td></tr></table></figure></p>
+<h5 id="流排列"><a href="#流排列" class="headerlink" title="流排列"></a>流排列</h5><p>若没有显式指定网格项的排列方式，可以指定默认<strong>流向</strong>。（这个效果跟flex很像了）。</p>
+<ul>
+<li>row：默认行流向。自动换行。</li>
+<li>column：默认列流向。自动换列。</li>
+<li>dense：【不推荐】后面的网格项 往前挤，占领前面的空位</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grid-auto-flow: row | column | row dense | column dense</span><br></pre></td></tr></table></figure>
+<h5 id="模板简写"><a href="#模板简写" class="headerlink" title="模板简写"></a>模板简写</h5><h6 id="grid-template"><a href="#grid-template" class="headerlink" title="grid-template"></a>grid-template</h6><p><code>grid-template</code>是 <code>grid-template-rows</code>, <code>grid-template-columns</code>,  <code>grid-template-areas</code> 的简写形式。</p>
+<p>由于 <code>grid-template</code>  不能设置隐式的grid属性(<code>grid-auto-columns</code>, <code>grid-auto-rows</code>, and <code>grid-auto-flow</code>)，因此推荐使用grid-*属性替代 <code>grid-template</code>  。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">grid-template: none | &lt;grid-template-rows&gt; / &lt;grid-template-columns&gt;; /* 先行/后列 */</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="selector-tag">grid-template</span>:</span><br><span class="line">    <span class="selector-attr">[row1-start]</span> "<span class="selector-tag">header</span> <span class="selector-tag">header</span> <span class="selector-tag">header</span>" 25<span class="selector-tag">px</span> <span class="selector-attr">[row1-end]</span></span><br><span class="line">    <span class="selector-attr">[row2-start]</span> "<span class="selector-tag">footer</span> <span class="selector-tag">footer</span> <span class="selector-tag">footer</span>" 25<span class="selector-tag">px</span> <span class="selector-attr">[row2-end]</span></span><br><span class="line">    / auto 50px auto;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 与下述等价，行列模板与区块模板分开处理即可 */</span></span><br><span class="line"></span><br><span class="line"><span class="selector-tag">grid-template-rows</span>: <span class="selector-attr">[row1-start]</span> 25<span class="selector-tag">px</span> <span class="selector-attr">[row1-end row2-start]</span> 25<span class="selector-tag">px</span> <span class="selector-attr">[row2-end]</span>;</span><br><span class="line"><span class="selector-tag">grid-template-columns</span>: <span class="selector-tag">auto</span> 50<span class="selector-tag">px</span> <span class="selector-tag">auto</span>;</span><br><span class="line"><span class="selector-tag">grid-template-areas</span>: </span><br><span class="line">    "<span class="selector-tag">header</span> <span class="selector-tag">header</span> <span class="selector-tag">header</span>" </span><br><span class="line">    "<span class="selector-tag">footer</span> <span class="selector-tag">footer</span> <span class="selector-tag">footer</span>";</span><br></pre></td></tr></table></figure>
+<h6 id="grid"><a href="#grid" class="headerlink" title="grid"></a>grid</h6><p><code>grid</code>是 <code>grid-template-rows</code>, <code>grid-template-columns</code>,  <code>grid-template-areas</code> , 及 <code>grid-auto-rows</code>, <code>grid-auto-columns</code>, <code>grid-auto-flow</code>的简写形式。可以同时显式定义/隐式定义模板值。</p>
+<h5 id="间隔-gap"><a href="#间隔-gap" class="headerlink" title="间隔 gap"></a>间隔 gap</h5><p>网格区域内部间隔，不包括网格容器的外边界。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">grid-column-gap</span>: &lt;<span class="selector-tag">line-size</span>&gt;; <span class="comment">/* 新版本 column-gap */</span></span><br><span class="line"><span class="selector-tag">grid-row-gap</span>: &lt;<span class="selector-tag">line-size</span>&gt;; <span class="comment">/* 新版本 row-gap */</span></span><br><span class="line"></span><br><span class="line"><span class="selector-tag">grid-gap</span>: &lt;<span class="selector-tag">grid-row-gap</span>&gt; &lt;<span class="selector-tag">grid-column-gap</span>&gt;; <span class="comment">/* 新版本 gap */</span></span><br></pre></td></tr></table></figure></p>
+<h5 id="对齐方式-align"><a href="#对齐方式-align" class="headerlink" title="对齐方式 align"></a>对齐方式 align</h5><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 网格内部内容的align */</span></span><br><span class="line">justify-items: start | end | center | stretch;</span><br><span class="line">align-items: start | end | center | stretch;</span><br><span class="line">place-items: &lt;align-items&gt; / &lt;justify-items&gt;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 网格的本身相对于其父容器的align */</span></span><br><span class="line">justify-content: start | end | center | stretch | space-around | space-between | space-evenly;	</span><br><span class="line">align-content: start | end | center | stretch | space-around | space-between | space-evenly;	</span><br><span class="line">place-content: &lt;align-content&gt; / &lt;justify-content&gt;;</span><br></pre></td></tr></table></figure>
+<h5 id="网格线名称-line"><a href="#网格线名称-line" class="headerlink" title="网格线名称 line"></a>网格线名称 line</h5><p>部分示例：</p>
+<p>[first]<br>[line2]<br>[col4-start]<br>[five]<br>[end]</p>
+<p>[row1-start]<br>[row1-end]]<br>[third-line]<br>[last-line]<br>[row2-end]</p>
+<p>[row1-end row2-start]</p>
+<h4 id="网格项Grid-Items"><a href="#网格项Grid-Items" class="headerlink" title="网格项Grid Items"></a>网格项Grid Items</h4><p>在网格项中，以下属性失效：</p>
+<ul>
+<li>float</li>
+<li>display: inline-block</li>
+<li>display: table-cell</li>
+<li>vertical-align</li>
+<li>column-*</li>
+</ul>
+<h5 id="行列位置"><a href="#行列位置" class="headerlink" title="行列位置"></a>行列位置</h5><p>基于<strong>line</strong>取值（从第几个到第几个网格线）：</p>
+<ol>
+<li>number:  a number of grid line</li>
+<li>name:  a name of grid line</li>
+<li><code>span &lt;name&gt;</code>:   从当前开始，到名称为name的 line 结束。</li>
+</ol>
+<p>基于<strong>track</strong>取值（共几个网格）：</p>
+<ol>
+<li><code>span &lt;number&gt;</code>:   across number of grid tracks</li>
+</ol>
+<p>默认span = 1，即跨一个网格项</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">grid-column-start: &lt;number&gt; | &lt;name&gt; | span &lt;number&gt; | span &lt;name&gt; | auto;</span><br><span class="line">grid-column-end: &lt;number&gt; | &lt;name&gt; | span &lt;number&gt; | span &lt;name&gt; | auto;</span><br><span class="line"></span><br><span class="line">grid-row-start: &lt;number&gt; | &lt;name&gt; | span &lt;number&gt; | span &lt;name&gt; | auto;</span><br><span class="line">grid-row-end: &lt;number&gt; | &lt;name&gt; | span &lt;number&gt; | span &lt;name&gt; | auto;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 行简写 列简写 */</span></span><br><span class="line">grid-column: &lt;start-line&gt; / &lt;end-line&gt; | &lt;start-line&gt; / span &lt;value&gt;;</span><br><span class="line">grid-row: &lt;start-line&gt; / &lt;end-line&gt; | &lt;start-line&gt; / span &lt;value&gt;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 行列简写， 区块名称 */</span></span><br><span class="line">grid-area: &lt;name&gt; | &lt;row-start&gt; / &lt;column-start&gt; / &lt;row-end&gt; / &lt;column-end&gt;;</span><br></pre></td></tr></table></figure>
+<h5 id="对齐方式-align-1"><a href="#对齐方式-align-1" class="headerlink" title="对齐方式 align"></a>对齐方式 align</h5><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">justify-self: start | end | center | stretch;</span><br><span class="line">align-self: start | end | center | stretch;</span><br><span class="line">place-self: &lt;align-self&gt; / &lt;justify-self&gt;;</span><br></pre></td></tr></table></figure>
+<h5 id="叠加"><a href="#叠加" class="headerlink" title="叠加"></a>叠加</h5><p>z-index    #控制网格项的叠加顺序</p>
+<p>order #顺序</p>
+<h5 id="特殊值"><a href="#特殊值" class="headerlink" title="特殊值"></a>特殊值</h5><p>repeat     #重复若干次，eg： repeat(6, 1fr),  repeat(3, 20px [col-start]);</p>
+<p>fr    #网格容器剩余空间<strong>等分</strong></p>
+<p>单位：px, rem, %, min-content, max-content, auto, fr等，混合亦可。</p>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><p>[1]<a href="http://cssgridgarden.com/" target="_blank" rel="noopener">grid布局游戏</a><br>[2]<a href="http://www.css88.com/archives/8506" target="_blank" rel="noopener">5分钟学会 CSS Grid 布局</a><br>[3]<a href="https://css-tricks.com/snippets/css/complete-guide-grid/" target="_blank" rel="noopener">CSS-TRICKS A Complete Guide to Grid</a></p>
+<h3 id="Flex"><a href="#Flex" class="headerlink" title="Flex"></a>Flex</h3><h4 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h4><p>实现如下布局：<br><img src="/want/2018/10/18/布局/flex.png" title="flex布局"></p>
+<p>代码：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.wrapper</span> &#123;</span><br><span class="line">	<span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">	<span class="attribute">height</span>: <span class="number">100%</span>;</span><br><span class="line">	 </span><br><span class="line">	<span class="attribute">display</span>: flex;</span><br><span class="line">	<span class="attribute">flex-direction</span>: rows;</span><br><span class="line">	<span class="attribute">flex-wrap</span>: wrap;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.large</span> &#123;</span><br><span class="line">	<span class="attribute">flex</span>: <span class="number">3</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.middle</span> &#123;</span><br><span class="line">	<span class="attribute">flex</span>: <span class="number">2</span>;</span><br><span class="line"> &#125;</span><br><span class="line"><span class="selector-class">.wrapper</span> &gt; <span class="selector-tag">div</span> &#123;</span><br><span class="line">	<span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#ccc</span>;</span><br><span class="line">	<span class="attribute">background</span>: <span class="number">#f1f1f1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.wrapper</span> &gt; <span class="selector-tag">div</span><span class="selector-pseudo">:not(</span><span class="selector-pseudo">:nth-last-of-type(1))</span> &#123;</span><br><span class="line">	<span class="attribute">margin-right</span>: <span class="number">1rem</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="垂直居中，且出现垂直滚动条"><a href="#垂直居中，且出现垂直滚动条" class="headerlink" title="垂直居中，且出现垂直滚动条"></a>垂直居中，且出现垂直滚动条</h4><img src="/want/2018/10/18/布局/flex-right.gif" title="正确的滚动"><img src="/want/2018/10/18/布局/flex-error.gif" title="错误-无法滚动到顶部">
+<p>如上图图例，实现如下效果：</p>
+<ol>
+<li>内容较少，无滚动条时，图例垂直居中</li>
+<li>内容较多，出现滚动条</li>
+</ol>
+<h5 id="错误示例-flex"><a href="#错误示例-flex" class="headerlink" title="错误示例-flex"></a>错误示例-flex</h5><p>如下方式，只能实现垂直居中；当出现滚动条时，会吞掉顶部数据。<br>when the flex item overflows the container,  the top becomes inaccessible.</p>
+<blockquote>
+<p>justify-content: <strong>safe</strong> center; 其中，safe是flex用来解决overflow问题的，但基本不支持任何主流浏览器</p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"wrapper"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"item"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"item"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"item"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.wrapper</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">  <span class="attribute">flex-direction</span>: column;</span><br><span class="line">  <span class="attribute">justify-content</span>: safe center; <span class="comment">/* attention */</span></span><br><span class="line"></span><br><span class="line">  <span class="attribute">height</span>: <span class="number">200px</span>;</span><br><span class="line">  <span class="attribute">overflow</span>: hidden;</span><br><span class="line">  <span class="attribute">overflow-y</span>: auto;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.item</span> &#123;&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="解决示例-margin-auto"><a href="#解决示例-margin-auto" class="headerlink" title="解决示例-margin:auto"></a>解决示例-margin:auto</h5><p>用flex包裹一个子元素，使得该子元素margin:auto 居中（一种变通解决方案workaround）<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"wrapper"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"items"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"item"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"item"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"item"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.wrapper</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">  <span class="attribute">flex-direction</span>: column;</span><br><span class="line"></span><br><span class="line">  <span class="attribute">height</span>: <span class="number">200px</span>;</span><br><span class="line">  <span class="attribute">overflow</span>: hidden;</span><br><span class="line">  <span class="attribute">overflow-y</span>: auto;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.items</span> &#123;</span><br><span class="line">  <span class="attribute">margin</span>: auto; <span class="comment">/* attention */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>也许是flex的核心理念就在于有缩放特点的<strong>弹性布局</strong>，而不愿在弹性布局之上出现滚动条（破坏缩放）。</p>
+<h4 id="参考-1"><a href="#参考-1" class="headerlink" title="参考"></a>参考</h4><p>[1]<a href="https://www.hellojava.com/a/44618.html" target="_blank" rel="noopener">Can’t scroll to top of flex item that is overflowing container</a></p>
+
+      
+    </div>
+	
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">
+		-------------Keep It Simple Stupid-------------
+		</div>
+    
+</div>
+	  
+	</div>
+	
+    
+    
+    
+	
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/want/tags/grid/" rel="tag"># grid</a>
+          
+            <a href="/want/tags/flex/" rel="tag"># flex</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/want/2018/10/10/地图栅格/" rel="next" title="地图栅格">
+                <i class="fa fa-chevron-left"></i> 地图栅格
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/want/2018/10/31/bug前端/" rel="prev" title="bug前端">
+                bug前端 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/want/images/avatar.jpg" alt="luxia">
+            
+              <p class="site-author-name" itemprop="name">luxia</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/want/archives/">
+              
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/want/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Grid"><span class="nav-number">2.</span> <span class="nav-text">Grid</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#示例"><span class="nav-number">2.1.</span> <span class="nav-text">示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#网格容器Grid-Container"><span class="nav-number">2.2.</span> <span class="nav-text">网格容器Grid Container</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#定义"><span class="nav-number">2.2.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#行列模板"><span class="nav-number">2.2.2.</span> <span class="nav-text">行列模板</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#区块模板-area"><span class="nav-number">2.2.3.</span> <span class="nav-text">区块模板 area</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#隐式（默认）行列"><span class="nav-number">2.2.4.</span> <span class="nav-text">隐式（默认）行列</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#流排列"><span class="nav-number">2.2.5.</span> <span class="nav-text">流排列</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#模板简写"><span class="nav-number">2.2.6.</span> <span class="nav-text">模板简写</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#grid-template"><span class="nav-number">2.2.6.1.</span> <span class="nav-text">grid-template</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#grid"><span class="nav-number">2.2.6.2.</span> <span class="nav-text">grid</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#间隔-gap"><span class="nav-number">2.2.7.</span> <span class="nav-text">间隔 gap</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#对齐方式-align"><span class="nav-number">2.2.8.</span> <span class="nav-text">对齐方式 align</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#网格线名称-line"><span class="nav-number">2.2.9.</span> <span class="nav-text">网格线名称 line</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#网格项Grid-Items"><span class="nav-number">2.3.</span> <span class="nav-text">网格项Grid Items</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#行列位置"><span class="nav-number">2.3.1.</span> <span class="nav-text">行列位置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#对齐方式-align-1"><span class="nav-number">2.3.2.</span> <span class="nav-text">对齐方式 align</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#叠加"><span class="nav-number">2.3.3.</span> <span class="nav-text">叠加</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#特殊值"><span class="nav-number">2.3.4.</span> <span class="nav-text">特殊值</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考"><span class="nav-number">2.4.</span> <span class="nav-text">参考</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Flex"><span class="nav-number">3.</span> <span class="nav-text">Flex</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#示例-1"><span class="nav-number">3.1.</span> <span class="nav-text">示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#垂直居中，且出现垂直滚动条"><span class="nav-number">3.2.</span> <span class="nav-text">垂直居中，且出现垂直滚动条</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#错误示例-flex"><span class="nav-number">3.2.1.</span> <span class="nav-text">错误示例-flex</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#解决示例-margin-auto"><span class="nav-number">3.2.2.</span> <span class="nav-text">解决示例-margin:auto</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考-1"><span class="nav-number">3.3.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">luxia</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">57.2k</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/want/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/want/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/want/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/want/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/want/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/want/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/want/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/want/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: true,
+        notify: true,
+        appId: 'h9Jehf4VaeDG22nDbzEpkHnt-gzGzoHsz',
+        appKey: 'GPvy0xbbxNb0Ao6DM6oRFSoG',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/want/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('-1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("h9Jehf4VaeDG22nDbzEpkHnt-gzGzoHsz", "GPvy0xbbxNb0Ao6DM6oRFSoG");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+  	 <!-- custom analytics part create by lux -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("h9Jehf4VaeDG22nDbzEpkHnt-gzGzoHsz", "GPvy0xbbxNb0Ao6DM6oRFSoG");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = $(document.getElementById(url)).text() + ': 0';
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = $(document.getElementById(url)).text() + ': ' + object.get('time');
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content = $(document.getElementById(url)).text() + ': ' + counter.get('time');
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = $(document.getElementById(url)).text() + ': ' + newcounter.get('time');
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+});
+</script>
+  
+<script src="/want/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/want/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"position":"right","width":100,"height":200,"hOffset":0,"vOffset":160},"mobile":{"show":true,"scale":0.05}});</script></body>
+</html>

@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/want/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/want/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/want/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/want/images/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/want/images/favicon-16x16.png?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="基本概念一个基于浏览器的key-value 数据库。 使用情景：  需存储大量数据 需额外“加工”数据  特点：  支持事务 异步API——注意使用 promise / generator / async 等封装 虽然提供了同步API，但浏览器支持不好（最好和webworkers结合使用）。     基本使用过程：  打开数据库。 创建对象仓库（object store）。 创建事务，执行一些数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IndexedDB">
+<meta property="og:url" content="https://echowant.github.io/want/2019/01/16/IndexedDB/index.html">
+<meta property="og:site_name" content="不周山">
+<meta property="og:description" content="基本概念一个基于浏览器的key-value 数据库。 使用情景：  需存储大量数据 需额外“加工”数据  特点：  支持事务 异步API——注意使用 promise / generator / async 等封装 虽然提供了同步API，但浏览器支持不好（最好和webworkers结合使用）。     基本使用过程：  打开数据库。 创建对象仓库（object store）。 创建事务，执行一些数据">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-06-22T12:11:09.894Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="IndexedDB">
+<meta name="twitter:description" content="基本概念一个基于浏览器的key-value 数据库。 使用情景：  需存储大量数据 需额外“加工”数据  特点：  支持事务 异步API——注意使用 promise / generator / async 等封装 虽然提供了同步API，但浏览器支持不好（最好和webworkers结合使用）。     基本使用过程：  打开数据库。 创建对象仓库（object store）。 创建事务，执行一些数据">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/want/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://echowant.github.io/want/2019/01/16/IndexedDB/">
+
+
+
+
+
+  <title>IndexedDB | 不周山</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/want/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">不周山</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Keep It Simple Stupid</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/want/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/want/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/want/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/want/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://echowant.github.io/want/want/2019/01/16/IndexedDB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="luxia">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/want/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不周山">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">IndexedDB</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-16T09:00:37+08:00">
+                2019-01-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/want/2019/01/16/IndexedDB/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/want/2019/01/16/IndexedDB/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/want/2019/01/16/IndexedDB/" class="leancloud_visitors" data-flag-title="IndexedDB">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.9k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>一个基于浏览器的<strong>key-value</strong> 数据库。</p>
+<p><strong>使用情景</strong>：</p>
+<ol>
+<li>需存储大量数据</li>
+<li>需额外“加工”数据</li>
+</ol>
+<p><strong>特点</strong>：</p>
+<ol>
+<li>支持事务</li>
+<li>异步API——注意使用 promise / generator / async 等封装<ul>
+<li>虽然提供了同步API，但浏览器支持不好（最好和webworkers结合使用）。 </li>
+</ul>
+</li>
+</ol>
+<p><strong>基本使用过程</strong>：</p>
+<ol>
+<li>打开数据库。</li>
+<li>创建对象仓库（object store）。</li>
+<li>创建事务，执行一些数据库操作(增删改查)。</li>
+<li>监听事件，等待数据库操作完成。</li>
+<li>拿到操作结果。</li>
+</ol>
+<p><strong>存储概念模型</strong>：</p>
+<pre class="mermaid">graph TD
+A(database /数据库/) --- B(object stores /表/)
+B --- C(object store /行/)
+C --- E(keyPath 或 autoIncrement /主键/)
+C --- D(index /索引/)
+C --- F(值)
+D -.源自.- F
+
+F --- F1(string)
+F --- F4(array)
+F --- F6(blob)
+F --- F7(file)
+F --- F5(date)
+F --- F2(number)
+F --- F3(object)</pre>
+
+<h3 id="基本方法-属性"><a href="#基本方法-属性" class="headerlink" title="基本方法/属性"></a>基本方法/属性</h3><pre class="mermaid">graph TD
+A1(IDBFactory) ==> B1(open)
+   B1 ==> A2(IDBRequest)
+
+   A2 -.- B21(onerror)
+   A2 -.- B22(onsuccess)
+   A2 -.- B23(onupgradeneeded)
+
+   B22 ==> B2(success & event.target.result)
+   B23 ==> B2
+   B2 ==> A3(IDBDatabase)
+
+   A3 ==> B3(createObjectStore)
+   B3 ==> A4(IDBObjectStore)
+
+   A3 ==> B4(transaction)
+   B4 ==> A5(IDBTransaction)
+
+   A5 ==> B5(objectStore)
+   B5 ==> A4
+
+   A4 ==> B6(index)
+   B6 ==> A6(IDBIndex)
+
+   A4 ==> B7(openCursor)
+   B7 ==> A7(IDBCursor)
+
+   style A1 fill: orange
+   style A2 fill: orange
+   style A3 fill: orange
+   style A4 fill: orange
+   style A5 fill: orange
+   style A6 fill: orange
+   style A7 fill: orange</pre>
+
+<h3 id="objectStore"><a href="#objectStore" class="headerlink" title="objectStore"></a>objectStore</h3><h4 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h4><p>主键</p>
+<table>
+<thead>
+<tr>
+<th>键类型</th>
+<th>存储数据</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>不使用</td>
+<td>任意类型的值。但每添加一条数据，都需额外指定“键”</td>
+<td>db.createObjectStore(‘students’)</td>
+</tr>
+<tr>
+<td>keyPath</td>
+<td>Javascript对象，且对象必须有一属性与keyPath同名。</td>
+<td>db.createObjectStore(‘students’,{keyPath:”id”});</td>
+</tr>
+<tr>
+<td>keyGenerator</td>
+<td>任意类型的值。会自动生成键。</td>
+<td>db.createObjectStore(‘students’,{autoIncrement: true});</td>
+</tr>
+<tr>
+<td>都使用</td>
+<td>Javascript对象。如果对象中有keyPath指定的属性则不生成新的键值。</td>
+<td>db.createObjectStore(‘students’,{keyPath:”id”, autoIncrement: true});</td>
+</tr>
+</tbody>
+</table>
+<h4 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h4><p>方法应和事务结合使用。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>add(data)</td>
+<td>增加数据。</td>
+</tr>
+<tr>
+<td>put(data, key?)</td>
+<td>增加 / 修改数据</td>
+</tr>
+<tr>
+<td>get(key)</td>
+<td>获取数据。</td>
+</tr>
+<tr>
+<td>getAll()</td>
+<td></td>
+</tr>
+<tr>
+<td>getAll(query)</td>
+<td>A key or <a href="https://developer.mozilla.org/en-US/docs/Web/API/IDBKeyRange" target="_blank" rel="noopener"><code>IDBKeyRange</code></a> to be queried</td>
+</tr>
+<tr>
+<td>getAll(query, count)</td>
+<td></td>
+</tr>
+<tr>
+<td>getAllKeys() 参数同上</td>
+<td></td>
+</tr>
+<tr>
+<td>count(key?)</td>
+<td>match the provided key or IDBKeyRange</td>
+</tr>
+<tr>
+<td>delete(key)</td>
+<td>删除数据。</td>
+</tr>
+<tr>
+<td>clear()</td>
+<td>清空全部objectStore数据。</td>
+</tr>
+</tbody>
+</table>
+<p>add 和 put 的作用类似，区别在于 put 保存数据时，如果该数据的主键在数据库中已经有相同主键的时候，则会修改数据库中对应主键的对象，而使用 add 保存数据，如果该主键已经存在，则保存失败。</p>
+<h3 id="游标-Cursor"><a href="#游标-Cursor" class="headerlink" title="游标-Cursor"></a>游标-Cursor</h3><p>游标，可获取区间数据。</p>
+<ul>
+<li>openCursor(range, next)    获取符合条件的整个对象</li>
+<li>openKeyCursor(range, next)    获取符合条件的记录的那个keyPath值</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">不传参，则获取object store所有记录</span><br></pre></td></tr></table></figure>
+<p>其中range的取值如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">range值可为<span class="literal">null</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 第三个参数为true，则不包含最小键值；第四参数为true，则不包含最大键值。默认都为false</span></span><br><span class="line"><span class="keyword">var</span> boundRange = IDBKeyRange.bound(<span class="string">'bill'</span>, <span class="string">'donna'</span>, <span class="literal">false</span>, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> onlyRange = IDBKeyRange.only(<span class="string">'donna'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 第二个参数可选，为true则表示不包含最小主键，默认为false</span></span><br><span class="line"><span class="keyword">var</span> lowerRange = IDBKeyRange.lowerBound(<span class="number">1</span>, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 第二个参数可选，为true则表示不包含最大主键，默认为false</span></span><br><span class="line"><span class="keyword">var</span> upperRange = IDBKeyRange.upperBound(<span class="number">10</span>, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure></p>
+<p>next的取值如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">next : 主键值升序，主键值相等的数据都被读取</span><br><span class="line">nextunique : 主键值升序，主键值相等只读取第一条数据</span><br><span class="line">prev : 主键值降序，主键值相等的数据都被读取</span><br><span class="line">prevunique : 主键值降序，主键值相等只读取第一条数据</span><br></pre></td></tr></table></figure></p>
+<p>拿到cursor数据后，可进行如下操作：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 更新数据</span></span><br><span class="line">cursor.update(&#123;</span><br><span class="line">    userId : cursor.key,</span><br><span class="line">    userName : <span class="string">'Hello'</span>,</span><br><span class="line">    age : <span class="number">18</span></span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// 删除数据</span></span><br><span class="line">cursor.delete();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 继续读取下一条</span></span><br><span class="line">cursor.continue();</span><br><span class="line"></span><br><span class="line">cursor.value</span><br><span class="line">cursor.primaryKey</span><br></pre></td></tr></table></figure></p>
+<h3 id="索引-Index"><a href="#索引-Index" class="headerlink" title="索引-Index"></a>索引-Index</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">createIndex(indexName, property, &#123;unique: false &#125;)</span><br><span class="line">var index = store.index(indexName);</span><br><span class="line">var data = index.get(indexNameValue)</span><br></pre></td></tr></table></figure>
+<p>多个store，游标和索引示例：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> request = <span class="built_in">window</span>.indexedDB.open(<span class="string">"database"</span>, <span class="number">1</span>);</span><br><span class="line">request.onsuccess = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> db = request.result;</span><br><span class="line">    <span class="keyword">const</span> transaction = db.transaction(</span><br><span class="line">        [<span class="string">'invoices'</span>, <span class="string">'invoice-items'</span>],</span><br><span class="line">        <span class="string">'readwrite'</span></span><br><span class="line">    );</span><br><span class="line">    <span class="keyword">const</span> invStore = transaction.objectStore(<span class="string">'invoices'</span>);</span><br><span class="line">    <span class="keyword">const</span> invItemStore = transaction.objectStore(<span class="string">'invoice-items'</span>);</span><br><span class="line">    <span class="comment">// Get invoice cursor</span></span><br><span class="line">    <span class="keyword">const</span> invoiceCursorRequest = invStore.index(<span class="string">'VendorIndex'</span>)</span><br><span class="line">        .openCursor(IDBKeyRange.only(<span class="string">'Frigidaire'</span>));</span><br><span class="line">    </span><br><span class="line">    invoiceCursorRequest.onsuccess = <span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> invCursor = e.target.result;</span><br><span class="line">        <span class="keyword">if</span> (invCursor) &#123;</span><br><span class="line">            <span class="comment">// Get invoice item cursor</span></span><br><span class="line">            <span class="keyword">const</span> invItemCursorRequest = invItemStore</span><br><span class="line">                .index(<span class="string">'InvoiceIndex'</span>)</span><br><span class="line">                .openCursor(</span><br><span class="line">                    IDBKeyRange.only(invCursor.value.invoiceId)</span><br><span class="line">                );</span><br><span class="line">            invItemCursorRequest.onsuccess = <span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">                <span class="keyword">const</span> invItemCursor = e.target.result;</span><br><span class="line">                <span class="keyword">if</span> (invItemCursor) &#123;</span><br><span class="line">                    invItemCursor.delete();</span><br><span class="line">                    invItemCursor.continue();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            invCursor.delete();</span><br><span class="line">            invCursor.continue();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<h3 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h3><p>进行数据操作都需要事务。</p>
+<p>事务定义：db.transaction(arg1, arg2)</p>
+<ul>
+<li>arg1：objectStoreName的字符串 或 objectStoreName字符串数组。</li>
+<li>arg2 :  readonly，readwrite，verionchange</li>
+</ul>
+<p>事务的三种操作模式：</p>
+<ol>
+<li>只读：readonly，可并发执行</li>
+<li>读写：readwrite</li>
+<li>版本变更：verionchange</li>
+</ol>
+<p>事务的返回结果：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> transaction=db.transaction([<span class="string">'students'</span>,<span class="string">'teacher'</span>], <span class="string">'readwrite'</span>);</span><br><span class="line"><span class="keyword">var</span> objectStore=transaction.objectStore(<span class="string">'students'</span>); <span class="comment">//获取students数据</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 对数据进行操作</span></span><br><span class="line"></span><br><span class="line">transaction.oncomplete(<span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;);</span><br><span class="line">transaction.onerror(<span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;);</span><br><span class="line">transaction.onabort(<span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="版本更新"><a href="#版本更新" class="headerlink" title="版本更新"></a>版本更新</h3><p>版本更新原理</p>
+<pre class="mermaid">graph LR
+A[Open request] --> B{Version higher?}
+ B -->|Yes| C[Upgrade] 
+ B -->|No| D[Open]</pre>
+
+<h3 id="查询慢的解决方案"><a href="#查询慢的解决方案" class="headerlink" title="查询慢的解决方案"></a>查询慢的解决方案</h3><p>如果数据量过大，indexedDB查询很慢，可在indexedDB之上， 再建索引——将key存储在localStorage中。</p>
+<p>注意：需要做好key的同步增删工作。</p>
+<pre class="mermaid">graph LR
+A(查询) --Key--- B(localStorage/只存keys/)
+    B --- C{存在Key?}
+    C --- | yes | D(查询indexedDB)
+    C --- | no| E(结束)</pre>
+
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ol>
+<li>遵循“同源策略same-origin”（不能跨域）。即存储的数据只能在当前域名或其子域下使用</li>
+<li>浏览器“隐私模式/无痕浏览”下不可用。</li>
+<li>用户手动清除浏览器缓存时，会清除IndexedDB相关数据。</li>
+<li>储存空间：</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>浏览器</th>
+<th>限制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Chrome</td>
+<td>可用空间 &lt;20%</td>
+</tr>
+<tr>
+<td>Firebox</td>
+<td>没有限制。会针对超过50MB（可在 dom.indexedDB.warningQuota 首选项自定义）的Blob请求权限</td>
+</tr>
+<tr>
+<td>Safari</td>
+<td>&lt; 50MB</td>
+</tr>
+<tr>
+<td>IE10</td>
+<td>&lt; 250MB</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>浏览器</th>
+<th>自动逐出政策</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Chrome</td>
+<td>在 Chrome 耗尽空间后采用 LRU 策略</td>
+</tr>
+<tr>
+<td>Firebox</td>
+<td>在整个磁盘已装满时采用 LRU 策略</td>
+</tr>
+<tr>
+<td>Safari</td>
+<td>无逐出</td>
+</tr>
+<tr>
+<td>Edge</td>
+<td>无逐出</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>LRU策略：</p>
+<ul>
+<li>当可用磁盘填满，磁盘容量管理器将会根据 LRU 策略清理数据 。</li>
+<li>LRU（Least Recently Used）: 在内存中，最近最少使用的数据块将会被优先删除，直到浏览器不再超过限额。</li>
+</ul>
+</blockquote>
+<h3 id="npm封装插件"><a href="#npm封装插件" class="headerlink" title="npm封装插件"></a>npm封装插件</h3><p><a href="https://www.npmjs.com/package/idb" target="_blank" rel="noopener">idb: IndexedDB Promised</a></p>
+<h3 id="其他存储类型"><a href="#其他存储类型" class="headerlink" title="其他存储类型"></a>其他存储类型</h3><h4 id="内存数据"><a href="#内存数据" class="headerlink" title="内存数据"></a>内存数据</h4><p>变量存储在内存中，是常见的内存数据。</p>
+<p>在react+ redux框架中，常见变量存储机制有props， state。当全局变量（reducer props）较多时，导致内存占用过多、系统变慢。这就要求前端开发人员<strong>合理分配props和state</strong>。</p>
+<h4 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h4><p>cookie属性： key , value, domain, path, expires,  secure 和 httpOnly。</p>
+<ul>
+<li>httpOnly :  默认false。若改成true，则只能服务端读取，前端无法读取。</li>
+<li>secure :  默认false。若改成true，请求服务端时除非是https，否则服务端无法读取。</li>
+</ul>
+<p>在cookie中查看有效期expires较为困难：</p>
+<ul>
+<li>调试时，通过调试工具可查看</li>
+<li>代码中获取时，需在cookie值（key, value）中保存过期时间，或另建cookie，专门保存。</li>
+</ul>
+<p>能存储数据极少，大小4KB。</p>
+<p>每次发送HTTP请求，相应域下的Cookie都会在header里传动到服务端，Cookie多了会增加数据传输的量，对性能造成影响。注意：fetch默认不携带cookie。</p>
+<h4 id="localStorage"><a href="#localStorage" class="headerlink" title="localStorage"></a>localStorage</h4><p>只在前端读取。</p>
+<p>localStorage提高性能的常见用法（节省网络传送数据、提升首屏性能）：</p>
+<ol>
+<li>网站首次加载时从服务端下发样式和脚本代码。</li>
+<li>将样式和脚本代码缓存到localStoage里。</li>
+<li>下次再渲染时，直接从localStorage里读取。</li>
+</ol>
+<p>通常，每个域名的localStorage使用量在2~10Mb之间。（不同浏览器不同）</p>
+<p>localStorage只要不手工清除，就会一直存在。</p>
+<p>在无痕浏览/隐私模式下localStorage不可用。</p>
+<p>各个tab页直接可通讯。</p>
+<h4 id="sessionStorage"><a href="#sessionStorage" class="headerlink" title="sessionStorage"></a>sessionStorage</h4><p>当前会话(session)关闭后，sessionStorage会默认被清除。<br>其他同localStorage。</p>
+<h4 id="Web-SQL"><a href="#Web-SQL" class="headerlink" title="Web SQL"></a>Web SQL</h4><p>废弃</p>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/IndexedDB_API/Using_IndexedDB" target="_blank" rel="noopener">MDN说明文档</a></p>
+<p><a href="https://itnext.io/indexeddb-your-second-step-towards-progressive-web-apps-pwa-dcbcd6cc2076" target="_blank" rel="noopener">How to use IndexedDB to build Progressive Web Apps</a></p>
+<p><a href="https://itnext.io/searching-in-your-indexeddb-database-d7cbf202a17gg" target="_blank" rel="noopener">Searching in Your IndexedDB Database</a></p>
+<p><a href="https://flaviocopes.com/indexeddb/#introduction-to-indexeddb" target="_blank" rel="noopener">idb使用：DIVE INTO INDEXEDDB</a></p>
+
+      
+    </div>
+	
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">
+		-------------Keep It Simple Stupid-------------
+		</div>
+    
+</div>
+	  
+	</div>
+	
+    
+    
+    
+	
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/want/2019/01/14/地图坐标系/" rel="next" title="地图坐标系">
+                <i class="fa fa-chevron-left"></i> 地图坐标系
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/want/2019/01/29/大屏/" rel="prev" title="大屏">
+                大屏 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/want/images/avatar.jpg" alt="luxia">
+            
+              <p class="site-author-name" itemprop="name">luxia</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/want/archives/">
+              
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/want/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本概念"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本方法-属性"><span class="nav-number">2.</span> <span class="nav-text">基本方法/属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#objectStore"><span class="nav-number">3.</span> <span class="nav-text">objectStore</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#属性"><span class="nav-number">3.1.</span> <span class="nav-text">属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方法"><span class="nav-number">3.2.</span> <span class="nav-text">方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#游标-Cursor"><span class="nav-number">4.</span> <span class="nav-text">游标-Cursor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#索引-Index"><span class="nav-number">5.</span> <span class="nav-text">索引-Index</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事务"><span class="nav-number">6.</span> <span class="nav-text">事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#版本更新"><span class="nav-number">7.</span> <span class="nav-text">版本更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询慢的解决方案"><span class="nav-number">8.</span> <span class="nav-text">查询慢的解决方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意事项"><span class="nav-number">9.</span> <span class="nav-text">注意事项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#npm封装插件"><span class="nav-number">10.</span> <span class="nav-text">npm封装插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他存储类型"><span class="nav-number">11.</span> <span class="nav-text">其他存储类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#内存数据"><span class="nav-number">11.1.</span> <span class="nav-text">内存数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Cookie"><span class="nav-number">11.2.</span> <span class="nav-text">Cookie</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#localStorage"><span class="nav-number">11.3.</span> <span class="nav-text">localStorage</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sessionStorage"><span class="nav-number">11.4.</span> <span class="nav-text">sessionStorage</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Web-SQL"><span class="nav-number">11.5.</span> <span class="nav-text">Web SQL</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考链接"><span class="nav-number">12.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">luxia</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">57.2k</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/want/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/want/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/want/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/want/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/want/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/want/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/want/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/want/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: true,
+        notify: true,
+        appId: 'h9Jehf4VaeDG22nDbzEpkHnt-gzGzoHsz',
+        appKey: 'GPvy0xbbxNb0Ao6DM6oRFSoG',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/want/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('-1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("h9Jehf4VaeDG22nDbzEpkHnt-gzGzoHsz", "GPvy0xbbxNb0Ao6DM6oRFSoG");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+  	 <!-- custom analytics part create by lux -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("h9Jehf4VaeDG22nDbzEpkHnt-gzGzoHsz", "GPvy0xbbxNb0Ao6DM6oRFSoG");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = $(document.getElementById(url)).text() + ': 0';
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = $(document.getElementById(url)).text() + ': ' + object.get('time');
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content = $(document.getElementById(url)).text() + ': ' + counter.get('time');
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = $(document.getElementById(url)).text() + ': ' + newcounter.get('time');
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+});
+</script>
+  
+<script src="/want/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/want/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"position":"right","width":100,"height":200,"hOffset":0,"vOffset":160},"mobile":{"show":true,"scale":0.05}});</script></body>
+</html>
