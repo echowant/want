@@ -3,7 +3,7 @@
 
 
 
-<html class="theme-next gemini" lang="zh-Hans">
+<html class="theme-next mist" lang="zh-Hans">
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -80,7 +80,7 @@
 <meta property="og:site_name" content="不周山">
 <meta property="og:description" content="mysql命令行工具查看mysql命令行工具的命令 1mysql --help 进入mysql工具 -u 用户 -p 密码 -h 主机地址 -P 端口号  12345678# 用户进入mysql -u root# 带密码用户进入mysql -u root -p# 带密码、主机名、端口号，用户进入mysql -u root -p -h 10.XX.XX.XX -P 3306 退出mysql工具123">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-06-28T02:36:35.886Z">
+<meta property="og:updated_time" content="2020-10-29T01:36:44.056Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql">
 <meta name="twitter:description" content="mysql命令行工具查看mysql命令行工具的命令 1mysql --help 进入mysql工具 -u 用户 -p 密码 -h 主机地址 -P 端口号  12345678# 用户进入mysql -u root# 带密码用户进入mysql -u root -p# 带密码、主机名、端口号，用户进入mysql -u root -p -h 10.XX.XX.XX -P 3306 退出mysql工具123">
@@ -91,7 +91,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/want/',
-    scheme: 'Gemini',
+    scheme: 'Mist',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
     fancybox: true,
@@ -360,7 +360,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2.1k
+                  3.3k
                 </span>
               
 
@@ -562,9 +562,296 @@
 </ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select name from user where name like &apos;want%&apos;</span><br><span class="line"></span><br><span class="line">select name from user where name like &apos;want_&apos;</span><br><span class="line"></span><br><span class="line">select name from user where name not like &apos;want_&apos;</span><br></pre></td></tr></table></figure>
 <h5 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h5><p>LIKE只是正则表达式的子集。</p>
+<h4 id="group-by"><a href="#group-by" class="headerlink" title="group by"></a>group by</h4><p>把MySQL升级到5.7或者更高的版本，一些以前看上去不会出错的group by 操作在这个版本以后就会出现语法报错</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">only_full_group_by</span><br></pre></td></tr></table></figure>
+<p>在这个模式下，使用分组查询时，出现在select字段后面的字段，必须只能是group by后面的分组字段，或使用聚合函数包裹着的字段。</p>
+<h4 id="case-when"><a href="#case-when" class="headerlink" title="case/when"></a>case/when</h4><h5 id="mysql-行变列"><a href="#mysql-行变列" class="headerlink" title="mysql 行变列"></a>mysql 行变列</h5><p>源数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">+----+------+--------+-------+</span><br><span class="line">| id | name | clazz  | score |</span><br><span class="line">+----+------+--------+-------+</span><br><span class="line">|  1 | lux  | 数学   |    10 |</span><br><span class="line">|  2 | want | 数学   |    15 |</span><br><span class="line">|  3 | wei  | 数学   |    20 |</span><br><span class="line">|  4 | lux  | 语文   |    50 |</span><br><span class="line">|  5 | want | 语文   |    55 |</span><br><span class="line">|  6 | wei  | 语文   |    60 |</span><br><span class="line">|  7 | lux  | 英语   |    70 |</span><br><span class="line">|  8 | want | 英语   |    75 |</span><br><span class="line">|  9 | wei  | 英语   |    80 |</span><br><span class="line">+----+------+--------+-------+</span><br></pre></td></tr></table></figure></p>
+<p>目标<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">+------+----------+</span><br><span class="line">| name | score    |</span><br><span class="line">+------+----------+</span><br><span class="line">| lux  | 10;50;70 |</span><br><span class="line">| want | 15;55;75 |</span><br><span class="line">| wei  | 20;60;80 |</span><br><span class="line">+------+----------+</span><br><span class="line">select name, group_concat(score Separator &apos;;&apos;) as score from grade group by name;</span><br></pre></td></tr></table></figure></p>
+<p>目标<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">+------+----------------------------+</span><br><span class="line">| name | score                      |</span><br><span class="line">+------+----------------------------+</span><br><span class="line">| lux  | 数学10;语文50;英语70       |</span><br><span class="line">| want | 数学15;语文55;英语75       |</span><br><span class="line">| wei  | 数学20;语文60;英语80       |</span><br><span class="line">+------+----------------------------+</span><br><span class="line">select name, group_concat(concat(clazz,score) Separator &apos;;&apos;) as score from grade group by name;</span><br></pre></td></tr></table></figure></p>
+<p>目标<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">+------+------+---------+---------+</span><br><span class="line">| name | math | chinese | english |</span><br><span class="line">+------+------+---------+---------+</span><br><span class="line">| lux  |   10 |      50 |      70 |</span><br><span class="line">| want |   15 |      55 |      75 |</span><br><span class="line">| wei  |   20 |      60 |      80 |</span><br><span class="line">+------+------+---------+---------+</span><br><span class="line">select</span><br><span class="line">  name, </span><br><span class="line">  MAX(case clazz when &apos;数学&apos; then score else 0 end) as math,</span><br><span class="line">  MAX(case clazz when &apos;语文&apos; then score else 0 end) as chinese,</span><br><span class="line">  MAX(case clazz when &apos;英语&apos; then score else 0 end) as english</span><br><span class="line">from grade group by name;</span><br></pre></td></tr></table></figure></p>
+<p>参考：</p>
+<p><a href="https://www.cnblogs.com/small8/p/6211009.html" target="_blank" rel="noopener">https://www.cnblogs.com/small8/p/6211009.html</a></p>
+<h4 id="判断字符串字段-是否包含某字符串"><a href="#判断字符串字段-是否包含某字符串" class="headerlink" title="判断字符串字段,是否包含某字符串"></a>判断字符串字段,是否包含某字符串</h4><p>方法一：like 模糊判断</p>
+<figure class="highlight plain"><figcaption><span>* FROM 表名 WHERE 字段名 like "%字符%";```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">方法二：find_in_set() 严格判断</span><br><span class="line"></span><br><span class="line">1. 利用mysql 字符串函数 find_in_set();</span><br><span class="line">2. find_in_set(str1,str2)函数是返回str2中str1所在的位置索引，不存在就返回0，str2必须以&quot;,&quot;分割开。</span><br><span class="line"></span><br><span class="line">```mysql</span><br><span class="line">SELECT * FROM users WHERE find_in_set(&apos;字符&apos;, 字段名)</span><br><span class="line">SELECT find_in_set(&apos;3&apos;,&apos;3,6,13,24,33,36&apos;)</span><br></pre></td></tr></table></figure>
+<p>方法三：locate(字符,字段名) 模糊判断</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select * from 表名 where locate(字符,字段)</span><br><span class="line">select * from 表名 where position(字符 in 字段);</span><br><span class="line">update site set url =concat(&apos;http://&apos;,url) where locate(&apos;http://&apos;,url)=0</span><br></pre></td></tr></table></figure>
+<p> 方法四：INSTR(字段,字符) 模糊判断</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from 表名 where INSTR(字段,字符)</span><br></pre></td></tr></table></figure>
+<h4 id="时间"><a href="#时间" class="headerlink" title="时间"></a>时间</h4><p>DATE_FORMAT(date,format)　　日期格式化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT DATE_FORMAT(NOW(), &apos;%Y-%m-%d&apos;);</span><br></pre></td></tr></table></figure>
+<p>STR_TO_DATE(str,format)　　字符串 ===》 日期</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select str_to_date(&apos;2016-01-02&apos;, &apos;%Y-%m-%d %H&apos;);</span><br></pre></td></tr></table></figure>
+<p>UNIX_TIMESTAMP()　　其他数据 ===》时间戳</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select unix_timestamp(now());</span><br><span class="line">select unix_timestamp(&apos;2016-02-01&apos;);</span><br></pre></td></tr></table></figure>
+<p>FROM_UNIXTIME(unix_timestamp,format)　　时间戳格式化</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 十三位时间戳转时间。</span></span><br><span class="line"><span class="keyword">SELECT</span> FROM_UNIXTIME(<span class="built_in">time</span>/<span class="number">1000</span>,<span class="string">'%Y-%m-%d %h:%i:%s'</span>)  <span class="keyword">FROM</span> <span class="keyword">user</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 十位时间戳转时间。(%H)</span></span><br><span class="line"><span class="keyword">SELECT</span> FROM_UNIXTIME(<span class="built_in">time</span>,<span class="string">'%Y-%m-%d %h:%i:%s'</span>)  <span class="keyword">FROM</span> <span class="keyword">user</span>;</span><br></pre></td></tr></table></figure>
+<p>时间格式</p>
+<table>
+<thead>
+<tr>
+<th>毫秒</th>
+<th>%f</th>
+<th>毫秒数（000000…999999）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>秒</td>
+<td>%S、%s</td>
+<td>两位数字形式的秒（ 00,01, …, 59）</td>
+</tr>
+<tr>
+<td>分</td>
+<td>%I、%i</td>
+<td>两位数字形式的分（ 00,01, …, 59）</td>
+</tr>
+<tr>
+<td>小时</td>
+<td>%H</td>
+<td>24小时制，两位数形式小时（00,01, …,23）</td>
+</tr>
+<tr>
+<td></td>
+<td>%h</td>
+<td>12小时制，两位数形式小时（00,01, …,12）</td>
+</tr>
+<tr>
+<td></td>
+<td>%k</td>
+<td>24小时制，数形式小时（0,1, …,23）</td>
+</tr>
+<tr>
+<td></td>
+<td>%l</td>
+<td>12小时制，数形式小时（0,1, …,12）</td>
+</tr>
+<tr>
+<td></td>
+<td>%T</td>
+<td>24小时制，时间形式（HH:mm:ss）</td>
+</tr>
+<tr>
+<td></td>
+<td>%r</td>
+<td>12小时制，时间形式（hh:mm:ss AM 或 PM）</td>
+</tr>
+<tr>
+<td></td>
+<td>%p</td>
+<td>AM上午或PM下午</td>
+</tr>
+<tr>
+<td>周</td>
+<td>%W</td>
+<td>一周中每一天的名称，周日到周六（Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday）</td>
+</tr>
+<tr>
+<td></td>
+<td>%a</td>
+<td>一周中每一天的名称的缩写，周日到周六（Sun,Mon,Tue,Wed,Thu,Fri,Sat）</td>
+</tr>
+<tr>
+<td></td>
+<td>%w</td>
+<td>以数字形式标识周（0=Sunday,1=Monday, …,6=Saturday）</td>
+</tr>
+<tr>
+<td></td>
+<td>%U</td>
+<td>数字表示周数，星期天为周中第一天</td>
+</tr>
+<tr>
+<td></td>
+<td>%u</td>
+<td>数字表示周数，星期一为周中第一天</td>
+</tr>
+<tr>
+<td>天</td>
+<td>%d</td>
+<td>两位数字表示月中天数（01,02, …,31）</td>
+</tr>
+<tr>
+<td></td>
+<td>%e</td>
+<td>数字表示月中天数（1,2, …,31）</td>
+</tr>
+<tr>
+<td></td>
+<td>%D</td>
+<td>英文后缀表示月中天数（1st,2nd,3rd …）</td>
+</tr>
+<tr>
+<td></td>
+<td>%j</td>
+<td>以三位数字表示年中天数（001,002, …,366）</td>
+</tr>
+<tr>
+<td>月</td>
+<td>%M</td>
+<td>英文月名（January,February,March,April,May,June,July,August,September,October,November,December）</td>
+</tr>
+<tr>
+<td></td>
+<td>%b</td>
+<td>英文缩写月名（Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec）</td>
+</tr>
+<tr>
+<td></td>
+<td>%m</td>
+<td>两位数字表示月份（01,02, …,12）</td>
+</tr>
+<tr>
+<td></td>
+<td>%c</td>
+<td>数字表示月份（1,2, …,12）</td>
+</tr>
+<tr>
+<td>年</td>
+<td>%Y</td>
+<td>四位数字表示的年份（2015,2016…）</td>
+</tr>
+<tr>
+<td></td>
+<td>%y</td>
+<td>两位数字表示的年份（15,16…）</td>
+</tr>
+<tr>
+<td>文字输出</td>
+<td>%文字</td>
+<td>直接输出文字内容</td>
+</tr>
+</tbody>
+</table>
 <h3 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create database grid;</span><br></pre></td></tr></table></figure>
+<h4 id="字段类型"><a href="#字段类型" class="headerlink" title="字段类型"></a>字段类型</h4><table>
+<thead>
+<tr>
+<th>java类</th>
+<th></th>
+<th>mysql数据库</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>java.lang.Byte</td>
+<td>byte</td>
+<td>TINYINT</td>
+</tr>
+<tr>
+<td>java.lang.Short</td>
+<td>short</td>
+<td>SMALLINT</td>
+</tr>
+<tr>
+<td>java.lang.Integer</td>
+<td>integer</td>
+<td>INGEGER</td>
+</tr>
+<tr>
+<td>java.lang.Long</td>
+<td>long</td>
+<td>BIGINT</td>
+</tr>
+<tr>
+<td>java.lang.Float</td>
+<td>float</td>
+<td>FLOAT</td>
+</tr>
+<tr>
+<td>java.lang.Double</td>
+<td>double</td>
+<td>DOUBLE</td>
+</tr>
+<tr>
+<td>java.lang.BigDecimal</td>
+<td>big_decimal</td>
+<td>NUMERIC</td>
+</tr>
+<tr>
+<td>java.lang.Boolean</td>
+<td>boolean</td>
+<td>BIT</td>
+</tr>
+<tr>
+<td>java.lang.String</td>
+<td>string</td>
+<td>VARCHAR</td>
+</tr>
+<tr>
+<td>java.lang.Boolean</td>
+<td>yes_no</td>
+<td>CHAR(1)(‘Y’或’N’)</td>
+</tr>
+<tr>
+<td>java.lang.Boolean</td>
+<td>true_false</td>
+<td>CHAR(1)(‘Y’或’N’)</td>
+</tr>
+<tr>
+<td>java.uitl.Date / java.sql.Date</td>
+<td>date</td>
+<td>DATE</td>
+</tr>
+<tr>
+<td>java.sql.Time</td>
+<td>time</td>
+<td>TIME</td>
+</tr>
+<tr>
+<td>java.sql.Timestamp</td>
+<td>timestamp</td>
+<td>TIMESTAMP</td>
+</tr>
+<tr>
+<td>java.uitl.Calendar</td>
+<td>celendar</td>
+<td>TIMESTAMP</td>
+</tr>
+<tr>
+<td>java.uitl.Calendar</td>
+<td>calendar</td>
+<td>TIMESTAMP</td>
+</tr>
+<tr>
+<td>java.io.Serializable</td>
+<td>serializable</td>
+<td>VARBINARY/BLOB</td>
+</tr>
+<tr>
+<td>java.sql.Clob</td>
+<td>clob</td>
+<td>CLOB</td>
+</tr>
+<tr>
+<td>java.sql.Blob</td>
+<td>blob</td>
+<td>BLOB</td>
+</tr>
+<tr>
+<td>java.lang.Class</td>
+<td>class</td>
+<td>VARCHAR</td>
+</tr>
+<tr>
+<td>java.uitl.Locale</td>
+<td>locale</td>
+<td>VARCHAR</td>
+</tr>
+<tr>
+<td>java.uitl.TimeZone</td>
+<td>timezone</td>
+<td>VARCHAR</td>
+</tr>
+<tr>
+<td>java.uitl.Currency</td>
+<td>currency</td>
+<td>VARCHAR</td>
+</tr>
+</tbody>
+</table>
 <h3 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 创建</span><br><span class="line">create table user</span><br><span class="line">(</span><br><span class="line">	id int AUTO_INCREMENT,</span><br><span class="line">	name varchar(50) not null,</span><br><span class="line">	age int default 0,</span><br><span class="line">	primary key (id)</span><br><span class="line">) engine=InnoDB;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 查看</span><br><span class="line">SHOW COLUMNS from user;</span><br></pre></td></tr></table></figure>
 <h3 id="insert"><a href="#insert" class="headerlink" title="insert"></a>insert</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 省略列指定，表示全部列</span><br><span class="line">insert into user values(null, &apos;want&apos;, 23);</span><br><span class="line"></span><br><span class="line"># 显式指定列</span><br><span class="line">insert into user(name, age) values(&apos;yuni&apos;, 18);</span><br></pre></td></tr></table></figure>
+<h3 id="alter"><a href="#alter" class="headerlink" title="alter"></a>alter</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 增加新列</span><br><span class="line">alter table user add column time Date;</span><br><span class="line"># 修改列</span><br><span class="line">alter table user modify column time bigint;</span><br></pre></td></tr></table></figure>
 <h3 id="存储过程procedure"><a href="#存储过程procedure" class="headerlink" title="存储过程procedure"></a>存储过程procedure</h3><p>操作多条语句的完整过程。</p>
 <h4 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE PROCEDURE handleage()</span><br><span class="line">BEGIN</span><br><span class="line">	select avg(age) as avgAge from user;</span><br><span class="line">END;</span><br></pre></td></tr></table></figure>
 <h4 id="执行"><a href="#执行" class="headerlink" title="执行"></a>执行</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CALL handleage(@mymax, @mymin, @myavg)</span><br></pre></td></tr></table></figure>
@@ -738,7 +1025,7 @@
               
                 <a href="/want/archives/">
               
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">46</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -784,7 +1071,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql命令行工具"><span class="nav-number">1.</span> <span class="nav-text">mysql命令行工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#进入mysql工具"><span class="nav-number">1.1.</span> <span class="nav-text">进入mysql工具</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#退出mysql工具"><span class="nav-number">1.2.</span> <span class="nav-text">退出mysql工具</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用mysql工具"><span class="nav-number">1.3.</span> <span class="nav-text">使用mysql工具</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#库表"><span class="nav-number">2.</span> <span class="nav-text">库表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#库"><span class="nav-number">2.1.</span> <span class="nav-text">库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#表"><span class="nav-number">2.2.</span> <span class="nav-text">表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#show命令"><span class="nav-number">2.3.</span> <span class="nav-text">show命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sql语句"><span class="nav-number">3.</span> <span class="nav-text">sql语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#select"><span class="nav-number">4.</span> <span class="nav-text">select</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#distinct"><span class="nav-number">4.1.</span> <span class="nav-text">distinct</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#limit"><span class="nav-number">4.2.</span> <span class="nav-text">limit</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#order-by"><span class="nav-number">4.3.</span> <span class="nav-text">order by</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#order-by-limit查找最大-最小值"><span class="nav-number">4.3.1.</span> <span class="nav-text">order by + limit查找最大/最小值</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#where"><span class="nav-number">4.4.</span> <span class="nav-text">where</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#比较操作符"><span class="nav-number">4.4.1.</span> <span class="nav-text">比较操作符</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#AND-OR"><span class="nav-number">4.4.2.</span> <span class="nav-text">AND/OR</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#IN"><span class="nav-number">4.4.3.</span> <span class="nav-text">IN</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#NOT"><span class="nav-number">4.4.4.</span> <span class="nav-text">NOT</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#LIKE"><span class="nav-number">4.4.5.</span> <span class="nav-text">LIKE</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#正则表达式"><span class="nav-number">4.4.6.</span> <span class="nav-text">正则表达式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建数据库"><span class="nav-number">5.</span> <span class="nav-text">创建数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建表"><span class="nav-number">6.</span> <span class="nav-text">创建表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#insert"><span class="nav-number">7.</span> <span class="nav-text">insert</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#存储过程procedure"><span class="nav-number">8.</span> <span class="nav-text">存储过程procedure</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建"><span class="nav-number">8.1.</span> <span class="nav-text">创建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#执行"><span class="nav-number">8.2.</span> <span class="nav-text">执行</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过-sql文件执行命令"><span class="nav-number">9.</span> <span class="nav-text">通过.sql文件执行命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#账号管理"><span class="nav-number">10.</span> <span class="nav-text">账号管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见问题"><span class="nav-number">11.</span> <span class="nav-text">常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端连接MySQL报错-authentication-plugin-‘caching-sha2-password’-navicat"><span class="nav-number">11.1.</span> <span class="nav-text">客户端连接MySQL报错- authentication plugin ‘caching_sha2_password’ -navicat</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IDEA中配置MySQL出现Server-returns-invalid-timezone问题"><span class="nav-number">11.2.</span> <span class="nav-text">IDEA中配置MySQL出现Server returns invalid timezone问题</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql命令行工具"><span class="nav-number">1.</span> <span class="nav-text">mysql命令行工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#进入mysql工具"><span class="nav-number">1.1.</span> <span class="nav-text">进入mysql工具</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#退出mysql工具"><span class="nav-number">1.2.</span> <span class="nav-text">退出mysql工具</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用mysql工具"><span class="nav-number">1.3.</span> <span class="nav-text">使用mysql工具</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#库表"><span class="nav-number">2.</span> <span class="nav-text">库表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#库"><span class="nav-number">2.1.</span> <span class="nav-text">库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#表"><span class="nav-number">2.2.</span> <span class="nav-text">表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#show命令"><span class="nav-number">2.3.</span> <span class="nav-text">show命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sql语句"><span class="nav-number">3.</span> <span class="nav-text">sql语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#select"><span class="nav-number">4.</span> <span class="nav-text">select</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#distinct"><span class="nav-number">4.1.</span> <span class="nav-text">distinct</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#limit"><span class="nav-number">4.2.</span> <span class="nav-text">limit</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#order-by"><span class="nav-number">4.3.</span> <span class="nav-text">order by</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#order-by-limit查找最大-最小值"><span class="nav-number">4.3.1.</span> <span class="nav-text">order by + limit查找最大/最小值</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#where"><span class="nav-number">4.4.</span> <span class="nav-text">where</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#比较操作符"><span class="nav-number">4.4.1.</span> <span class="nav-text">比较操作符</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#AND-OR"><span class="nav-number">4.4.2.</span> <span class="nav-text">AND/OR</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#IN"><span class="nav-number">4.4.3.</span> <span class="nav-text">IN</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#NOT"><span class="nav-number">4.4.4.</span> <span class="nav-text">NOT</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#LIKE"><span class="nav-number">4.4.5.</span> <span class="nav-text">LIKE</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#正则表达式"><span class="nav-number">4.4.6.</span> <span class="nav-text">正则表达式</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#group-by"><span class="nav-number">4.5.</span> <span class="nav-text">group by</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#case-when"><span class="nav-number">4.6.</span> <span class="nav-text">case/when</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#mysql-行变列"><span class="nav-number">4.6.1.</span> <span class="nav-text">mysql 行变列</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#判断字符串字段-是否包含某字符串"><span class="nav-number">4.7.</span> <span class="nav-text">判断字符串字段,是否包含某字符串</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#时间"><span class="nav-number">4.8.</span> <span class="nav-text">时间</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建数据库"><span class="nav-number">5.</span> <span class="nav-text">创建数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#字段类型"><span class="nav-number">5.1.</span> <span class="nav-text">字段类型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建表"><span class="nav-number">6.</span> <span class="nav-text">创建表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#insert"><span class="nav-number">7.</span> <span class="nav-text">insert</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#alter"><span class="nav-number">8.</span> <span class="nav-text">alter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#存储过程procedure"><span class="nav-number">9.</span> <span class="nav-text">存储过程procedure</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建"><span class="nav-number">9.1.</span> <span class="nav-text">创建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#执行"><span class="nav-number">9.2.</span> <span class="nav-text">执行</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过-sql文件执行命令"><span class="nav-number">10.</span> <span class="nav-text">通过.sql文件执行命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#账号管理"><span class="nav-number">11.</span> <span class="nav-text">账号管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见问题"><span class="nav-number">12.</span> <span class="nav-text">常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端连接MySQL报错-authentication-plugin-‘caching-sha2-password’-navicat"><span class="nav-number">12.1.</span> <span class="nav-text">客户端连接MySQL报错- authentication plugin ‘caching_sha2_password’ -navicat</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IDEA中配置MySQL出现Server-returns-invalid-timezone问题"><span class="nav-number">12.2.</span> <span class="nav-text">IDEA中配置MySQL出现Server returns invalid timezone问题</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -818,7 +1105,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">57.2k</span>
+    <span title="Site words total count">91.8k</span>
   
 </div>
 
@@ -935,13 +1222,6 @@
 
   
   
-
-
-  <script type="text/javascript" src="/want/js/src/affix.js?v=5.1.4"></script>
-
-  <script type="text/javascript" src="/want/js/src/schemes/pisces.js?v=5.1.4"></script>
-
-
 
   
   <script type="text/javascript" src="/want/js/src/scrollspy.js?v=5.1.4"></script>

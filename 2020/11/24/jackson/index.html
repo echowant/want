@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/want/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/want/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/want/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/want/images/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/want/images/favicon-16x16.png?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="简介jackson支持java和Kotlin、Scala等语言，支持JSON及JSON以外的多种格式转换。 是Spring家族默认的JSON、XML解析器。 语法特点：纵观整个Jackson，它更多的是使用抽象类而非接口。 1234567891011121314151617181920&amp;lt;!-- https://mvnrepository.com/artifact/com.fasterxml.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jackson">
+<meta property="og:url" content="https://echowant.github.io/want/2020/11/24/jackson/index.html">
+<meta property="og:site_name" content="不周山">
+<meta property="og:description" content="简介jackson支持java和Kotlin、Scala等语言，支持JSON及JSON以外的多种格式转换。 是Spring家族默认的JSON、XML解析器。 语法特点：纵观整个Jackson，它更多的是使用抽象类而非接口。 1234567891011121314151617181920&amp;lt;!-- https://mvnrepository.com/artifact/com.fasterxml.">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="c:/Users/luxia/AppData/Roaming/Typora/typora-user-images/1606270805638.png">
+<meta property="og:updated_time" content="2020-11-26T12:30:55.203Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="jackson">
+<meta name="twitter:description" content="简介jackson支持java和Kotlin、Scala等语言，支持JSON及JSON以外的多种格式转换。 是Spring家族默认的JSON、XML解析器。 语法特点：纵观整个Jackson，它更多的是使用抽象类而非接口。 1234567891011121314151617181920&amp;lt;!-- https://mvnrepository.com/artifact/com.fasterxml.">
+<meta name="twitter:image" content="c:/Users/luxia/AppData/Roaming/Typora/typora-user-images/1606270805638.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/want/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://echowant.github.io/want/2020/11/24/jackson/">
+
+
+
+
+
+  <title>jackson | 不周山</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/want/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">不周山</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Keep It Simple Stupid</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/want/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/want/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/want/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/want/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://echowant.github.io/want/want/2020/11/24/jackson/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="luxia">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/want/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不周山">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">jackson</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-11-24T17:49:33+08:00">
+                2020-11-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/want/2020/11/24/jackson/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/want/2020/11/24/jackson/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/want/2020/11/24/jackson/" class="leancloud_visitors" data-flag-title="jackson">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.4k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>jackson支持java和Kotlin、Scala等语言，支持JSON及JSON以外的多种格式转换。</p>
+<p>是Spring家族默认的JSON、XML解析器。</p>
+<p>语法特点：纵观整个Jackson，它更多的是使用抽象类而非接口。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.fasterxml.jackson.core<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jackson-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.11.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.fasterxml.jackson.core<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jackson-annotations<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.11.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.fasterxml.jackson.core<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jackson-databind<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.11.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="三大核心模块"><a href="#三大核心模块" class="headerlink" title="三大核心模块"></a>三大核心模块</h4><ul>
+<li><code>jackson-core</code>： Streaming流处理模块，定义底层处理流API：JsonPaser和JsonGenerator等，并包含<strong>特定于json</strong>的实现。</li>
+<li><code>jackson-annotations</code>：Annotations标准注解模块，包含标准的Jackson注解。</li>
+<li><code>jackson-databind</code>：Databind数据绑定模块，在streaming包上实现数据绑定(和对象序列化)支持；<strong>它依赖于上面的两个模块</strong>，也是Jackson的高层API(如ObjectMapper)所在的模块。实际开发中，只用到<code>Databind数据绑定模块</code></li>
+</ul>
+<h4 id="扩展模块"><a href="#扩展模块" class="headerlink" title="扩展模块"></a>扩展模块</h4><p>通过扩展模块，让<code>Jackson databind</code>包(<code>ObjectMapper / ObjectReader / ObjectWriter</code>)能够顺利读写/转换扩展的类型。</p>
+<ol>
+<li>利用Jackson插件模块（<code>ObjectMapper.registerModule()</code>），</li>
+<li>添加序列化器和反序列化器</li>
+<li>最终支持各种常用Java库数据类型。</li>
+</ol>
+<h5 id="数据类型模块datatype"><a href="#数据类型模块datatype" class="headerlink" title="数据类型模块datatype"></a>数据类型模块datatype</h5><ol>
+<li><p>官方维护的扩展模块</p>
+<pre><code>* groupId为：`&lt;groupId&gt;com.fasterxml.jackson.datatype&lt;/groupId&gt;`
+</code></pre></li>
+</ol>
+<ul>
+<li>version和官方主版本号相对应</li>
+</ul>
+<ol start="2">
+<li><p>非官方直接维护的扩展模块</p>
+<pre><code>* groupId不确定，版本号与官方主版本无关。比如：
+</code></pre><ul>
+<li>jackson-datatype-commons-lang3：支持<code>Apache Commons Lang v3</code>里面的一些类型</li>
+<li>jackson-datatype-money：支持<code>javax.money</code></li>
+<li>jackson-datatype-json-lib：对久远的<code>json-lib</code>这个库的支持</li>
+</ul>
+</li>
+</ol>
+<h5 id="数据格式模块dataformat"><a href="#数据格式模块dataformat" class="headerlink" title="数据格式模块dataformat"></a>数据格式模块dataformat</h5><p>支持<strong>JSON之外</strong>的数据格式，大多数只是实现streaming API抽象，以便数据绑定组件可以按原样使用。</p>
+<ol>
+<li>官方维护的扩展模块<ul>
+<li>groupId为：<code>&lt;groupId&gt;com.fasterxml.jackson.dataformat&lt;/groupId&gt;</code></li>
+<li>version和官方主版本号相对应。</li>
+<li>Avro/CBOR/Ion/Protobuf/Smile(binary JSON) ：二进制格式，artifactId为：<code>&lt;artifactId&gt;jackson-dataformat-[FORMAT]&lt;/artifactId&gt;</code></li>
+<li>CSV/Properties/XML/YAML等文本格式。</li>
+</ul>
+</li>
+<li>非官方直接维护的扩展模块。</li>
+</ol>
+<h4 id="支持Kotlin和Scala的依赖"><a href="#支持Kotlin和Scala的依赖" class="headerlink" title="支持Kotlin和Scala的依赖"></a>支持Kotlin和Scala的依赖</h4><ul>
+<li>groupId为：<code>&lt;groupId&gt;com.fasterxml.jackson.module&lt;/groupId&gt;</code></li>
+<li>version和官方主版本号相对应。<ul>
+<li>jackson-module-kotlin：处理kotlin源生类型</li>
+<li>jackson-module-scala_[scala版本号]：处理scala源生类型</li>
+</ul>
+</li>
+</ul>
+<h4 id="支持移动端的依赖"><a href="#支持移动端的依赖" class="headerlink" title="支持移动端的依赖"></a>支持移动端的依赖</h4><p>jackson.jr，一个轻量级的更简单、更小的库。</p>
+<p>仅依赖<code>jackson-core</code>，并不依赖于annotation和databind。</p>
+<ol>
+<li>Jackson三大核心模块大小：343KB（core）+ 66KB（annotation）+ 1.4M（databind）。</li>
+<li>Jackson jr大小：96KB（jr） + 343KB（core)</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.jr/jackson-jr-objects --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.fasterxml.jackson.jr<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jackson-jr-objects<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.11.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.fasterxml.jackson.core<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jackson-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.11.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="JSON的三种处理方式"><a href="#JSON的三种处理方式" class="headerlink" title="JSON的三种处理方式"></a>JSON的三种处理方式</h3><table>
+<thead>
+<tr>
+<th>方式</th>
+<th>描述</th>
+<th>隶属包</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>流式API</td>
+<td>读/写性能最好、开销最低、 速度最快； 其它2者都基于它实现。</td>
+<td>jackson-core</td>
+</tr>
+<tr>
+<td>树模型</td>
+<td>类似于XML的DOM解析，层层嵌套。是最灵活的方式</td>
+<td>jackson-core</td>
+</tr>
+<tr>
+<td>数据绑定</td>
+<td>JSON和POJO相互转换，是使用最方便的方式。使用最多。</td>
+<td>jackson-databind</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>流式API，读取和写入JSON内容作为离散事件<ul>
+<li>读数据：<code>org.codehaus.jackson.JsonParser</code></li>
+<li>写数据：<code>org.codehaus.jackson.JsonGenerator</code></li>
+<li>流式，指的是IO流，因此具有最低的开销。</li>
+<li>使用流式API读写JSON的方式，使用的<strong>均是增量模式</strong>（每个部分一个一个地往上增加，类似于垒砖）</li>
+<li>流式API里很重要的一个抽象概念<strong>JsonToken</strong>：每一部分都是一个独立的Token（有不同类型的Token），最终被“拼凑”起来就是一个JSON。</li>
+</ul>
+</li>
+<li>树模型，JSON文件在内存里以树形式表示<ul>
+<li><code>org.codehaus.jackson.map.ObjectMapper</code> 生成树</li>
+<li>树组成<code>JsonNode</code> 节点集</li>
+</ul>
+</li>
+<li>数据绑定，JSON和POJO相互转换<ul>
+<li>简单数据绑定,是指从Java Map、List、String、Numbers、Boolean和空值进行转换</li>
+<li>完整数据绑定,是指从任何Java bean类型 （及上文所述的”简单”类型） 进行转换</li>
+<li>使用最方便的方式</li>
+</ul>
+</li>
+</ol>
+<h3 id="流式API"><a href="#流式API" class="headerlink" title="流式API"></a>流式API</h3><p>实际是i/o流读写。隶属于jackson-core包。</p>
+<h4 id="写操作：JsonGenerator"><a href="#写操作：JsonGenerator" class="headerlink" title="写操作：JsonGenerator"></a>写操作：JsonGenerator</h4><h5 id="运行案例"><a href="#运行案例" class="headerlink" title="运行案例"></a>运行案例</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ----------基本实现------</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testJsonGenerator</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        JsonFactory factory = <span class="keyword">new</span> JsonFactory();</span><br><span class="line">        <span class="comment">// 将生成的json放到控制台，也可以放到文件（OutputStream）、网络（HttpOutputMessage）等</span></span><br><span class="line">        JsonGenerator jsonGenerator = factory.createGenerator(System.out, JsonEncoding.UTF8);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">        		<span class="comment">// 体现了增量模式（每个部分一个一个地往上增加）</span></span><br><span class="line">            jsonGenerator.writeStartObject();</span><br><span class="line">            jsonGenerator.writeStringField(<span class="string">"name"</span>, <span class="string">"want"</span>);</span><br><span class="line">            jsonGenerator.writeNumberField(<span class="string">"age"</span>, <span class="number">23</span>);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 只能出现一个独立key</span></span><br><span class="line">            <span class="comment">// jsonGenerator.writeFieldName("school");</span></span><br><span class="line">            <span class="comment">// jsonGenerator.writeFieldName("345");</span></span><br><span class="line">            jsonGenerator.writeFieldId(<span class="number">123</span>);</span><br><span class="line"></span><br><span class="line">            jsonGenerator.writeEndObject();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            jsonGenerator.close();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="comment">// &#123;"name":"want","age":23,"123"&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ----------try-with-resources实现（JsonGenerator实现了AutoCloseable接口）----</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testJsonGeneratorAutoCloseable</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">     		OutputStream outputStream = <span class="keyword">new</span> FileOutputStream(<span class="string">"./jsonGenertor.txt"</span>);</span><br><span class="line">        <span class="keyword">try</span> (JsonGenerator jsonGenerator = factory.createGenerator(outputStream, JsonEncoding.UTF8)) &#123;</span><br><span class="line">            jsonGenerator.writeStartObject();</span><br><span class="line">            jsonGenerator.writeStringField(<span class="string">"name"</span>, <span class="string">"want"</span>);</span><br><span class="line">            jsonGenerator.writeNumberField(<span class="string">"age"</span>, <span class="number">23</span>);</span><br><span class="line">            jsonGenerator.writeEndObject();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ----------------实现了AutoCloseable接口-----------</span></span><br><span class="line"> 			<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Closeable</span> <span class="keyword">extends</span> <span class="title">AutoCloseable</span> </span>&#123;<span class="function"><span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>;&#125;</span><br><span class="line">      <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">JsonGenerator</span> <span class="keyword">implements</span> <span class="title">Closeable</span>, <span class="title">Flushable</span>, <span class="title">Versioned</span> </span>&#123;</span><br><span class="line">          <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">              <span class="keyword">super</span>.close();</span><br><span class="line">              <span class="comment">// 其他代码</span></span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>try-with-resources：jdk1.7引入，一种语法糖，主要是替代了 try-catch-finally/try-finaly中的finally ，但是在编译的时候，还是会转回 try-catch-finally/try-finaly。</p>
+<p>要求：在 try-with-resources 声明中定义的变量，要实现AutoCloseable 接口。</p>
+<p>这样在系统可以自动调用它们的close方法，从而替代了finally中关闭资源的功能。</p>
+<p>注意点：try-with-resources之后，又进行追加的catch 和 finally 中的代码，会在try-with-resources自动资源关闭之后才运行。</p>
+<p>参考：<a href="https://zhuanlan.zhihu.com/p/163106465" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/163106465</a></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// try-finaly</span></span><br><span class="line">InputStream inputStream = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    inputStream = <span class="keyword">new</span> FileInputStream(<span class="string">"/my/file"</span>);</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (inputStream != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            inputStream.close();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// try-with-resources</span></span><br><span class="line"><span class="keyword">try</span> (InputStream inputStream = <span class="keyword">new</span> FileInputStream(<span class="string">"/my/file"</span>)) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 也可以支持创建多个资源，先创建，后关闭</span></span><br><span class="line"><span class="keyword">try</span> (InputStream inputStream = <span class="keyword">new</span> FileInputStream(<span class="string">"/my/file"</span>);</span><br><span class="line">     OutputStream outputStream = <span class="keyword">new</span> FileOutputStream(<span class="string">"./jsonGenertor.txt"</span>)) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="相关类"><a href="#相关类" class="headerlink" title="相关类"></a>相关类</h5><ul>
+<li><code>WriterBasedJsonGenerator</code>：基于:<code>java.io.Writer</code>处理字符编码（使用Writer输出JSON）<ul>
+<li>因为UTF-8编码基本标准化了，因此Jackson内部也提供了<code>SegmentedStringWriter/UTF8Writer</code>来简化操作</li>
+</ul>
+</li>
+<li><code>UTF8JsonGenerator</code>：基于OutputStream + UTF-8处理字符编码（默认指定使用UTF-8编码把字节变为字符）</li>
+</ul>
+<p><img src="C:\Users\luxia\AppData\Roaming\Typora\typora-user-images\1606270805638.png" alt="1606270805638"></p>
+<h5 id="json实现"><a href="#json实现" class="headerlink" title="json实现"></a>json实现</h5><p><strong>key</strong>，可以独立存在（无需value），但value不能独立存在<code>{&quot;name&quot;:&quot;want&quot;,&quot;age&quot;:23,&quot;school&quot;}</code>。生成独立key方法如下：</p>
+<ol>
+<li>jsonGenerator.writeFieldName(“school”);</li>
+<li>jsonGenerator.writeFieldId(123);只能是数字，且本质还是用writeFieldName来实现。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 独立存在的key,放到最后,因为碰到独立key,json就终止了</span><br><span class="line">            // jsonGenerator.writeFieldName(&quot;school&quot;);</span><br><span class="line">            // jsonGenerator.writeFieldName(&quot;345&quot;);</span><br><span class="line">            jsonGenerator.writeFieldId(123); // &#123;&quot;school&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>value</strong>，JSON中取值类型只能如下6种，但是Java中数据类型更丰富，需要JsonGenerator进行映射。</p>
+<pre class="mermaid">graph LR
+A(java数据类型) --JsonGenerator--> B(JSON数据格式)</pre>
+
+<h6 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// key-value分开写</span></span><br><span class="line">jsonGenerator.writeFieldName(<span class="string">"height"</span>);</span><br><span class="line">jsonGenerator.writeString(<span class="string">"170cm"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// key-value合并写法[推荐]</span></span><br><span class="line">jsonGenerator.writeStringField(<span class="string">"name"</span>, <span class="string">"want"</span>);</span><br></pre></td></tr></table></figure>
+<p> Base64编码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">jsonGenerator.writeFieldName(<span class="string">"base64"</span>);</span><br><span class="line">jsonGenerator.writeBinary(<span class="string">"hello,world!jackson!"</span>.getBytes()); <span class="comment">// "base64":"aGVsbG8sd29ybGQhamFja3NvbiE="</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 合并写法</span></span><br><span class="line">jsonGenerator.writeBinaryField(<span class="string">"base64"</span>, <span class="string">"hello,world!jackson!"</span>.getBytes())</span><br></pre></td></tr></table></figure>
+<p>文本原样输出</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">jsonGenerator.writeFieldName(<span class="string">"love1"</span>);</span><br><span class="line">jsonGenerator.writeString(<span class="string">"&#123;'love': 'batman'&#125;"</span>);<span class="comment">//"love1":"&#123;'love': 'batman'&#125;"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 不做任何转义,也不添加分隔符</span></span><br><span class="line">jsonGenerator.writeFieldName(<span class="string">"love2"</span>);</span><br><span class="line">jsonGenerator.writeRaw(<span class="string">"&#123;'love': 'batman'&#125;"</span>);<span class="comment">//"love2"&#123;'love': 'batman'&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 不做任何转义,但添加分隔符</span></span><br><span class="line">jsonGenerator.writeFieldName(<span class="string">"love3"</span>);</span><br><span class="line">jsonGenerator.writeRawValue(<span class="string">"&#123;'love': 'batman'&#125;"</span>);<span class="comment">//"love3":&#123;'love': 'batman'&#125;</span></span><br></pre></td></tr></table></figure>
+<h6 id="数字"><a href="#数字" class="headerlink" title="数字"></a>数字</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">jsonGenerator.writeFieldName(<span class="string">"age"</span>);</span><br><span class="line">jsonGenerator.writeNumber(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 合并写法</span></span><br><span class="line">jsonGenerator.writeNumberField(<span class="string">"age"</span>, <span class="number">23</span>);</span><br></pre></td></tr></table></figure>
+<h6 id="布尔"><a href="#布尔" class="headerlink" title="布尔"></a>布尔</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">jsonGenerator.writeFieldName(<span class="string">"isMan"</span>);</span><br><span class="line">jsonGenerator.writeBoolean(<span class="keyword">false</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">//合并写法</span></span><br><span class="line">jsonGenerator.writeBooleanField(<span class="string">"isMan"</span>, <span class="keyword">true</span>);</span><br></pre></td></tr></table></figure>
+<h6 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ------key-value分开写法------</span></span><br><span class="line">jsonGenerator.writeFieldName(<span class="string">"friends"</span>);</span><br><span class="line">jsonGenerator.writeStartArray();</span><br><span class="line">            <span class="comment">// 数组元素-string</span></span><br><span class="line">            jsonGenerator.writeString(<span class="string">"tom"</span>);</span><br><span class="line">            </span><br><span class="line">						<span class="comment">// 数组元素-对象</span></span><br><span class="line">            jsonGenerator.writeStartObject();</span><br><span class="line">            jsonGenerator.writeStringField(<span class="string">"name"</span>, <span class="string">"zhou"</span>);</span><br><span class="line">            jsonGenerator.writeNumberField(<span class="string">"age"</span>, <span class="number">53</span>);</span><br><span class="line">            jsonGenerator.writeEndObject();</span><br><span class="line">            </span><br><span class="line">						<span class="comment">// 数组元素-数字</span></span><br><span class="line">            jsonGenerator.writeNumber(<span class="number">10</span>);</span><br><span class="line">jsonGenerator.writeEndArray();</span><br><span class="line"></span><br><span class="line"><span class="comment">// ------key-value合并写法------</span></span><br><span class="line"><span class="comment">// writeArrayFieldStart = writeFieldName + writeStartArray</span></span><br><span class="line">jsonGenerator.writeArrayFieldStart(<span class="string">"cakes"</span>);</span><br><span class="line">            jsonGenerator.writeString(<span class="string">"price"</span>);</span><br><span class="line">jsonGenerator.writeEndArray();</span><br><span class="line"></span><br><span class="line"><span class="comment">// ------快捷写入数组（从第index = 0位开始，取5个[0,0+5)）------</span></span><br><span class="line">jsonGenerator.writeFieldName(<span class="string">"classmates"</span>);</span><br><span class="line">jsonGenerator.writeArray(<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>&#125;, <span class="number">0</span>, <span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+<h6 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ------key-value分开写法------</span></span><br><span class="line">jsonGenerator.writeFieldName(<span class="string">"father"</span>);</span><br><span class="line">            <span class="comment">// JSON的顺序，和write的顺序保持一致</span></span><br><span class="line">            jsonGenerator.writeStartObject();</span><br><span class="line">            jsonGenerator.writeStringField(<span class="string">"name"</span>, <span class="string">"zhou"</span>);</span><br><span class="line">            jsonGenerator.writeNumberField(<span class="string">"age"</span>, <span class="number">53</span>);</span><br><span class="line">jsonGenerator.writeEndObject();</span><br><span class="line"></span><br><span class="line"><span class="comment">// ------key-value合并写法------</span></span><br><span class="line"><span class="comment">// writeObjectFieldStart = writeFieldName + writeStartObject</span></span><br><span class="line">jsonGenerator.writeObjectFieldStart(<span class="string">"money"</span>);</span><br><span class="line">            jsonGenerator.writeStringField(<span class="string">"bank"</span>, <span class="string">"12345678901"</span>);</span><br><span class="line">jsonGenerator.writeEndObject();</span><br></pre></td></tr></table></figure>
+<p>POJO实体类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// User实体类转json</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name = <span class="string">"loveName"</span>;</span><br><span class="line">    <span class="keyword">private</span> Integer age = <span class="number">23</span>;</span><br><span class="line">    <span class="comment">// 其他</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 自定义解码器</span></span><br><span class="line"><span class="comment"> * 用于把User写为JSON</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserObjectCodec</span> <span class="keyword">extends</span> <span class="title">ObjectCodec</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writeValue</span><span class="params">(JsonGenerator gen, Object value)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        User user = (User) value;</span><br><span class="line">        gen.writeStartObject();</span><br><span class="line">        gen.writeStringField(<span class="string">"name"</span>, user.getName());</span><br><span class="line">        gen.writeNumberField(<span class="string">"age"</span>, user.getAge());</span><br><span class="line">        gen.writeEndObject();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 其他</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// --------执行JSON转换-----------</span></span><br><span class="line"><span class="comment">// 必须指定一个ObjectCodec解码器,才能转换实体类为JSON</span></span><br><span class="line"><span class="comment">// data-bind常见的ObjectMapper就是一个ObjectCodec解码器,这是ObjectMapper的原理雏形</span></span><br><span class="line">jsonGenerator.setCodec(<span class="keyword">new</span> UserObjectCodec());</span><br><span class="line">jsonGenerator.writeObject(<span class="keyword">new</span> User());</span><br></pre></td></tr></table></figure>
+<p>嵌套实体类，其实是个树结构转JSON，但core模块没有提供树模型TreeNode的实现</p>
+<p>实现方式：</p>
+<ol>
+<li>writeTree()</li>
+<li>setCodec()解码器</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserTreeNode</span> <span class="keyword">implements</span> <span class="title">TreeNode</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> User user;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UserTreeNode</span><span class="params">(User user)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.user = user;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name = <span class="string">"loveName"</span>;</span><br><span class="line">    <span class="keyword">private</span> Integer age = <span class="number">23</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserTreeCodec</span> <span class="keyword">extends</span> <span class="title">ObjectCodec</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writeValue</span><span class="params">(JsonGenerator gen, Object value)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        User user = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (value <span class="keyword">instanceof</span> User) &#123;</span><br><span class="line">            user = User<span class="class">.<span class="keyword">class</span>.<span class="title">cast</span>(<span class="title">value</span>)</span>; <span class="comment">// 类型强制转换等价于 (User) value</span></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (value <span class="keyword">instanceof</span> TreeNode) &#123;</span><br><span class="line">            user = UserTreeNode<span class="class">.<span class="keyword">class</span>.<span class="title">cast</span>(<span class="title">value</span>).<span class="title">getUser</span>()</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        gen.writeStartObject();</span><br><span class="line">        gen.writeStringField(<span class="string">"name"</span>, user.getName());</span><br><span class="line">        gen.writeNumberField(<span class="string">"age"</span>, user.getAge());</span><br><span class="line">        gen.writeEndObject();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testJsonGeneratorTree</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    JsonFactory jsonFactory = <span class="keyword">new</span> JsonFactory();</span><br><span class="line">    <span class="keyword">try</span> (JsonGenerator jsonGenerator = jsonFactory.createGenerator(System.out, JsonEncoding.UTF8)) &#123;</span><br><span class="line">        jsonGenerator.setCodec(<span class="keyword">new</span> UserTreeCodec());</span><br><span class="line">        jsonGenerator.writeTree(<span class="keyword">new</span> UserTreeNode(<span class="keyword">new</span> User()));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h6 id="null"><a href="#null" class="headerlink" title="null"></a>null</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jsonGenerator.writeNullField(<span class="string">"weight"</span>);</span><br></pre></td></tr></table></figure>
+<p>树模型</p>
+<p><strong>writeTree()</strong></p>
+
+      
+    </div>
+	
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">
+		-------------Keep It Simple Stupid-------------
+		</div>
+    
+</div>
+	  
+	</div>
+	
+    
+    
+    
+	
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/want/2020/11/24/java数据校验/" rel="next" title="java数据校验">
+                <i class="fa fa-chevron-left"></i> java数据校验
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/want/2020/11/30/redis哨兵/" rel="prev" title="redis哨兵">
+                redis哨兵 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/want/images/avatar.jpg" alt="luxia">
+            
+              <p class="site-author-name" itemprop="name">luxia</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/want/archives/">
+              
+                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/want/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#三大核心模块"><span class="nav-number">1.1.</span> <span class="nav-text">三大核心模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#扩展模块"><span class="nav-number">1.2.</span> <span class="nav-text">扩展模块</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#数据类型模块datatype"><span class="nav-number">1.2.1.</span> <span class="nav-text">数据类型模块datatype</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#数据格式模块dataformat"><span class="nav-number">1.2.2.</span> <span class="nav-text">数据格式模块dataformat</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#支持Kotlin和Scala的依赖"><span class="nav-number">1.3.</span> <span class="nav-text">支持Kotlin和Scala的依赖</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#支持移动端的依赖"><span class="nav-number">1.4.</span> <span class="nav-text">支持移动端的依赖</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSON的三种处理方式"><span class="nav-number">2.</span> <span class="nav-text">JSON的三种处理方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#流式API"><span class="nav-number">3.</span> <span class="nav-text">流式API</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#写操作：JsonGenerator"><span class="nav-number">3.1.</span> <span class="nav-text">写操作：JsonGenerator</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#运行案例"><span class="nav-number">3.1.1.</span> <span class="nav-text">运行案例</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#相关类"><span class="nav-number">3.1.2.</span> <span class="nav-text">相关类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#json实现"><span class="nav-number">3.1.3.</span> <span class="nav-text">json实现</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#字符串"><span class="nav-number">3.1.3.1.</span> <span class="nav-text">字符串</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#数字"><span class="nav-number">3.1.3.2.</span> <span class="nav-text">数字</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#布尔"><span class="nav-number">3.1.3.3.</span> <span class="nav-text">布尔</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#数组"><span class="nav-number">3.1.3.4.</span> <span class="nav-text">数组</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#对象"><span class="nav-number">3.1.3.5.</span> <span class="nav-text">对象</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#null"><span class="nav-number">3.1.3.6.</span> <span class="nav-text">null</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">luxia</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">91.8k</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/want/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/want/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/want/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/want/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/want/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/want/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: true,
+        notify: true,
+        appId: 'h9Jehf4VaeDG22nDbzEpkHnt-gzGzoHsz',
+        appKey: 'GPvy0xbbxNb0Ao6DM6oRFSoG',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/want/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('-1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("h9Jehf4VaeDG22nDbzEpkHnt-gzGzoHsz", "GPvy0xbbxNb0Ao6DM6oRFSoG");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+  	 <!-- custom analytics part create by lux -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("h9Jehf4VaeDG22nDbzEpkHnt-gzGzoHsz", "GPvy0xbbxNb0Ao6DM6oRFSoG");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = $(document.getElementById(url)).text() + ': 0';
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = $(document.getElementById(url)).text() + ': ' + object.get('time');
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content = $(document.getElementById(url)).text() + ': ' + counter.get('time');
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = $(document.getElementById(url)).text() + ': ' + newcounter.get('time');
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+});
+</script>
+  
+<script src="/want/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/want/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"position":"right","width":100,"height":200,"hOffset":0,"vOffset":160},"mobile":{"show":true,"scale":0.05}});</script></body>
+</html>

@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/want/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/want/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/want/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/want/images/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/want/images/favicon-16x16.png?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="校验是否是同一个文件md5sum1md5sum 文件名 sha1sum1sha1sum 文件名 shell默认值 ${var:=初始值} 调用初始值后，变量var也赋予了一个值 ${var:-初始值}  临时调用，变量var并不改变，仍然为空  1234567891011[root@server0 ~]# a=$&amp;#123;b:-12&amp;#125;[root@server0 ~]# echo $a1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux">
+<meta property="og:url" content="https://echowant.github.io/want/2020/06/25/linux/index.html">
+<meta property="og:site_name" content="不周山">
+<meta property="og:description" content="校验是否是同一个文件md5sum1md5sum 文件名 sha1sum1sha1sum 文件名 shell默认值 ${var:=初始值} 调用初始值后，变量var也赋予了一个值 ${var:-初始值}  临时调用，变量var并不改变，仍然为空  1234567891011[root@server0 ~]# a=$&amp;#123;b:-12&amp;#125;[root@server0 ~]# echo $a1">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-10-29T01:36:44.009Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="linux">
+<meta name="twitter:description" content="校验是否是同一个文件md5sum1md5sum 文件名 sha1sum1sha1sum 文件名 shell默认值 ${var:=初始值} 调用初始值后，变量var也赋予了一个值 ${var:-初始值}  临时调用，变量var并不改变，仍然为空  1234567891011[root@server0 ~]# a=$&amp;#123;b:-12&amp;#125;[root@server0 ~]# echo $a1">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/want/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://echowant.github.io/want/2020/06/25/linux/">
+
+
+
+
+
+  <title>linux | 不周山</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/want/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">不周山</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Keep It Simple Stupid</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/want/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/want/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/want/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/want/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://echowant.github.io/want/want/2020/06/25/linux/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="luxia">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/want/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不周山">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">linux</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-25T21:58:02+08:00">
+                2020-06-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/want/2020/06/25/linux/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/want/2020/06/25/linux/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/want/2020/06/25/linux/" class="leancloud_visitors" data-flag-title="linux">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.8k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="校验是否是同一个文件"><a href="#校验是否是同一个文件" class="headerlink" title="校验是否是同一个文件"></a>校验是否是同一个文件</h3><h4 id="md5sum"><a href="#md5sum" class="headerlink" title="md5sum"></a><strong>md5sum</strong></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">md5sum 文件名</span><br></pre></td></tr></table></figure>
+<h4 id="sha1sum"><a href="#sha1sum" class="headerlink" title="sha1sum"></a>sha1sum</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sha1sum 文件名</span><br></pre></td></tr></table></figure>
+<h3 id="shell"><a href="#shell" class="headerlink" title="shell"></a>shell</h3><h4 id="默认值"><a href="#默认值" class="headerlink" title="默认值"></a>默认值</h4><ol>
+<li>${var:=初始值} 调用初始值后，变量var也赋予了一个值</li>
+<li>${var:-初始值}  临时调用，变量var并不改变，仍然为空</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@server0 ~]# a=$&#123;b:-12&#125;</span><br><span class="line">[root@server0 ~]# echo $a</span><br><span class="line">12</span><br><span class="line">[root@server0 ~]# echo $b</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@server0 ~]# a=$&#123;b:=12&#125;</span><br><span class="line">[root@server0 ~]# echo $a</span><br><span class="line">12</span><br><span class="line">[root@server0 ~]# echo $b</span><br><span class="line">12</span><br></pre></td></tr></table></figure>
+<h4 id="删除日志"><a href="#删除日志" class="headerlink" title="删除日志"></a>删除日志</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">################删除文件#################</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash">!/bin/sh</span></span><br><span class="line">DAY=$&#123;1:-100&#125; #默认值100天</span><br><span class="line"></span><br><span class="line">BEFORE_COUNT=$(find ./microservice/logs -type f|wc -l) #统计原来的数量</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除100天前的操作</span></span><br><span class="line">find ./microservice/logs -mtime +$DAY -type f -name "*.log" | xargs rm -rf</span><br><span class="line"></span><br><span class="line">if [ $? = 0 ]</span><br><span class="line">then</span><br><span class="line">  AFTER_COUNT=$(find ./microservice/logs -type f|wc -l)</span><br><span class="line">  echo clear success!before_count=$BEFORE_COUNT,after_count=$AFTER_COUNT</span><br><span class="line">else echo 'clear fail!'</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">################删除目录#################</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash">!/bin/sh</span></span><br><span class="line">DAY=$&#123;1:-100&#125; #默认值100天</span><br><span class="line"></span><br><span class="line">BEFORE_COUNT=$(find . -type d|wc -l) #统计原来的数量</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除100天前的操作</span></span><br><span class="line">find . -mtime +$DAY -type d -name "*-M*" |xargs rm -rf</span><br><span class="line"></span><br><span class="line">if [ $? = 0 ]</span><br><span class="line">then</span><br><span class="line">  AFTER_COUNT=$(find . -type d|wc -l)</span><br><span class="line">  echo clear success!before_count=$BEFORE_COUNT,after_count=$AFTER_COUNT</span><br><span class="line">else echo 'clear fail!'</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<h4 id="变量赋值"><a href="#变量赋值" class="headerlink" title="变量赋值"></a>变量赋值</h4><ol>
+<li><p>直接赋值，格式为：变量名= 变量值</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">VAR='nice'</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Read 命令是系统内置命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">read -p "input a val:" VAR    #获取键盘输入的 VAR 变量</span><br><span class="line">read -p "please input your age: ,sex: " age sex #多个变量,以空格的形式截取</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用命令行参数赋值</p>
+</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash">0	<span class="comment">#shell脚本程序名</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash">1	<span class="comment">#第一个参数</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash">2	<span class="comment">#第二个参数</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"><span class="comment">#	#参数总数</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash">*	<span class="comment">#所有位置的参数（所有参数）</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash">?	<span class="comment">#上一次命令执行返回值</span></span></span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>利用命令的输出结果赋值：</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">currentdir=`pwd`  </span><br><span class="line"> </span><br><span class="line">echo $currentdir</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>从文件中读入数据</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">HOSTLIST=$(cat hostList.txt)</span><br><span class="line"></span><br><span class="line">for HOST in $HOSTLIST</span><br></pre></td></tr></table></figure>
+<p><a href="https://www.cnblogs.com/Dxd-python/articles/11125968.html" target="_blank" rel="noopener">https://www.cnblogs.com/Dxd-python/articles/11125968.html</a></p>
+<h3 id="隐藏属性"><a href="#隐藏属性" class="headerlink" title="隐藏属性"></a>隐藏属性</h3><p>root</p>
+<ol>
+<li><p>chattr [+/-] [参数] [目录或文件]</p>
+</li>
+<li><p>lsattr [参数] [目录或文件]</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">chattr +a test</span><br><span class="line">lsattr test</span><br><span class="line"></span><br><span class="line">chattr -a test</span><br><span class="line">lsattr test</span><br></pre></td></tr></table></figure>
+<h3 id="ACL"><a href="#ACL" class="headerlink" title="ACL"></a>ACL</h3><p>给文件/目录，赋予某用户/组的权限</p>
+<ol>
+<li>setfacl</li>
+<li>getfacl</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">setfacl -m u:luxia:rw- <span class="built_in">test</span></span><br><span class="line"></span><br><span class="line">-rw-rw-r--+ 1 root  root   6 Jun 25 10:14 <span class="built_in">test</span></span><br><span class="line"></span><br><span class="line">getfacl <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+<h3 id="su-sudo"><a href="#su-sudo" class="headerlink" title="su / sudo"></a>su / sudo</h3><h4 id="su"><a href="#su" class="headerlink" title="su"></a>su</h4><p>su    需要输入目标用户的密码</p>
+<ol>
+<li><code>su</code>    不加用户，默认切到 root用户</li>
+<li><code>su 用户名</code>    只能获得root的执行权限，不能获得环境变量(不改变当前用户的变量)</li>
+<li><code>su - 用户名</code>    彻底切换为root用户（也切换了用户变量）</li>
+</ol>
+<h4 id="sudo"><a href="#sudo" class="headerlink" title="sudo"></a>sudo</h4><p>sudo    需要输入当前用户的密码</p>
+<p><code>sudo 命令</code>    在当前用户下，执行root用户才能执行的命令。需要root给当前用户用visudo命令（或者编辑/etc/sudoers文件）配置权限</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># root用户</span></span><br><span class="line">visudo 或者直接vim /etc/sudoers</span><br><span class="line"></span><br><span class="line">want ALL=(ALL) ALL</span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换到want用户</span></span><br><span class="line">sudo -l</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提示无权限</span></span><br><span class="line">ls /root</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可以查看</span></span><br><span class="line">sudo ls /root</span><br></pre></td></tr></table></figure>
+<p>`</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># root用户</span></span><br><span class="line">visudo 或者直接vim /etc/sudoers</span><br><span class="line"></span><br><span class="line">want ALL=(ALL) /usr/bin/cat</span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换到want用户</span></span><br><span class="line">sudo -l</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提示无权限</span></span><br><span class="line">cat /etc/shadow</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可以查看</span></span><br><span class="line">sudo cat /etc/shadow</span><br></pre></td></tr></table></figure>
+<h3 id="ln"><a href="#ln" class="headerlink" title="ln"></a>ln</h3><p>ln [参数] 源文件 目标文件</p>
+<ol>
+<li>软连接，依赖源文件。</li>
+<li>硬链接，不依赖源文件，类似于复制了一份文件。</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">"test link"</span> &gt;&gt; link.txt</span><br><span class="line"></span><br><span class="line"><span class="comment">## 软连接</span></span><br><span class="line">ln -s link.txt  link2</span><br><span class="line"></span><br><span class="line">lrwxrwxrwx.  1 root root        8 Jun 25 11:37 link2 -&gt; link.txt</span><br><span class="line">-rw-r--r--.  1 root root       10 Jun 25 11:36 link.txt</span><br><span class="line"></span><br><span class="line"><span class="comment">## 硬链接</span></span><br><span class="line">ln -s link.txt  link3</span><br><span class="line"></span><br><span class="line"><span class="comment"># 原始文件的硬盘链接数增加到2</span></span><br><span class="line">-rw-r--r--.  2 root root       10 Jun 25 11:39 link3</span><br><span class="line">-rw-r--r--.  2 root root       10 Jun 25 11:39 link.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除原始文件，软连接不能访问，硬链接仍然可以访问。</span></span><br><span class="line">lrwxrwxrwx.  1 root root        8 Jun 25 11:38 link2 -&gt; link.txt</span><br><span class="line">-rw-r--r--.  1 root root       10 Jun 25 11:39 link3</span><br></pre></td></tr></table></figure>
+<h3 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h3><h4 id="ping"><a href="#ping" class="headerlink" title="ping"></a>ping</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ping -c 4 192.168.37.1</span><br><span class="line"></span><br><span class="line"><span class="comment">#参数</span></span><br><span class="line">-c 指明发送数据报文的次数</span><br><span class="line"></span><br><span class="line"><span class="comment">#退出</span></span><br><span class="line">Ctrl + C</span><br></pre></td></tr></table></figure>
+<h4 id="telnet"><a href="#telnet" class="headerlink" title="telnet"></a>telnet</h4><p>安装（root用户）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 检查是否安装telnet,如果安装会有返回</span></span><br><span class="line">rpm -qa | grep telnet</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看可以查看的telnet相关的软件</span></span><br><span class="line">yum list | grep telnet</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 安装</span></span><br><span class="line">yum install -y telnet*</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">或者指定具体安装内容</span></span><br><span class="line">yum install -y telnet-server.x86_64</span><br><span class="line">yum install -y telnet.x86_64</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">telnet 192.168.37.1 21</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 退出</span></span><br><span class="line">输入quit</span><br></pre></td></tr></table></figure>
+<h4 id="traceroute"><a href="#traceroute" class="headerlink" title="traceroute"></a>traceroute</h4><ol>
+<li>从计算机A到另一端主机B所经历的全部网络路径。</li>
+<li>每次数据包由同样出发点（source）到达同样目的地(destination)走的路径可能不一样，大部分是相同的。</li>
+<li>traceroute通过发送小的数据包到目的设备直到返回，来测量需要多长时间。一条路径上的每个设备traceroute要测3次。输出结果中包括每次测试的时间(ms)和设备的名称（如有）及其IP地址。</li>
+<li>有些返回结果是星号*表示的，可能是防火墙封掉了ICMP的返回信息，所以得不到相关的数据包返回。</li>
+</ol>
+<p>命令：</p>
+<ol>
+<li>Linux，traceroute</li>
+<li>Windows，tracert</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">traceroute 192.168.37.1</span><br><span class="line">traceroute www.baidu.com</span><br><span class="line"></span><br><span class="line">-q 默认向每个网关发送3个探测包，可以通过-q 指定次数。</span><br><span class="line">-d 使用Socket层级的排错功能。</span><br><span class="line">-f 设置第一个检测数据包的存活数值TTL的大小。</span><br><span class="line">-F 设置勿离断位。</span><br><span class="line">-g 设置来源路由网关，最多可设置8个。</span><br><span class="line">-i 使用指定的网络界面送出数据包。</span><br><span class="line">-I 使用ICMP回应取代UDP资料信息。</span><br><span class="line"></span><br><span class="line">-m 设置检测数据包的最大存活数值TTL的大小。【指定最多经过的路径跳数，默认30跳】</span><br><span class="line"></span><br><span class="line">-n 直接返回IP地址而非主机名称。【避免了域名的解析】</span><br><span class="line"></span><br><span class="line">-p 设置UDP传输协议的通信端口。</span><br><span class="line">-r 忽略普通的Routing Table，直接将数据包送到远端主机上。【绕过正常的路由表，直接发送到网络相连的主机】</span><br><span class="line">-s 设置本地主机送出数据包的IP地址。</span><br><span class="line">-t 设置检测数据包的TOS数值。</span><br><span class="line">-v 详细显示指令的执行过程。</span><br><span class="line">-w 设置等待远端主机回报的时间。【把对外发探测包的等待响应时间设置为XXX秒】</span><br><span class="line">-x 开启或关闭数据包的正确性检验。</span><br></pre></td></tr></table></figure>
+<p>参考：</p>
+<ol>
+<li>traceroute <a href="https://blog.csdn.net/llq_200/article/details/81034345" target="_blank" rel="noopener">https://blog.csdn.net/llq_200/article/details/81034345</a></li>
+</ol>
+<h3 id="磁盘df"><a href="#磁盘df" class="headerlink" title="磁盘df"></a>磁盘df</h3><h4 id="查看所有磁盘分区的大小、已用、剩余"><a href="#查看所有磁盘分区的大小、已用、剩余" class="headerlink" title="查看所有磁盘分区的大小、已用、剩余"></a>查看所有磁盘分区的大小、已用、剩余</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">df -h</span><br><span class="line"></span><br><span class="line">Filesystem                       Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/mapper/cl-root               50G   41G  9.7G  81% /</span><br><span class="line">devtmpfs                          16G     0   16G   0% /dev</span><br><span class="line">tmpfs                             16G     0   16G   0% /dev/shm</span><br><span class="line">tmpfs                             16G  1.6G   15G  11% /run</span><br><span class="line">tmpfs                             16G     0   16G   0% /sys/fs/cgroup</span><br><span class="line">/dev/sda1                       1014M  140M  875M  14% /boot</span><br><span class="line">/dev/mapper/cl-home              142G  2.4G  139G   2% /home</span><br><span class="line">tmpfs                            3.2G     0  3.2G   0% /run/user/1001</span><br><span class="line">tmpfs                            3.2G     0  3.2G   0% /run/user/0</span><br><span class="line">dynamic.caiyun-clu-03.com:/HASZ  5.0T  209G  4.8T   5% /data</span><br></pre></td></tr></table></figure>
+<h4 id="查看指定目录的磁盘剩余空间"><a href="#查看指定目录的磁盘剩余空间" class="headerlink" title="查看指定目录的磁盘剩余空间"></a>查看指定目录的磁盘剩余空间</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">df -h /usr/</span><br><span class="line"></span><br><span class="line">Filesystem           Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/mapper/cl-root   50G   41G  9.7G  81% /</span><br></pre></td></tr></table></figure>
+<h3 id="文件夹du"><a href="#文件夹du" class="headerlink" title="文件夹du"></a>文件夹du</h3><p>查看文件占用大小。用于快速定位大文件的位置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 当前目录本身大小</span></span><br><span class="line">du -sh</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">指定文件、目录大小</span></span><br><span class="line">du -sh 文件或者目录</span><br><span class="line">------------------------------------------------------------------</span><br><span class="line"><span class="meta">#</span><span class="bash"> 当前目录下所有文件大小</span></span><br><span class="line">du -sh *</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">指定目录下每个文件大小</span></span><br><span class="line">du -sh 目录/*</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">指定根目录下每个文件大小</span></span><br><span class="line">du -sh /*</span><br><span class="line">------------------------------------------------------------------</span><br><span class="line"><span class="meta">#</span><span class="bash"> 目录+目录下所有子目录 大小</span></span><br><span class="line">du -h 目录					#查看指定目录下所有目录大小（含子目录）</span><br><span class="line">du -h --max-depth=1 /home/* #列出home下面所有一级目录的一级目录文件大小</span><br><span class="line">------------------------------------------------------------------</span><br><span class="line"><span class="meta">#</span><span class="bash"> 单位是MB</span></span><br><span class="line">du -sm</span><br></pre></td></tr></table></figure>
+<h4 id="当前目录下的文件个数"><a href="#当前目录下的文件个数" class="headerlink" title="当前目录下的文件个数"></a>当前目录下的文件个数</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">查看当前目录下有多少文件、目录</span></span><br><span class="line">ls |wc -l</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">只查看目录个数</span></span><br><span class="line">find . -type d|wc -l</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">只查看文件个数</span></span><br><span class="line">find . -type f|wc -l</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+	
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">
+		-------------Keep It Simple Stupid-------------
+		</div>
+    
+</div>
+	  
+	</div>
+	
+    
+    
+    
+	
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/want/2020/06/11/sftp/" rel="next" title="sftp">
+                <i class="fa fa-chevron-left"></i> sftp
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/want/2020/07/05/doc/" rel="prev" title="doc">
+                doc <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/want/images/avatar.jpg" alt="luxia">
+            
+              <p class="site-author-name" itemprop="name">luxia</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/want/archives/">
+              
+                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/want/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#校验是否是同一个文件"><span class="nav-number">1.</span> <span class="nav-text">校验是否是同一个文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#md5sum"><span class="nav-number">1.1.</span> <span class="nav-text">md5sum</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sha1sum"><span class="nav-number">1.2.</span> <span class="nav-text">sha1sum</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shell"><span class="nav-number">2.</span> <span class="nav-text">shell</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#默认值"><span class="nav-number">2.1.</span> <span class="nav-text">默认值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除日志"><span class="nav-number">2.2.</span> <span class="nav-text">删除日志</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#变量赋值"><span class="nav-number">2.3.</span> <span class="nav-text">变量赋值</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#隐藏属性"><span class="nav-number">3.</span> <span class="nav-text">隐藏属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ACL"><span class="nav-number">4.</span> <span class="nav-text">ACL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#su-sudo"><span class="nav-number">5.</span> <span class="nav-text">su / sudo</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#su"><span class="nav-number">5.1.</span> <span class="nav-text">su</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sudo"><span class="nav-number">5.2.</span> <span class="nav-text">sudo</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ln"><span class="nav-number">6.</span> <span class="nav-text">ln</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络"><span class="nav-number">7.</span> <span class="nav-text">网络</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ping"><span class="nav-number">7.1.</span> <span class="nav-text">ping</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#telnet"><span class="nav-number">7.2.</span> <span class="nav-text">telnet</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#traceroute"><span class="nav-number">7.3.</span> <span class="nav-text">traceroute</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘df"><span class="nav-number">8.</span> <span class="nav-text">磁盘df</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查看所有磁盘分区的大小、已用、剩余"><span class="nav-number">8.1.</span> <span class="nav-text">查看所有磁盘分区的大小、已用、剩余</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看指定目录的磁盘剩余空间"><span class="nav-number">8.2.</span> <span class="nav-text">查看指定目录的磁盘剩余空间</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件夹du"><span class="nav-number">9.</span> <span class="nav-text">文件夹du</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#当前目录下的文件个数"><span class="nav-number">9.1.</span> <span class="nav-text">当前目录下的文件个数</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">luxia</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">91.8k</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/want/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/want/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/want/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/want/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/want/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/want/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: true,
+        notify: true,
+        appId: 'h9Jehf4VaeDG22nDbzEpkHnt-gzGzoHsz',
+        appKey: 'GPvy0xbbxNb0Ao6DM6oRFSoG',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/want/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('-1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("h9Jehf4VaeDG22nDbzEpkHnt-gzGzoHsz", "GPvy0xbbxNb0Ao6DM6oRFSoG");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+  	 <!-- custom analytics part create by lux -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("h9Jehf4VaeDG22nDbzEpkHnt-gzGzoHsz", "GPvy0xbbxNb0Ao6DM6oRFSoG");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = $(document.getElementById(url)).text() + ': 0';
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = $(document.getElementById(url)).text() + ': ' + object.get('time');
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content = $(document.getElementById(url)).text() + ': ' + counter.get('time');
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = $(document.getElementById(url)).text() + ': ' + newcounter.get('time');
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+});
+</script>
+  
+<script src="/want/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/want/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"position":"right","width":100,"height":200,"hOffset":0,"vOffset":160},"mobile":{"show":true,"scale":0.05}});</script></body>
+</html>
