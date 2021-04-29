@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/want/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/want/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/want/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/want/images/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/want/images/favicon-16x16.png?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="图,SVG,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="需求 主要内容：  静态绘制 缩放/拖拽联动 选中效果/扩大点击区域/曲线可被选中而svg画布其他部分鼠标穿透 悬浮效果+获取tooltip数据  静态绘制曲线集svg12345678910111213&amp;lt;svg class=&quot;home-broadband-chart-line&quot; version=&quot;1.1&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&amp;gt;// ac">
+<meta name="keywords" content="图,SVG">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SVG连线图">
+<meta property="og:url" content="https://echowant.github.io/want/2018/09/30/SVG链路图/index.html">
+<meta property="og:site_name" content="不周山">
+<meta property="og:description" content="需求 主要内容：  静态绘制 缩放/拖拽联动 选中效果/扩大点击区域/曲线可被选中而svg画布其他部分鼠标穿透 悬浮效果+获取tooltip数据  静态绘制曲线集svg12345678910111213&amp;lt;svg class=&quot;home-broadband-chart-line&quot; version=&quot;1.1&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&amp;gt;// ac">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://echowant.github.io/want/2018/09/30/SVG链路图/link.gif">
+<meta property="og:updated_time" content="2020-06-22T12:11:09.980Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SVG连线图">
+<meta name="twitter:description" content="需求 主要内容：  静态绘制 缩放/拖拽联动 选中效果/扩大点击区域/曲线可被选中而svg画布其他部分鼠标穿透 悬浮效果+获取tooltip数据  静态绘制曲线集svg12345678910111213&amp;lt;svg class=&quot;home-broadband-chart-line&quot; version=&quot;1.1&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&amp;gt;// ac">
+<meta name="twitter:image" content="https://echowant.github.io/want/2018/09/30/SVG链路图/link.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/want/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://echowant.github.io/want/2018/09/30/SVG链路图/">
+
+
+
+
+
+  <title>SVG连线图 | 不周山</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/want/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">不周山</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Keep It Simple Stupid</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/want/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/want/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/want/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/want/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://echowant.github.io/want/want/2018/09/30/SVG链路图/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="luxia">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/want/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不周山">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SVG连线图</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-30T14:26:15+08:00">
+                2018-09-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/want/2018/09/30/SVG链路图/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/want/2018/09/30/SVG链路图/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/want/2018/09/30/SVG链路图/" class="leancloud_visitors" data-flag-title="SVG连线图">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.5k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><img src="/want/2018/09/30/SVG链路图/link.gif" title="SVG曲线实现效果图">
+<p>主要内容：</p>
+<ol>
+<li>静态绘制</li>
+<li>缩放/拖拽联动</li>
+<li>选中效果/扩大点击区域/曲线可被选中而svg画布其他部分鼠标穿透</li>
+<li>悬浮效果+获取tooltip数据</li>
+</ol>
+<h3 id="静态绘制曲线集"><a href="#静态绘制曲线集" class="headerlink" title="静态绘制曲线集"></a>静态绘制曲线集</h3><h4 id="svg"><a href="#svg" class="headerlink" title="svg"></a>svg</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">svg</span> <span class="attr">class</span>=<span class="string">"home-broadband-chart-line"</span> <span class="attr">version</span>=<span class="string">"1.1"</span> <span class="attr">xmlns</span>=<span class="string">"http://www.w3.org/2000/svg"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">// active 选中效果</span><br><span class="line">  <span class="tag">&lt;<span class="name">g</span> <span class="attr">class</span>=<span class="string">"line-group active"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">// 扩大点击区域（d为曲线： M起点 Q折点, 终点）</span><br><span class="line">    <span class="tag">&lt;<span class="name">path</span> <span class="attr">class</span>=<span class="string">"line-bg"</span> <span class="attr">d</span>=<span class="string">"M790,130 Q598.2258262634277,147.52609517415354 406.45165252685547,312.57828552246065"</span>&gt;</span><span class="tag">&lt;/<span class="name">path</span>&gt;</span></span><br><span class="line">        </span><br><span class="line">// 真实曲线（d为曲线（同上）： M起点 Q折点, 终点）</span><br><span class="line">    <span class="tag">&lt;<span class="name">path</span> <span class="attr">class</span>=<span class="string">"line"</span> <span class="attr">d</span>=<span class="string">"同上"</span> <span class="attr">style</span>=<span class="string">"stroke: rgb(238, 80, 66);"</span>&gt;</span><span class="tag">&lt;/<span class="name">path</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;/<span class="name">g</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">svg</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="css"><a href="#css" class="headerlink" title="css"></a>css</h4><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.home-broadband-chart-line</span> &#123;</span><br><span class="line">  <span class="attribute">pointer-events</span>: none; <span class="comment">// 设置svg鼠标穿透</span></span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">z-index</span>: <span class="number">1</span>;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100%</span>;</span><br><span class="line"></span><br><span class="line">  <span class="selector-class">.line-group</span> &#123;</span><br><span class="line">    <span class="attribute">cursor</span>: pointer;</span><br><span class="line">    <span class="attribute">fill</span>: none;</span><br><span class="line">    <span class="attribute">pointer-events</span>: visiblepainted; <span class="comment">// 设置具体曲线可鼠标穿透</span></span><br><span class="line">    <span class="selector-tag">path</span> &#123;</span><br><span class="line">      <span class="attribute">fill</span>: none; <span class="comment">// 只渲染stroke曲线,不渲染闭合填充</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="selector-tag">&amp;</span><span class="selector-pseudo">:hover</span>, <span class="selector-tag">&amp;</span><span class="selector-class">.active</span> &#123;</span><br><span class="line">      <span class="selector-class">.line</span> &#123;</span><br><span class="line">        <span class="attribute">stroke-width</span>: <span class="number">3</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="selector-class">.line-bg</span> &#123;</span><br><span class="line">    <span class="attribute">stroke</span>: transparent; <span class="comment">// 透明，用于扩大点击区域</span></span><br><span class="line">    <span class="attribute">stroke-width</span>: <span class="number">10</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="selector-class">.line</span> &#123;</span><br><span class="line">    <span class="attribute">stroke</span>: <span class="number">#55E38D</span>;</span><br><span class="line">    <span class="attribute">stroke-width</span>: <span class="number">1</span>;</span><br><span class="line">    <span class="attribute">stroke-dasharray</span>: <span class="number">5</span>, <span class="number">2</span>; <span class="comment">// 虚线效果</span></span><br><span class="line">   &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>参考： <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/pointer-events" target="_blank" rel="noopener">visiblepainted</a></p>
+<h3 id="动态绘制曲线集"><a href="#动态绘制曲线集" class="headerlink" title="动态绘制曲线集"></a>动态绘制曲线集</h3><p>获得每一条线的起始坐标，输入svg绘制即可。</p>
+<h4 id="曲线"><a href="#曲线" class="headerlink" title="曲线"></a>曲线</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">&lt;svg</span><br><span class="line">  className=<span class="string">"home-broadband-chart-line"</span></span><br><span class="line">  version=<span class="string">"1.1"</span></span><br><span class="line">  xmlns=<span class="string">"http://www.w3.org/2000/svg"</span></span><br><span class="line">&gt;</span><br><span class="line">  &#123;</span><br><span class="line">  indexLinkList</span><br><span class="line">    .map(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> &#123;</span><br><span class="line">        id,</span><br><span class="line">        name,</span><br><span class="line">        bId,</span><br><span class="line">        aId,</span><br><span class="line">        legend,</span><br><span class="line">      &#125; = item;</span><br><span class="line">      <span class="keyword">const</span> &#123; color &#125; = MAP_LEGEND_INFO[legend];</span><br><span class="line">                </span><br><span class="line">      <span class="keyword">const</span> startPos = posType[bId] || [<span class="number">0</span>, <span class="number">0</span>]; <span class="comment">// 起点位置</span></span><br><span class="line">      <span class="keyword">const</span> x1 = startPos[<span class="number">0</span>];</span><br><span class="line">      <span class="keyword">const</span> y1 = startPos[<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">      <span class="keyword">const</span> endPos = posMap[aId] || [<span class="number">0</span>, <span class="number">0</span>]; <span class="comment">// 终点位置</span></span><br><span class="line">      <span class="keyword">const</span> x2 = endPos[<span class="number">0</span>];</span><br><span class="line">      <span class="keyword">const</span> y2 = endPos[<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">      <span class="keyword">const</span> cx = (x1 + x2) / <span class="number">2</span>; <span class="comment">// 折点位置 x</span></span><br><span class="line">      <span class="keyword">const</span> cy = (y1 + y2) / <span class="number">3</span>; <span class="comment">// 折点位置 y</span></span><br><span class="line">      <span class="keyword">const</span> operator = [<span class="string">'group'</span>, <span class="string">'idc'</span>].indexOf(bId) &gt; <span class="number">-1</span> ? <span class="number">1</span> : <span class="number">2</span>; <span class="comment">// 弧方向</span></span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> (</span><br><span class="line">        &lt;g</span><br><span class="line">          key=&#123;id&#125;</span><br><span class="line">          className=&#123;<span class="string">`line-group <span class="subst">$&#123;id === currentId ? <span class="string">'active'</span> : <span class="string">''</span>&#125;</span>`</span>&#125;</span><br><span class="line">          onMouseOver=&#123;e =&gt; <span class="keyword">this</span>.onLinkHover(e, &#123; id, name, color &#125;)&#125;</span><br><span class="line">          onFocus=&#123;e =&gt; <span class="keyword">this</span>.onLinkHover(e, &#123; id, name, color &#125;)&#125;</span><br><span class="line">          onMouseOut=&#123;<span class="keyword">this</span>.onLinkOut&#125;</span><br><span class="line">          onBlur=&#123;<span class="keyword">this</span>.onLinkOut&#125;</span><br><span class="line">          onClick=&#123;() =&gt; onSelect(id)&#125;</span><br><span class="line">        &gt;</span><br><span class="line">          &lt;path</span><br><span class="line">            className=<span class="string">"line-bg"</span></span><br><span class="line">            d=&#123;<span class="string">`M<span class="subst">$&#123;x1&#125;</span>,<span class="subst">$&#123;y1&#125;</span> Q<span class="subst">$&#123;cx&#125;</span>,<span class="subst">$&#123;operator * cy&#125;</span> <span class="subst">$&#123;x2&#125;</span>,<span class="subst">$&#123;y2&#125;</span>`</span>&#125;</span><br><span class="line">          /&gt;</span><br><span class="line">          &lt;path</span><br><span class="line">            className=<span class="string">"line"</span></span><br><span class="line">            d=&#123;<span class="string">`M<span class="subst">$&#123;x1&#125;</span>,<span class="subst">$&#123;y1&#125;</span> Q<span class="subst">$&#123;cx&#125;</span>,<span class="subst">$&#123;operator * cy&#125;</span> <span class="subst">$&#123;x2&#125;</span>,<span class="subst">$&#123;y2&#125;</span>`</span>&#125;</span><br><span class="line">            style=&#123;&#123;</span><br><span class="line">              stroke: color,</span><br><span class="line">            &#125;&#125;</span><br><span class="line">          /&gt;</span><br><span class="line">      &lt;<span class="regexp">/g&gt;</span></span><br><span class="line"><span class="regexp">     );</span></span><br><span class="line"><span class="regexp">   &#125;)</span></span><br><span class="line"><span class="regexp"> &#125;</span></span><br><span class="line"><span class="regexp">&lt;/</span>svg&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="起点位置"><a href="#起点位置" class="headerlink" title="起点位置"></a>起点位置</h4><p>起点是四个DOM定点，只需获取四个DOM元素的中心位置(<strong>简单DOM操作</strong>，根据实际情况而定)<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 该示例不通用</span></span><br><span class="line">getPos = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; id &#125; = <span class="keyword">this</span>.props;</span><br><span class="line">    <span class="keyword">const</span> &#123; offsetLeft, offsetTop &#125; = <span class="keyword">this</span>[id].offsetParent; <span class="comment">// 位置</span></span><br><span class="line">    <span class="keyword">const</span> ball = <span class="keyword">this</span>[id].children[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">const</span> xCenter = (<span class="keyword">this</span>[id].clientWidth - ball.clientWidth) / <span class="number">2</span>; <span class="comment">// 中心</span></span><br><span class="line">    <span class="keyword">const</span> yCenter = ball.clientHeight / <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      x: offsetLeft + <span class="keyword">this</span>[id].offsetLeft + xCenter,</span><br><span class="line">      y: (offsetTop + <span class="keyword">this</span>[id].offsetTop) + yCenter,</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure></p>
+<h4 id="终点位置"><a href="#终点位置" class="headerlink" title="终点位置"></a>终点位置</h4><p>终点是echarts图结点，需要获取echarts点位置<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">getPixel(info) &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; pos, geo = <span class="string">'geo'</span> &#125; = info;</span><br><span class="line">  <span class="keyword">const</span> &#123; lng, lat &#125; = pos;</span><br><span class="line">  <span class="keyword">const</span> &#123; chart &#125; = <span class="keyword">this</span>;</span><br><span class="line">  <span class="keyword">const</span> pixel = chart.convertToPixel(geo, [lng, lat]); <span class="comment">// 经纬度转平面坐标</span></span><br><span class="line">  <span class="keyword">return</span> pixel;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="resize（拖拽-缩放）"><a href="#resize（拖拽-缩放）" class="headerlink" title="resize（拖拽/缩放）"></a>resize（拖拽/缩放）</h3><p>echarts图形变动——重新获取地图各点平面坐标（终点位置）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">setDataZoom(func) &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; chart &#125; = <span class="keyword">this</span>;</span><br><span class="line">  chart.on(<span class="string">'georoam'</span>, () =&gt; &#123; <span class="comment">// 监听echart地图事件,同时响应缩放和拖拽</span></span><br><span class="line">    func();</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">chart.setDataZoom(<span class="function"><span class="params">()</span> =&gt;</span> <span class="keyword">this</span>.getMapPixel(mapList));</span><br></pre></td></tr></table></figure>
+<p>窗口变动——重新更新四个DOM元素平面坐标（起点位置）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">'resize'</span>, <span class="keyword">this</span>.resize);。</span><br><span class="line"><span class="built_in">window</span>.removeEventListener(<span class="string">'resize'</span>, <span class="keyword">this</span>.resize);</span><br></pre></td></tr></table></figure>
+<h3 id="判断鼠标“是否在同一条连线上连续移动”"><a href="#判断鼠标“是否在同一条连线上连续移动”" class="headerlink" title="判断鼠标“是否在同一条连线上连续移动”"></a>判断鼠标“是否在同一条连线上连续移动”</h3><p>鼠标在同一条连线上连续移动，不应重新调取tooltip接口，而应直接采用原有tooltip接口数据。</p>
+<p>已知鼠标方法：</p>
+<ul>
+<li>鼠标落在连线： onmouseover</li>
+<li>鼠标离开连线： onmouseout</li>
+</ul>
+<p>鼠标在曲线上移动过程中，视觉上虽然是连续的，但其实在一瞬间先经历了onmouseout又onmouseover的过程。</p>
+<p><strong>思路</strong>： 利用定时器setTimeout，来延缓onmouseout。即在200ms内，再次onmouseover，则不再执行onmouseout的方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">onLinkOut = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">this</span>.timer = setTimeout(<span class="keyword">this</span>.onReset, <span class="number">200</span>);</span><br><span class="line">&#125;;</span><br><span class="line">onLinkHover =<span class="function">(<span class="params">event, link</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>.timer) &#123;</span><br><span class="line">    clearTimeout(<span class="keyword">this</span>.timer);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>定时器有广泛的应用意义：</p>
+<ol>
+<li>为了防止用户鼠标不经意划过链接，腾讯网首页几乎所有鼠标经过事件都进行了【延时处理】，即 鼠标经过后200毫秒，才执行鼠标经过事件。</li>
+</ol>
+<p>该方案是节流、防抖的思想之一。</p>
+<h3 id="节流、防抖"><a href="#节流、防抖" class="headerlink" title="节流、防抖"></a>节流、防抖</h3><h4 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h4><p>因频繁执行DOM操作，资源加载等行为，导致UI停顿甚至浏览器崩溃。</p>
+<p>常见导致原因如以下<strong>持续触发</strong>的事件——</p>
+<ul>
+<li>浏览器的 onresize / onscroll 等事件。</li>
+<li>鼠标的 mousemove / mousedown 等事件。</li>
+<li>键盘的 keydown / keyup 等事件。</li>
+<li>地图的 zoomend / dragend / moveend 等事件。</li>
+</ul>
+<h4 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h4><h5 id="节流throttle"><a href="#节流throttle" class="headerlink" title="节流throttle"></a>节流throttle</h5><p><strong>作用</strong>：<br>以一定的频率执行后续处理。<br>让水龙头每隔200毫秒流出一滴水。源源不断的流出水而又不浪费。</p>
+<p><strong>场景</strong>：<br>拖拽DOM。在一定时间内多次执行，会感觉流畅。（如果使用防抖，一定时间内执行一次，会感觉卡顿）。</p>
+<p><strong>分类</strong>：</p>
+<ul>
+<li>时间戳</li>
+<li>定时版本</li>
+</ul>
+<h5 id="防抖debounce"><a href="#防抖debounce" class="headerlink" title="防抖debounce"></a>防抖debounce</h5><p><strong>作用</strong>：<br>停止n毫秒后，执行后续处理</p>
+<p><strong>场景</strong>：<br>搜索。当联想搜索时，用户连续不断输入字符keyup，不应立即发送请求，而应等一段时间不输入了，才发送一次请求</p>
+<p><strong>分类</strong>：</p>
+<ul>
+<li>非立即防抖</li>
+<li>立即防抖</li>
+</ul>
+<h6 id="非立即防抖"><a href="#非立即防抖" class="headerlink" title="非立即防抖"></a>非立即防抖</h6><p>触发事件后函数<strong>不会立即执行</strong>，而是在n秒之后执行，如果n秒之内又触发了事件，则会重新计算函数执行时间。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">debounce</span>(<span class="params">func, wait</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> timer = <span class="literal">null</span>; <span class="comment">// 定义计时器</span></span><br><span class="line">  <span class="keyword">var</span> context = <span class="keyword">this</span>;</span><br><span class="line">  <span class="keyword">var</span> args = <span class="built_in">arguments</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (timer) &#123;</span><br><span class="line">      clearTimeout(timer); <span class="comment">// 在n时间内，又被执行，则清除计时器,重新计时</span></span><br><span class="line">    &#125;</span><br><span class="line">    timer = setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      func.apply(context, args)</span><br><span class="line">    &#125;, wait); <span class="comment">// 触发事件后，等待n时间后才执行</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h6 id="立即防抖"><a href="#立即防抖" class="headerlink" title="立即防抖"></a>立即防抖</h6><p>触发事件后函数会<strong>立即执行</strong>，然后n秒内不触发事件才会执行函数的效果。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">debounce</span>(<span class="params">func, wait</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> timeout = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">var</span> context = <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">var</span> args = <span class="built_in">arguments</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (timeout) clearTimeout(timeout);</span><br><span class="line">        <span class="keyword">var</span> callNow = !timeout;</span><br><span class="line">        timeout = setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            timeout = <span class="literal">null</span>;</span><br><span class="line">        &#125;, wait)</span><br><span class="line">        <span class="keyword">if</span> (callNow) func.apply(context, args)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ol>
+<li><a href="https://www.jianshu.com/p/566c66aafa22" target="_blank" rel="noopener">节流（throttle）与防抖（debounce）</a></li>
+</ol>
+
+      
+    </div>
+	
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">
+		-------------Keep It Simple Stupid-------------
+		</div>
+    
+</div>
+	  
+	</div>
+	
+    
+    
+    
+	
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/want/tags/图/" rel="tag"># 图</a>
+          
+            <a href="/want/tags/SVG/" rel="tag"># SVG</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/want/2018/09/29/React前端开发前的规划/" rel="next" title="React前端开发前的规划图">
+                <i class="fa fa-chevron-left"></i> React前端开发前的规划图
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/want/2018/10/10/地图栅格/" rel="prev" title="地图栅格">
+                地图栅格 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/want/images/avatar.jpg" alt="luxia">
+            
+              <p class="site-author-name" itemprop="name">luxia</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/want/archives/">
+              
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/want/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#需求"><span class="nav-number">1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#静态绘制曲线集"><span class="nav-number">2.</span> <span class="nav-text">静态绘制曲线集</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#svg"><span class="nav-number">2.1.</span> <span class="nav-text">svg</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#css"><span class="nav-number">2.2.</span> <span class="nav-text">css</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态绘制曲线集"><span class="nav-number">3.</span> <span class="nav-text">动态绘制曲线集</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#曲线"><span class="nav-number">3.1.</span> <span class="nav-text">曲线</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#起点位置"><span class="nav-number">3.2.</span> <span class="nav-text">起点位置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#终点位置"><span class="nav-number">3.3.</span> <span class="nav-text">终点位置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#resize（拖拽-缩放）"><span class="nav-number">4.</span> <span class="nav-text">resize（拖拽/缩放）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#判断鼠标“是否在同一条连线上连续移动”"><span class="nav-number">5.</span> <span class="nav-text">判断鼠标“是否在同一条连线上连续移动”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#节流、防抖"><span class="nav-number">6.</span> <span class="nav-text">节流、防抖</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#描述"><span class="nav-number">6.1.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#功能"><span class="nav-number">6.2.</span> <span class="nav-text">功能</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#节流throttle"><span class="nav-number">6.2.1.</span> <span class="nav-text">节流throttle</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#防抖debounce"><span class="nav-number">6.2.2.</span> <span class="nav-text">防抖debounce</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#非立即防抖"><span class="nav-number">6.2.2.1.</span> <span class="nav-text">非立即防抖</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#立即防抖"><span class="nav-number">6.2.2.2.</span> <span class="nav-text">立即防抖</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考"><span class="nav-number">6.3.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">luxia</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">101.1k</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/want/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/want/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/want/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/want/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/want/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/want/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: true,
+        notify: true,
+        appId: 'h9Jehf4VaeDG22nDbzEpkHnt-gzGzoHsz',
+        appKey: 'GPvy0xbbxNb0Ao6DM6oRFSoG',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/want/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('-1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("h9Jehf4VaeDG22nDbzEpkHnt-gzGzoHsz", "GPvy0xbbxNb0Ao6DM6oRFSoG");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+  	 <!-- custom analytics part create by lux -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("h9Jehf4VaeDG22nDbzEpkHnt-gzGzoHsz", "GPvy0xbbxNb0Ao6DM6oRFSoG");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = $(document.getElementById(url)).text() + ': 0';
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = $(document.getElementById(url)).text() + ': ' + object.get('time');
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content = $(document.getElementById(url)).text() + ': ' + counter.get('time');
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = $(document.getElementById(url)).text() + ': ' + newcounter.get('time');
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+});
+</script>
+  
+<script src="/want/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/want/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"position":"right","width":100,"height":200,"hOffset":0,"vOffset":160},"mobile":{"show":true,"scale":0.05}});</script></body>
+</html>
