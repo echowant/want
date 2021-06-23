@@ -83,7 +83,7 @@
 <meta property="og:image" content="c:/Users/luxia/AppData/Local/YNote/data/wythyw@163.com/1116f7dea63d49fd8a64edd9a8e93b53/clipboard.png">
 <meta property="og:image" content="c:/Users/luxia/AppData/Local/YNote/data/wythyw@163.com/660f999f697641f7859f05d45d5246fe/clipboard.png">
 <meta property="og:image" content="https://www.pianshen.com/images/530/b4355e37fbd0533470cc75936dca8ad2.png">
-<meta property="og:updated_time" content="2021-02-23T05:42:34.518Z">
+<meta property="og:updated_time" content="2021-06-11T12:13:11.903Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java数据校验">
 <meta name="twitter:description" content="简介数据校验（Bean Validation） Bean Validation是将校验逻辑与相应的Bean域模型进行绑，是基于Bean的校验。 契约式编程：避免了if else 等硬编码校验（能通过契约约定解决的就不要去硬编码）。 面向接口编程：Bean Validation属于Java EE标准规范，是JSR（Java Specification Requests）抽象的具体实现，实际使用过程中">
@@ -569,8 +569,10 @@
 <h4 id="非空判断注解的区别"><a href="#非空判断注解的区别" class="headerlink" title="非空判断注解的区别"></a>非空判断注解的区别</h4><ol>
 <li>@NotNull 用在基本类型上,不能为null，但可以为空字符串</li>
 <li>@NotBlank 用在String上面,只能作用在String上，不能为null，而且调用trim()后，长度必须大于0（不能是空字符串）</li>
-<li>@NotEmpty用在集合类上面,不能为null，并且长度必须大于0</li>
+<li>@NotEmpty用在集合类上面,不能为null，并且长度必须大于0、</li>
 </ol>
+<p>kotlin的写法略有不同</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">For a field @field:NotBlank</span><br><span class="line"></span><br><span class="line">For a getter @get:NotBlank</span><br><span class="line"></span><br><span class="line">For a constructor @param:NotBlank</span><br></pre></td></tr></table></figure>
 <h4 id="groups"><a href="#groups" class="headerlink" title="groups"></a>groups</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IpRequired</span> </span>&#123;&#125;</span><br><span class="line"><span class="comment">// 应用到字段等</span></span><br><span class="line"><span class="meta">@NotNull</span>(groups = IpRequired<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class"><span class="title">private</span> <span class="title">Integer</span> <span class="title">ipAddress</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 只校验ipAddress字段，其他不校验</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getAllUserByName</span><span class="params">(@Validated(IpRequired.class)</span> User user) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">"nice"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getAllUserByBigAge</span><span class="params">(@Validated(&#123;CHECK.class, IpRequired.class&#125;)</span> User user) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">"nice"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="GroupSequence"><a href="#GroupSequence" class="headerlink" title="@GroupSequence"></a>@GroupSequence</h4><ul>
 <li>在使用组序列验证的时候，如果序列前边的组验证失败，则后面的组将不再给予验证。</li>
@@ -1026,7 +1028,7 @@
               
                 <a href="/want/archives/">
               
-                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-count">54</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1106,7 +1108,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">101.1k</span>
+    <span title="Site words total count">115.1k</span>
   
 </div>
 

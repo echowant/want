@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/want/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/want/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/want/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/want/images/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/want/images/favicon-16x16.png?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="单元测试单元测试（unit testing），是指对软件中的最小可测试单元进行检查和验证。在Java中单元测试的最小单元是类。 为什么写单元测试？  保证或验证实现功能。 保护已经实现的功能不被破坏。  只针对某一个功能点写测试，比如独立测试某类中的某个方法。但这个类和方法本身不是独立的，可能会去调用其他的类或方法。我们可以采用Mockito和PowerMock两种工具，来虚拟那些外部的、不容易构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="单元测试">
+<meta property="og:url" content="https://echowant.github.io/want/2021/05/13/单元测试/index.html">
+<meta property="og:site_name" content="不周山">
+<meta property="og:description" content="单元测试单元测试（unit testing），是指对软件中的最小可测试单元进行检查和验证。在Java中单元测试的最小单元是类。 为什么写单元测试？  保证或验证实现功能。 保护已经实现的功能不被破坏。  只针对某一个功能点写测试，比如独立测试某类中的某个方法。但这个类和方法本身不是独立的，可能会去调用其他的类或方法。我们可以采用Mockito和PowerMock两种工具，来虚拟那些外部的、不容易构">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="c:/Users/Lenovo/AppData/Roaming/Typora/typora-user-images/image-20210513110038208.png">
+<meta property="og:image" content="c:/Users/Lenovo/AppData/Roaming/Typora/typora-user-images/image-20210513125151127.png">
+<meta property="og:image" content="c:/Users/Lenovo/AppData/Roaming/Typora/typora-user-images/image-20210513110528189.png">
+<meta property="og:image" content="c:/Users/Lenovo/AppData/Roaming/Typora/typora-user-images/image-20210513135536067.png">
+<meta property="og:image" content="c:/Users/Lenovo/AppData/Roaming/Typora/typora-user-images/image-20210513135742771.png">
+<meta property="og:image" content="c:/Users/Lenovo/AppData/Roaming/Typora/typora-user-images/image-20210513140508548.png">
+<meta property="og:image" content="c:/Users/Lenovo/AppData/Roaming/Typora/typora-user-images/image-20210513135742771.png">
+<meta property="og:image" content="c:/Users/Lenovo/AppData/Roaming/Typora/typora-user-images/image-20210513144223695.png">
+<meta property="og:image" content="c:/Users/Lenovo/AppData/Roaming/Typora/typora-user-images/image-20210513144313023.png">
+<meta property="og:image" content="c:/Users/Lenovo/AppData/Roaming/Typora/typora-user-images/image-20210524162554542.png">
+<meta property="og:updated_time" content="2021-06-11T12:30:12.706Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="单元测试">
+<meta name="twitter:description" content="单元测试单元测试（unit testing），是指对软件中的最小可测试单元进行检查和验证。在Java中单元测试的最小单元是类。 为什么写单元测试？  保证或验证实现功能。 保护已经实现的功能不被破坏。  只针对某一个功能点写测试，比如独立测试某类中的某个方法。但这个类和方法本身不是独立的，可能会去调用其他的类或方法。我们可以采用Mockito和PowerMock两种工具，来虚拟那些外部的、不容易构">
+<meta name="twitter:image" content="c:/Users/Lenovo/AppData/Roaming/Typora/typora-user-images/image-20210513110038208.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/want/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://echowant.github.io/want/2021/05/13/单元测试/">
+
+
+
+
+
+  <title>单元测试 | 不周山</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/want/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">不周山</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Keep It Simple Stupid</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/want/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/want/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/want/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/want/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://echowant.github.io/want/want/2021/05/13/单元测试/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="luxia">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/want/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不周山">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">单元测试</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-05-13T09:39:18+08:00">
+                2021-05-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/want/2021/05/13/单元测试/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/want/2021/05/13/单元测试/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/want/2021/05/13/单元测试/" class="leancloud_visitors" data-flag-title="单元测试">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  4.5k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h3><p>单元测试（unit testing），是指对软件中的最小可测试单元进行检查和验证。在Java中单元测试的最小单元是类。</p>
+<p>为什么写单元测试？</p>
+<ol>
+<li>保证或验证实现功能。</li>
+<li>保护已经实现的功能不被破坏。</li>
+</ol>
+<p>只针对某一个功能点写测试，比如独立测试某类中的某个方法。但这个类和方法本身不是独立的，可能会去调用其他的类或方法。我们可以采用Mockito和PowerMock两种工具，来虚拟那些外部的、不容易构造的对象：</p>
+<ol>
+<li><p>Mockito：适用于大多数标准的单元测试。</p>
+</li>
+<li><p>PowerMock</p>
+</li>
+<li><ul>
+<li>PowerMock在Mockito的基础上，额外增加了更多case（如static Method，final method, 枚举类， private method和Constructor）</li>
+<li>PowerMock写法与Mockito基本相同，这是因为PowerMock是从Mockito的一个特殊的API衍化而来。比如当添加PowerMock Junit-module的maven依赖时时，其实还要导入Mockito-API。</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.powermock<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>powermock-module-junit4<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.powermock<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>powermock-api-mockito2<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="Mockito"><a href="#Mockito" class="headerlink" title="Mockito"></a>Mockito</h4><p>通过创建mock或spy对象，并制定具体返回规则来实现模拟的功能：</p>
+<ol>
+<li>mock对象对于未指定处理规则的调用，会按方法返回值类型返回该类型的默认值（如int、long则返回0，boolean则返回false，对象则返回null，void则什么都不做）</li>
+<li>spy对象在未指定处理规则时则会直接调用真实方法。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OpenServiceImplTest</span> </span>&#123;</span><br><span class="line">    <span class="comment">// @InjectMocks真正需要被测试的类</span></span><br><span class="line">    <span class="meta">@InjectMocks</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> IOpenService openService = <span class="keyword">new</span> OpenServiceImpl();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// @Mock创建虚拟对象(外部类等)</span></span><br><span class="line">    <span class="meta">@Mock</span></span><br><span class="line">    <span class="keyword">private</span> IOpenWorkOrderDao openWorkOrderDao;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Mock</span></span><br><span class="line">    <span class="keyword">private</span> ITunnelService tunnelService;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Before</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUp</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        MockitoAnnotations.initMocks(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getOpenDetailTest</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> id = <span class="number">321</span>;</span><br><span class="line">        <span class="keyword">final</span> OpenWorkOrderEntity openWorkOrderEntity = <span class="keyword">new</span> OpenWorkOrderEntity() &#123;&#123;</span><br><span class="line">            <span class="keyword">this</span>.setId(id);</span><br><span class="line">            <span class="keyword">this</span>.setWorkOrderNo(<span class="string">"12"</span>);</span><br><span class="line">            <span class="keyword">this</span>.setCustomName(<span class="string">"tom"</span>);</span><br><span class="line">            <span class="keyword">this</span>.setApnType(<span class="number">1</span>);</span><br><span class="line">        &#125;&#125;;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// mock的发生时机是当程序执行至”when-method-call-then-return”之类的语句时,可以测试类的逻辑流程</span></span><br><span class="line">        Mockito.when(openWorkOrderDao.selectOpenWorkOrderById(anyInt())).thenReturn(openWorkOrderEntity);</span><br><span class="line">        Mockito.doNothing().when(tunnelService).getTunnelInfo(any(OpenDetailDto<span class="class">.<span class="keyword">class</span>), <span class="title">anyInt</span>(), <span class="title">anyInt</span>())</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> OpenDetailDto openDetailDtoResult = openService.getOpenDetail(id);</span><br><span class="line">        <span class="comment">// Assertions.assertThat(openDetailDtoResult.getId()).isEqualTo(321);</span></span><br><span class="line">        Assertions.assertThat(openDetailDtoResult)</span><br><span class="line">                .extracting(<span class="string">"id"</span>, <span class="string">"workOrderNo"</span>, <span class="string">"customName"</span>, <span class="string">"apnType"</span>)</span><br><span class="line">                .contains(</span><br><span class="line">                        <span class="number">321</span>, <span class="string">"12"</span>, <span class="string">"name"</span>, <span class="number">1</span></span><br><span class="line">                );</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="PowerMock"><a href="#PowerMock" class="headerlink" title="PowerMock"></a>PowerMock</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@RunWith(PowerMockRunner.class)</span><br></pre></td></tr></table></figure>
+<h4 id="Spring-Boot"><a href="#Spring-Boot" class="headerlink" title="Spring Boot"></a>Spring Boot</h4><p><code>SpringBoot</code>也是基于<code>Junit</code>进行单位测试的。</p>
+<p>spring-boot-starter-test这个依赖中包含了：</p>
+<ul>
+<li>JUnit：Java 应用程序单元测试标准类库。</li>
+<li>Spring Test &amp; Spring Boot Test：Spring Boot 应用程序功能集成化测试支持。</li>
+<li>Mockito：一个Java Mock测试框架。</li>
+<li>AssertJ：一个轻量级的断言类库。</li>
+<li>Hamcrest：一个对象匹配器类库。</li>
+<li>JSONassert：一个用于JSON的断言库。</li>
+<li>JsonPath：一个JSON操作类库。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">  &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">  &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;</span><br><span class="line">  &lt;scope&gt;test&lt;/scope&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<p>打开IDEA，在任意类名、任意接口名上，按<code>ctrl+shift+t</code>，选择<code>Create New Test</code>。然后根据提示操作（默认即可），点击确认，就在项目的/test/java下的对应包里，生成了与类对应的测试类。</p>
+<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20210513110038208.png" alt="image-20210513110038208"></p>
+<p>或者，在任意类名、任意接口名上，按<code>Alt+Insert</code>，然后选择<code>Test</code>。然后根据提示操作（默认即可），点击确认，就在项目的/test/java下的对应包里，生成了与类对应的测试类。</p>
+<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20210513125151127.png" alt="image-20210513125151127"></p>
+<p>如果没有“Create New Test”，请更新idea版本或者在plugin中安装插件JUnitGenerator V2.0（仅支持到JUNIT4、3等老版本。idea升级后新版本不需要安装此插件）。</p>
+<p>参阅：<a href="https://blog.csdn.net/e6486883/article/details/108073594" target="_blank" rel="noopener">Spring Boot：快速创建单元测试_e6486883的博客-CSDN博客_springboot创建测试单元</a></p>
+<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20210513110528189.png" alt="image-20210513110528189"></p>
+<h4 id="代码覆盖率测试工具"><a href="#代码覆盖率测试工具" class="headerlink" title="代码覆盖率测试工具"></a>代码覆盖率测试工具</h4><p>Intellij IDEA集成了三种分析单元测试覆盖率的工具，包括IntelliJ IDEA、JaCoCo和Emma。</p>
+<ol>
+<li>IntelliJ IDEA，是idea默认自带的插件，统计出来的覆盖率只包含classes、method、line，不详细</li>
+<li>JaCoCo，最常用。需要首先在Idea中选择JaCoCo模式，而后在项目的maven polm文件中进行依赖配置。</li>
+</ol>
+<h5 id="IntelliJ-IDEA使用步骤"><a href="#IntelliJ-IDEA使用步骤" class="headerlink" title="IntelliJ IDEA使用步骤"></a>IntelliJ IDEA使用步骤</h5><ol>
+<li><p>Run → Edit Configurations</p>
+</li>
+<li><p>选择测试范围：指定要测试的包路径或类文件等</p>
+</li>
+</ol>
+<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20210513135536067.png" alt="image-20210513135536067"></p>
+<ol start="3">
+<li><code>Code Coverage</code>选项卡可以调整覆盖率设置。<ul>
+<li>Tracing mode模式会增加消耗，但测量会更精确。</li>
+<li>可以设置记录覆盖信息的类或包，即最后生成的测试覆盖率报告里包含了哪些类或包。</li>
+</ul>
+</li>
+</ol>
+<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20210513135742771.png" alt="image-20210513135742771"></p>
+<ol start="4">
+<li>右键选择<code>Run &#39;All Tests&#39; with Coverage</code>，开始运行所有测试用例。运行完后，IDE将会在<code>Coverage</code>工具窗显示所有include进来的包/类的覆盖率数据，也可以导出测试覆盖率报告 。</li>
+</ol>
+<ul>
+<li>红色方块：没有覆盖（在这一行中没有分支被执行）</li>
+<li>黄色方块：部分覆盖（这一行的分支中只有一部分被执行）</li>
+<li>绿色方块：完全覆盖（这一行的所有分支都被执行）</li>
+</ul>
+<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20210513140508548.png" alt="image-20210513140508548"></p>
+<h5 id="JaCoCo使用步骤"><a href="#JaCoCo使用步骤" class="headerlink" title="JaCoCo使用步骤"></a>JaCoCo使用步骤</h5><ol>
+<li>Run → Edit Configurations中设置为JaCoCo</li>
+</ol>
+<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20210513135742771.png" alt="image-20210513135742771"></p>
+<ol start="2">
+<li>maven配置</li>
+</ol>
+<p>添加依赖：配置JaCoCo插件一定注意和JDK版本的对应关系，如果是jdk1.8，则插件一定要用最新版，不然会报错误。g’g</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.jacoco&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;jacoco-maven-plugin&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;0.8.5&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<p>配置plugins</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">&lt;plugin&gt;</span><br><span class="line">     &lt;groupId&gt;org.jacoco&lt;/groupId&gt;</span><br><span class="line">     &lt;artifactId&gt;jacoco-maven-plugin&lt;/artifactId&gt;</span><br><span class="line">     &lt;version&gt;0.8.5&lt;/version&gt;</span><br><span class="line">     &lt;configuration&gt;</span><br><span class="line">          &lt;destFile&gt;target/coverage-reports/jacoco-unit.exec&lt;/destFile&gt;</span><br><span class="line">          &lt;dataFile&gt;target/coverage-reports/jacoco-unit.exec&lt;/dataFile&gt;</span><br><span class="line">          &lt;includes&gt;</span><br><span class="line">               &lt;include&gt;**/service/**&lt;/include&gt;</span><br><span class="line">               &lt;include&gt;**/controller/**&lt;/include&gt;</span><br><span class="line">               &lt;!--&lt;include&gt;**/service/impl/*.class&lt;/include&gt;--&gt;</span><br><span class="line">          &lt;/includes&gt;</span><br><span class="line"></span><br><span class="line">		  &lt;!-- rules里面指定覆盖规则，在覆盖率不满足的情况下，mvn install会报错Build Failure --&gt;</span><br><span class="line">          &lt;rules&gt;</span><br><span class="line">               &lt;rule implementation=&quot;org.jacoco.maven.RuleConfiguration&quot;&gt;</span><br><span class="line">                    &lt;element&gt;BUNDLE&lt;/element&gt;</span><br><span class="line">                    &lt;limits&gt;</span><br><span class="line">                         &lt;!-- 指定方法覆盖到50% --&gt;</span><br><span class="line">                         &lt;limit implementation=&quot;org.jacoco.report.check.Limit&quot;&gt;</span><br><span class="line">                              &lt;counter&gt;METHOD&lt;/counter&gt;</span><br><span class="line">                              &lt;value&gt;COVEREDRATIO&lt;/value&gt;</span><br><span class="line">                              &lt;minimum&gt;0.50&lt;/minimum&gt;</span><br><span class="line">                     	 &lt;/limit&gt;</span><br><span class="line">                     	 </span><br><span class="line">                         &lt;!-- 指定分支覆盖到50% --&gt;</span><br><span class="line">                         &lt;limit implementation=&quot;org.jacoco.report.check.Limit&quot;&gt;</span><br><span class="line">                              &lt;counter&gt;BRANCH&lt;/counter&gt;</span><br><span class="line">                              &lt;value&gt;COVEREDRATIO&lt;/value&gt;</span><br><span class="line">                              &lt;minimum&gt;0.50&lt;/minimum&gt;</span><br><span class="line">                         &lt;/limit&gt;</span><br><span class="line">                         </span><br><span class="line">                         &lt;!-- 指定类覆盖到100%，不能遗失任何类 --&gt;</span><br><span class="line">                         &lt;limit implementation=&quot;org.jacoco.report.check.Limit&quot;&gt;</span><br><span class="line">                             &lt;counter&gt;CLASS&lt;/counter&gt;</span><br><span class="line">                             &lt;value&gt;MISSEDCOUNT&lt;/value&gt;</span><br><span class="line">                             &lt;maximum&gt;0&lt;/maximum&gt;</span><br><span class="line">                         &lt;/limit&gt;</span><br><span class="line">                    &lt;/limits&gt;</span><br><span class="line">               &lt;/rule&gt;</span><br><span class="line">          &lt;/rules&gt;</span><br><span class="line">     &lt;/configuration&gt;</span><br><span class="line">     &lt;executions&gt;</span><br><span class="line">          &lt;execution&gt;</span><br><span class="line">              &lt;!--在maven的initialize阶段，将Jacoco的runtime agent作为VM的一个参数传给被测程序，用于监控JVM中的调用。--&gt;</span><br><span class="line">               &lt;id&gt;jacoco-initialize&lt;/id&gt;</span><br><span class="line">               &lt;goals&gt;</span><br><span class="line">                	&lt;goal&gt;prepare-agent&lt;/goal&gt;</span><br><span class="line">               &lt;/goals&gt;</span><br><span class="line">          &lt;/execution&gt;</span><br><span class="line">          </span><br><span class="line">          &lt;!--这个check:对代码进行检测，控制项目构建成功还是失败--&gt;</span><br><span class="line">          &lt;execution&gt;</span><br><span class="line">               &lt;id&gt;check&lt;/id&gt;</span><br><span class="line">               &lt;goals&gt;</span><br><span class="line">                	&lt;goal&gt;check&lt;/goal&gt;</span><br><span class="line">               &lt;/goals&gt;</span><br><span class="line">          &lt;/execution&gt;</span><br><span class="line">          </span><br><span class="line">          &lt;!--report:对代码进行检测，然后生成index.html在 target/site/index.html中可以查看检测的详细结果--&gt;</span><br><span class="line">          &lt;execution&gt;</span><br><span class="line">               &lt;id&gt;jacoco-site&lt;/id&gt;</span><br><span class="line">               &lt;phase&gt;package&lt;/phase&gt;</span><br><span class="line">               &lt;!--&lt;phase&gt;test&lt;/phase&gt;写上test的时候会自动出现site文件夹，而不需执行下面的jacoco:report步骤，推荐--&gt;</span><br><span class="line">               &lt;goals&gt;</span><br><span class="line">                	&lt;goal&gt;report&lt;/goal&gt;</span><br><span class="line">               &lt;/goals&gt;</span><br><span class="line">          &lt;/execution&gt;</span><br><span class="line">     &lt;/executions&gt; </span><br><span class="line">&lt;/plugin&gt;</span><br></pre></td></tr></table></figure>
+<p>刷新maven，会发现多了一个插件:</p>
+<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20210513144223695.png" alt="image-20210513144223695"></p>
+<p>arget文件夹中会多出一个site文件夹（如果没有点击上述jacoco:report）。点击里面的index.html文件，用浏览器打开即可看到测试报告。</p>
+<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20210513144313023.png" alt="image-20210513144313023"></p>
+<ol>
+<li>maven配置</li>
+</ol>
+<p>执行<code>mvn install</code> 或者 <code>mvn test</code> 命令，获得 JaCoCo的统计数据。执行完以后，target/site/jacoco/目录下会生成一个index.html文件，这是统计数据总览页面，可以在浏览器打开查看。</p>
+<h6 id="集成多模块报告"><a href="#集成多模块报告" class="headerlink" title="集成多模块报告"></a>集成多模块报告</h6><p>执行 <code>mvn clean package</code>（clean install）命令后，在项目的 ROOT\target\site\目录会生成 jacoco目录</p>
+<h3 id="断言"><a href="#断言" class="headerlink" title="断言"></a>断言</h3><h4 id="Assert"><a href="#Assert" class="headerlink" title="Assert"></a>Assert</h4><ul>
+<li>Assert.assertEquals 对比两个值相等</li>
+<li>Assert.assertNotEquals 对比两个值不相等</li>
+<li>Assert.assertSame 对比两个对象的引用相等</li>
+<li>Assert.assertArrayEquals 对比两个数组相等</li>
+<li>Assert.assertTrue 验证返回是否为真</li>
+<li>Assert.assertFlase 验证返回是否为假</li>
+<li>Assert.assertNull 验证null</li>
+<li>Assert.assertNotNull 验证非null</li>
+</ul>
+<h4 id="Assertions"><a href="#Assertions" class="headerlink" title="Assertions"></a>Assertions</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;</span><br><span class="line">    &lt;scope&gt;test&lt;/scope&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<p><a href="https://my.oschina.net/lineshtw/blog/747722" target="_blank" rel="noopener">「译」JUnit 5 系列：基础入门 - Linesh 林从羽 - OSCHINA - 中文开源技术交流社区</a></p>
+<p><a href="https://www.cnblogs.com/jpfss/p/10955009.html" target="_blank" rel="noopener">JUnit 单元测试断言推荐 AssertJ - 星朝 - 博客园 (cnblogs.com)</a></p>
+<p><a href="https://zuozewei.blog.csdn.net/article/details/86567263" target="_blank" rel="noopener">走进Java接口测试之流式断言库AssertJ_Mo小泽的技术博客-CSDN博客</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.assertj.core.api.Assertions;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 基本数据类型</span></span><br><span class="line">Assertions.assertThat(result).isEqualTo(<span class="number">123456</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对象</span></span><br><span class="line">Assertions.assertThat(openDetailDtoResult)</span><br><span class="line">                .extracting(<span class="string">"id"</span>, <span class="string">"workOrderNo"</span>, <span class="string">"customName"</span>, <span class="string">"apnType"</span>)</span><br><span class="line">                .contains(</span><br><span class="line">                        <span class="number">321</span>, <span class="string">"12"</span>, <span class="string">"集团客户"</span>, <span class="number">1</span></span><br><span class="line">                );</span><br><span class="line"><span class="comment">// 数组</span></span><br><span class="line">Assertions.assertThat(listDto.getDataList())</span><br><span class="line">                .isNotEmpty()</span><br><span class="line">                .hasSize(<span class="number">2</span>)</span><br><span class="line">                .extracting(<span class="string">"id"</span>, <span class="string">"workOrderNo"</span>)</span><br><span class="line">                .contains(tuple(<span class="number">1</span>, <span class="string">"first"</span>), tuple(<span class="number">2</span>, <span class="string">"second"</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// Map</span></span><br><span class="line">        Assertions.assertThat(queryParamsMap)</span><br><span class="line">                .hasSize(<span class="number">2</span>)</span><br><span class="line">                .containsKeys(<span class="string">"name"</span>, <span class="string">"age"</span>)</span><br><span class="line">                .contains(</span><br><span class="line">                        entry(<span class="string">"name"</span>, <span class="string">"nice"</span>),</span><br><span class="line">                        entry(<span class="string">"age"</span>, <span class="string">"23"</span>)</span><br><span class="line">                );</span><br><span class="line"></span><br><span class="line">Collections.singletonList(<span class="string">"23"</span>)这个方法主要用于只有一个元素的优化，减少内存分配，无需分配额外的内存，可以从SingletonList内部类看得出来,由于只有一个element,因此可以做到内存分配最小化，相比之下ArrayList的DEFAULT_CAPACITY=<span class="number">10</span>个。</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getRespErrorMessage</span><span class="params">(ReturnMessage&lt;?&gt; returnMessage)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (returnMessage == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> StringUtils.EMPTY;</span><br><span class="line">    &#125;</span><br><span class="line">    如果returnMessage.getErrorMessage()不为空，则返回returnMessage.getErrorMessage()</span><br><span class="line">    否则returnMessage.getErrorCode()不为空，则返回returnMessage.getErrorCode()，否则返回空</span><br><span class="line">    <span class="keyword">return</span> Optional.ofNullable(returnMessage.getErrorMessage())<span class="comment">//有errorMessage，返回之</span></span><br><span class="line">            .orElseGet(() -&gt; Optional.ofNullable(returnMessage.getErrorCode())<span class="comment">//否则返回errorCode</span></span><br><span class="line">                    .orElse(StringUtils.EMPTY));<span class="comment">//二者均为null，返回空字符串</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Expected :java.util.Arrays$ArrayList&lt;[SimpleResolver [/8.8.8.8:53], SimpleResolver [/114.114.114.114:53]]&gt;</span><br><span class="line">Actual   :java.util.ArrayList&lt;[SimpleResolver [/8.8.8.8:53], SimpleResolver [/114.114.114.114:53]]&gt;</span><br><span class="line"></span><br><span class="line">Arrays.asList():得到的类型是java.util.Arrays$ArrayList，而非java.util.ArrayList</span><br><span class="line"></span><br><span class="line">使用Arrays.asList()的原因无非是想将数组或一些元素转为集合,而你得到的集合并不一定是你想要的那个集合。</span><br><span class="line"></span><br><span class="line">而一开始asList的设计时用于打印数组而设计的，但jdk1.5开始，有了另一个比较更方便的打印函数Arrays.toString(),于是打印不再使用asList()，而asList()恰巧可用于将数组转为集合。</span><br><span class="line"></span><br><span class="line">isEqualTo()比较引用地址，所以不相等，对象时使用isEqualToComparingFieldByFieldRecursively</span><br></pre></td></tr></table></figure>
+<p><a href="https://blog.csdn.net/qq_34802416/article/details/84192236" target="_blank" rel="noopener">https://blog.csdn.net/qq_34802416/article/details/84192236</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import org.junit.Test;</span><br><span class="line">而不是别的</span><br></pre></td></tr></table></figure>
+<p>私有方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@RunWith(PowerMockRunner.class)</span><br><span class="line">class ExportUtilTest &#123;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">     void setRequestId() throws Exception &#123;</span><br><span class="line">         ReturnMessage returnMessage = new ReturnMessage();</span><br><span class="line"></span><br><span class="line">         ReturnMsgUtil returnMsgUtil = new ReturnMsgUtil();</span><br><span class="line">         Whitebox.invokeMethod(returnMsgUtil, &quot;setRequestId&quot;, returnMessage);</span><br><span class="line">         Assertions.assertThat(returnMessage.getRequestId()).doesNotContain(&quot;-&quot;).hasSize(32);</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>私有属性</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">@RunWith(PowerMockRunner.class)</span><br><span class="line">public class TldCacheTest &#123;</span><br><span class="line">    @InjectMocks</span><br><span class="line">    private TldCache tldCache;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    public void isSupportedTldTest() throws IllegalAccessException &#123;</span><br><span class="line">        // 模拟私有属性</span><br><span class="line">        MemberModifier</span><br><span class="line">                .field(TldCache.class, &quot;tldSet&quot;)</span><br><span class="line">                .set(tldCache, new HashSet&lt;&gt;(Arrays.asList(&quot;cn&quot;, &quot;com&quot;, &quot;us&quot;)));</span><br><span class="line">        Boolean isSupported = tldCache.isSupportedTld(&quot;cn&quot;);</span><br><span class="line">        Assertions.assertThat(isSupported).isTrue();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>Set断言</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void getIdSetByPackage() throws IllegalAccessException &#123;</span><br><span class="line">    final HashMap&lt;PackageType, Set&lt;String&gt;&gt; typeToIdMap = new HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    typeToIdMap.put(PackageType.STANDARD, new HashSet&lt;&gt;(Arrays.asList(&quot;0&quot;, &quot;3=1&quot;)));</span><br><span class="line"></span><br><span class="line">    MemberModifier</span><br><span class="line">            .field(LineCache.class, &quot;typeToIdMap&quot;)</span><br><span class="line">            .set(lineCache, typeToIdMap);</span><br><span class="line"></span><br><span class="line">    Assertions.assertThat(lineCache.getIdSetByPackage(PackageType.STANDARD))</span><br><span class="line">            .hasSize(2).contains(&quot;0&quot;, &quot;3=1&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Junit常用注解说明"><a href="#Junit常用注解说明" class="headerlink" title="Junit常用注解说明"></a>Junit常用注解说明</h3><ul>
+<li>@BeforeClass 加上这个注解，则该方法会第一个执行（在所有方法中），且方法要<strong>加上关键词static</strong>，是一个<strong>static方法</strong></li>
+<li>@Before 带上@Test的方法执行前会执行该方法</li>
+<li>@Test 加在<strong>待测试的方法</strong>前面，@Test(timeout = 1000)设置1000毫秒后超时</li>
+<li>@After 带上@Test的方法执行完毕后会执行该方法</li>
+<li>@AfterClass 加上这个注解，则该方法最后一个执行（在所有方法中）,同样，方法要<strong>加上关键词static</strong>，是一个<strong>static方法</strong></li>
+</ul>
+<p>一个单元测试类执行顺序为：</p>
+<p>@BeforeClass -&gt; @Before -&gt; @Test -&gt; @After -&gt; @AfterClass</p>
+<p>单元测试之使用H2 Database模拟数据库环境 <a href="http://coderec.cn/2016/08/09/单元测试之使用H2-Database模拟数据库环境/" target="_blank" rel="noopener">单元测试之使用H2 Database模拟数据库环境 | Coderec’s Blog</a></p>
+<p><a href="http://www.h2database.com/html/grammar.html" target="_blank" rel="noopener">SQL Grammar (h2database.com)</a></p>
+<p>单元测试之Mockito与PowerMock <a href="https://www.jianshu.com/p/51930cc5dcf9" target="_blank" rel="noopener">https://www.jianshu.com/p/51930cc5dcf9</a></p>
+<p><a href="https://blog.csdn.net/qisibajie/article/details/79068086" target="_blank" rel="noopener">https://blog.csdn.net/qisibajie/article/details/79068086</a></p>
+<p><a href="https://juejin.cn/post/6844903711483887623" target="_blank" rel="noopener">https://juejin.cn/post/6844903711483887623</a></p>
+<p><strong>Mockito与PowerMock的使用基础教程</strong></p>
+<p><a href="https://juejin.cn/post/6844903711483887623" target="_blank" rel="noopener">https://juejin.cn/post/6844903711483887623</a></p>
+<h3 id="WEB测试"><a href="#WEB测试" class="headerlink" title="WEB测试"></a>WEB测试</h3><p>在Spring Boot项目里面可以直接使用JUnit对web项目进行测试，Spring 提供了“TestRestTemplate”对象，使用这个对象可以很方便的进行模拟请求。</p>
+<p>Web测试只需要进行两步操作：</p>
+<ol>
+<li>在@SpringBootTest注解上设置“ebEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT”随机端口；</li>
+<li>使用TestRestTemplate进行post或get请求；</li>
+</ol>
+<p>示例代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RunWith</span>(SpringRunner<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class">@<span class="title">SpringBootTest</span>(<span class="title">webEnvironment</span> </span>= SpringBootTest.WebEnvironment.RANDOM_PORT)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserControllerTest</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TestRestTemplate restTemplate;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        String name = restTemplate.getForObject(<span class="string">"/name"</span>, String<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        System.out.println(name);</span><br><span class="line">        Assert.assertEquals(<span class="string">"Adam"</span>, name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中getForObject的含义代表执行get请求，并返回Object结果，第二个参数设置返回结果为String类型，更多的请求方法：</p>
+<ul>
+<li>getForEntity：Get请求，返回实体对象（可以是集合）；</li>
+<li>postForEntity：Post请求，返回实体对象（可以是集合）；</li>
+<li>postForObject：Post请求，返回对象；</li>
+</ul>
+<h3 id="数据库测试"><a href="#数据库测试" class="headerlink" title="数据库测试"></a>数据库测试</h3><p>测试数据操作时，如果给测试类上添加<code>@Transactional</code>，会让数据操作都在内存中完成，并不会真正的commit到数据库，将数据持久化操作截断。</p>
+<ol>
+<li>好处是：既可以测试数据操作方法，又不会污染数据库。</li>
+<li>注意点是：数据持久化的过程不再真实，没有了commit的过程。从而会导致——<ul>
+<li>无法保证 Entity 之间关联关系，唯一索引和主外键关联的准确性。</li>
+<li>无法保证 Entity 创建时间、更新时间和版本化(乐观锁)的赋值逻辑的准确性。</li>
+<li>无法保证 Entity 中有 @Transient 注解的属性的赋值逻辑的准确性。</li>
+<li>测试的数据不是真实场景存在的问题。</li>
+<li>测试中，单个事务中的准备数据，无法在多线程中共享。</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">saveTest</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    User user = <span class="keyword">new</span> User();</span><br><span class="line">    user.setName(<span class="string">"Adam"</span>);</span><br><span class="line">    user.setAge(<span class="number">19</span>);</span><br><span class="line">    user.setPwd(<span class="string">"123456"</span>);</span><br><span class="line">    userRepository.save(user);</span><br><span class="line">    System.out.println(<span class="string">"userId:"</span> + user.getId());</span><br><span class="line">    Assert.assertTrue(user.getId()&gt;<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="集成测试"><a href="#集成测试" class="headerlink" title="集成测试"></a>集成测试</h3><ol>
+<li>集成多个功能</li>
+<li>加载 spring 框架，要启整个 Spring</li>
+</ol>
+<p>1.在class上加入@SpringBootTest 和@RunWith(SpringRunner.class)两个注解即可。</p>
+<ul>
+<li><code>@SpringBootTest</code>：获取启动类，加载配置，寻找主配置启动类（被 @SpringBootApplication 注解的类）</li>
+<li><code>@RunWith(SpringRunner.class)</code>：让JUnit运行Spring的测试环境,获得Spring环境的上下文的支持</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">RunWith(SpringRunner.class)</span><br><span class="line">@SpringBootTest</span><br><span class="line">public class Test() &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>增加@Transactional支持回滚</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">RunWith(SpringRunner.class)</span><br><span class="line">@SpringBootTest</span><br><span class="line">@Transactional</span><br><span class="line">public class Test() &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>增加@Transactional支持回滚的同时，单独设置方法不回滚（正常提交）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">RunWith(SpringRunner.class)</span><br><span class="line">@SpringBootTest</span><br><span class="line">@Transactional</span><br><span class="line">public class Test() &#123;</span><br><span class="line"></span><br><span class="line">	// @Transactional的前提下，实现真正提交事务（即指定@Rollback(false)）</span><br><span class="line">	@Test</span><br><span class="line">	@Rollback(false)</span><br><span class="line">	void testCommit()&#123;&#125;</span><br><span class="line"></span><br><span class="line">	// @Transactional的前提下，默认会回滚（即@Rollback(True)）</span><br><span class="line">	@Test</span><br><span class="line">	void testRollBack()&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2.在测试方法上加上@Test注解。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootTest</span></span><br><span class="line"><span class="meta">@RunWith</span>(SpringRunner::<span class="class"><span class="keyword">class</span>)</span></span><br><span class="line"><span class="class">@<span class="title">Transactional</span></span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">UserServiceImplTest</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> lateinit <span class="keyword">var</span> userServiceImpl: UserServiceImpl</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">var</span> userId = <span class="string">"CIDC-U-cd8e01a325ea4eb0bcf0b83f973d5d9f"</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Before</span></span><br><span class="line">    <span class="function">fun <span class="title">setUp</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        AuthUserContext.setAuthUser(RequestUser(userId))</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function">fun <span class="title">getUserInfoById</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        val result = userServiceImpl.getUserInfoById(<span class="keyword">this</span>.userId)</span><br><span class="line">        assertNotNull(result)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试私有方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">@RunWith(SpringJUnit4ClassRunner.class)</span><br><span class="line">@SpringBootTest(classes = Application.class)</span><br><span class="line">public class Test &#123;</span><br><span class="line"> </span><br><span class="line">    @Autowired</span><br><span class="line">    private Service service;</span><br><span class="line"> </span><br><span class="line">    @Test</span><br><span class="line">    public void test() throws NoSuchMethodException, ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException &#123;</span><br><span class="line">        // 获取class</span><br><span class="line">        Class&lt;? extends Service&gt; clazz = service.getClass();</span><br><span class="line">        // 获取方法，注意param的类型</span><br><span class="line">        Method myPricateMothod= clazz.getDeclaredMethod(&quot;myPricateMothod&quot;, String.class);</span><br><span class="line">        myPricateMothod.setAccessible(true);</span><br><span class="line">        // 执行这个service，不要使用clazz.newInstance()，这个方法是新new一个对象</span><br><span class="line">        myPricateMothod.invoke(service, &quot;myparam&quot;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">val targetClass = DomainServiceImpl::class.java</span><br><span class="line">val method: Method = targetClass.getDeclaredMethod(</span><br><span class="line">    &quot;createDomainInVendorWrapper&quot;,</span><br><span class="line">    DomainCreation::class.javaObjectType,</span><br><span class="line">    Vendor::class.javaObjectType</span><br><span class="line">) //获得method.注意,这里不能使用getMethod方法,因为这个方法只能获取public修饰的方法..</span><br><span class="line">method.setAccessible(true)</span><br><span class="line"></span><br><span class="line">val operatorServiceField: Field = targetClass.getDeclaredField(&quot;operatorService&quot;)</span><br><span class="line">operatorServiceField.setAccessible(true)</span><br><span class="line">operatorServiceField.set(domainService, operatorService)</span><br><span class="line"></span><br><span class="line">val instanceServiceField: Field = targetClass.getDeclaredField(&quot;instanceService&quot;)</span><br><span class="line">instanceServiceField.setAccessible(true)</span><br><span class="line">instanceServiceField.set(domainService, instanceService)</span><br><span class="line"></span><br><span class="line">val operateResult: Any = method.invoke(</span><br><span class="line">    domainService,</span><br><span class="line">    DomainCreation(&quot;abc.com&quot;, &quot;unit test&quot;, instancePO.instanceId),</span><br><span class="line">    Vendor.DNS_POD</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p><code>ReflectionUtils</code>是<code>Spring</code>中一个常用的类，属于<code>spring-core</code>包；</p>
+<p><code>ReflectionTestUtils</code>则属于<code>spring-test</code>包。</p>
+<p>两者功能有重叠的地方，而<code>ReflectionUtils</code>会更强大。在单元测试时使用<code>ReflectionTestUtils</code>，能增加我们的便利性。</p>
+<p>处理</p>
+<p><a href="https://blog.csdn.net/zhuqiuhui/article/details/88215632" target="_blank" rel="noopener">UT中使用ReflectionTestUtils.setField不能mock掉依赖问题解决_苦行僧-CSDN博客_reflectiontestutils.setfield</a></p>
+<p><a href="https://stackoverflow.com/questions/39989090/reflectiontestutils-not-working-with-autowired-in-spring-test" target="_blank" rel="noopener">service - ReflectionTestUtils not working with @Autowired in Spring Test - Stack Overflow</a></p>
+<p>获取对象的成员变量：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">getField</span><span class="params">(@Nullable Object targetObject, String name)</span></span></span><br></pre></td></tr></table></figure>
+<p>给对象注入成员变量：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setField</span><span class="params">(Class&lt;?&gt; targetClass, String name, @Nullable Object value)</span></span></span><br></pre></td></tr></table></figure>
+<p>调用成员方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">T <span class="title">invokeMethod</span><span class="params">(Object target, String name, Object... args)</span></span></span><br></pre></td></tr></table></figure>
+<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20210524162554542.png" alt="image-20210524162554542"></p>
+<p>单元测试时测试一个private私有方法时，我们第一想法可能是用java反射机制。</p>
+<p>…<br>Method method = clazz.getDeclaredMethod(methodName, classes)<br>method.setAccessible(true);<br>method.invoke(obj, objects)</p>
+<p>Spring 有一个好用的测试工具类ReflectionTestUtils</p>
+<p>…<br>ReflectionTestUtils.invokeMethod(Object target, String name, Object… args)</p>
+<p>即可完成调用私有方法。</p>
+<p>maven依赖：</p>
+<p><dependency><br>      <groupid>org.springframework</groupid><br>      <artifactid>spring-test</artifactid><br>      <version>4.1.6.RELEASE</version><br>      <scope>test</scope><br>    </dependency><br>————————————————<br>版权声明：本文为CSDN博主「lijie2049」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。<br>原文链接：<a href="https://blog.csdn.net/lijie2049/article/details/84732723" target="_blank" rel="noopener">https://blog.csdn.net/lijie2049/article/details/84732723</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Unexpected exception, expected&lt;com.chinamobile.cmss.fnc.cdns.exception.DomainException&gt; but was&lt;java.lang.reflect.InvocationTargetException&gt;</span><br></pre></td></tr></table></figure>
+<p>反射，异常处理</p>
+<p><a href="https://www.baeldung.com/java-lang-reflect-invocationtargetexception" target="_blank" rel="noopener">What Causes java.lang.reflect.InvocationTargetException? | Baeldung</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">val targetClass = DomainServiceImpl::class.java</span><br><span class="line">val method: Method = targetClass.getDeclaredMethod(</span><br><span class="line">    &quot;handleExitedParentsDomainName&quot;,</span><br><span class="line">    String::class.java</span><br><span class="line">)</span><br><span class="line">method.setAccessible(true)</span><br><span class="line">val exception: Exception = assertThrows(InvocationTargetException::class.java) &#123;</span><br><span class="line">    method.invoke(domainService, domainName)</span><br><span class="line">&#125;</span><br><span class="line">Assertions.assertThat(exception.cause!!.javaClass).isEqualTo(DomainException::class.java)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">    private fun getSubDomainPOList(domainName: String, withUser: Boolean, userId: String? = null): List&lt;DomainPO&gt;? </span><br><span class="line">    </span><br><span class="line">    val method: Method = targetClass.getDeclaredMethod(</span><br><span class="line">        &quot;getSubDomainPOList&quot;,</span><br><span class="line">        String::class.java,</span><br><span class="line">        Boolean::class.java,</span><br><span class="line">        String::class.java</span><br><span class="line">    )</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">     private fun getDomainListByInstanceId(</span><br><span class="line">        instanceId: String, withUser: Boolean? = null, userId: String? = null</span><br><span class="line">): List&lt;DomainPO&gt;</span><br><span class="line">     val method: Method = targetClass.getDeclaredMethod(</span><br><span class="line">        &quot;getDomainListByInstanceId&quot;,</span><br><span class="line">        String::class.java,</span><br><span class="line">        Boolean::class.javaObjectType,</span><br><span class="line">        String::class.java</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+<p><a href="https://blog.csdn.net/weixin_40763897/article/details/111956633" target="_blank" rel="noopener">Java类型与Kotlin类型对应关系_WongKyunban的博客-CSDN博客</a></p>
+<p>MockMvc是由spring-test包提供，实现了对Http请求的模拟，能够直接使用网络的形式，转换到Controller的调用，使得测试速度快、不依赖网络环境。同时提供了一套验证的工具，结果的验证十分方便。</p>
+<p>(1) mockMvc.perform执行一个请求。</p>
+<p>(2) MockMvcRequestBuilders.get(“XXX”)构造一个请求。</p>
+<p>(3) ResultActions.param添加请求传值 </p>
+<p>(4) ResultActions.accept()设置返回类型 </p>
+<p>(5) ResultActions.andExpect添加执行完成后的断言。</p>
+<p>(6) ResultActions.andDo添加一个结果处理器，表示要对结果做点什么事情，比如处使用print()输出整个响应结果信息。</p>
+<p>(7) ResultActions.andReturn表示执行完成后返回相应的结果。</p>
+
+      
+    </div>
+	
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">
+		-------------Keep It Simple Stupid-------------
+		</div>
+    
+</div>
+	  
+	</div>
+	
+    
+    
+    
+	
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/want/2021/04/28/ElasticStack/" rel="next" title="ElasticStack">
+                <i class="fa fa-chevron-left"></i> ElasticStack
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/want/2021/06/02/bind/" rel="prev" title>
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/want/images/avatar.jpg" alt="luxia">
+            
+              <p class="site-author-name" itemprop="name">luxia</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/want/archives/">
+              
+                  <span class="site-state-item-count">54</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/want/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#单元测试"><span class="nav-number">1.</span> <span class="nav-text">单元测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Mockito"><span class="nav-number">1.1.</span> <span class="nav-text">Mockito</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PowerMock"><span class="nav-number">1.2.</span> <span class="nav-text">PowerMock</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Spring-Boot"><span class="nav-number">1.3.</span> <span class="nav-text">Spring Boot</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代码覆盖率测试工具"><span class="nav-number">1.4.</span> <span class="nav-text">代码覆盖率测试工具</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#IntelliJ-IDEA使用步骤"><span class="nav-number">1.4.1.</span> <span class="nav-text">IntelliJ IDEA使用步骤</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#JaCoCo使用步骤"><span class="nav-number">1.4.2.</span> <span class="nav-text">JaCoCo使用步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#集成多模块报告"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">集成多模块报告</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#断言"><span class="nav-number">2.</span> <span class="nav-text">断言</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Assert"><span class="nav-number">2.1.</span> <span class="nav-text">Assert</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Assertions"><span class="nav-number">2.2.</span> <span class="nav-text">Assertions</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Junit常用注解说明"><span class="nav-number">3.</span> <span class="nav-text">Junit常用注解说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WEB测试"><span class="nav-number">4.</span> <span class="nav-text">WEB测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库测试"><span class="nav-number">5.</span> <span class="nav-text">数据库测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#集成测试"><span class="nav-number">6.</span> <span class="nav-text">集成测试</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">luxia</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">115.1k</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/want/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/want/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/want/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/want/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/want/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/want/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: true,
+        notify: true,
+        appId: 'h9Jehf4VaeDG22nDbzEpkHnt-gzGzoHsz',
+        appKey: 'GPvy0xbbxNb0Ao6DM6oRFSoG',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/want/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('-1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("h9Jehf4VaeDG22nDbzEpkHnt-gzGzoHsz", "GPvy0xbbxNb0Ao6DM6oRFSoG");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+  	 <!-- custom analytics part create by lux -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("h9Jehf4VaeDG22nDbzEpkHnt-gzGzoHsz", "GPvy0xbbxNb0Ao6DM6oRFSoG");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = $(document.getElementById(url)).text() + ': 0';
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = $(document.getElementById(url)).text() + ': ' + object.get('time');
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content = $(document.getElementById(url)).text() + ': ' + counter.get('time');
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = $(document.getElementById(url)).text() + ': ' + newcounter.get('time');
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+});
+</script>
+  
+<script src="/want/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/want/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"position":"right","width":100,"height":200,"hOffset":0,"vOffset":160},"mobile":{"show":true,"scale":0.05}});</script></body>
+</html>
