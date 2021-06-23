@@ -94,7 +94,7 @@
 <meta property="og:image" content="https://echowant.github.io/want/2021/06/02/bind/Grafana_import_detail.png">
 <meta property="og:image" content="https://echowant.github.io/want/2021/06/02/bind/grafana_dashboards.png">
 <meta property="og:image" content="https://echowant.github.io/want/2021/06/02/bind/node_exporter.png">
-<meta property="og:updated_time" content="2021-06-23T14:03:15.831Z">
+<meta property="og:updated_time" content="2021-06-23T14:39:32.753Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="bind">
 <meta name="twitter:description" content="简介BIND（Berkeley Internet Name Domain），是现今互联网上最常使用的DNS软件，使用BIND作为服务器软件的DNS服务器约占所有DNS服务器的九成。BIND现在由互联网系统协会（Internet Systems Consortium）负责开发与维护。 主从的作用： 1、共同解析域名——如master与slave任何一端dns服务断掉，也可以通过从另外一端来解析域名。">
@@ -420,7 +420,6 @@
 <th>主备</th>
 <th>操作系统</th>
 <th>bind版本</th>
-<th>domainName</th>
 </tr>
 </thead>
 <tbody>
@@ -429,21 +428,18 @@
 <td>主机master</td>
 <td>CentOS Linux release 7.9.2009 (Core) / Linux 3.10.0-1160.11.1.el7.x86_64</td>
 <td>BIND 9.16.17 (Stable Release)</td>
-<td>ns1.test.com</td>
 </tr>
 <tr>
 <td>fnc04 10.154.5.162</td>
 <td>从机slave</td>
 <td>CentOS Linux release 7.8.2003 (Core) / Linux 3.10.0-1127.18.2.el7.x86_64</td>
 <td>BIND 9.16.16 (Stable Release)</td>
-<td>ns2.test.com</td>
 </tr>
 <tr>
 <td>fnc03 10.154.5.214</td>
 <td>从机slave</td>
 <td>BigCloud Enterprise Linux For LDK release 7.6.1906 (Core) / Linux 4.19.25-200.1.el7.bclinux.x86_64</td>
 <td>BIND 9.16.17 (Stable Release)</td>
-<td>ns3.test.com</td>
 </tr>
 </tbody>
 </table>
