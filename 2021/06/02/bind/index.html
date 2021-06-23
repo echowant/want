@@ -94,7 +94,7 @@
 <meta property="og:image" content="https://echowant.github.io/want/2021/06/02/bind/Grafana_import_detail.png">
 <meta property="og:image" content="https://echowant.github.io/want/2021/06/02/bind/grafana_dashboards.png">
 <meta property="og:image" content="https://echowant.github.io/want/2021/06/02/bind/node_exporter.png">
-<meta property="og:updated_time" content="2021-06-23T14:39:32.753Z">
+<meta property="og:updated_time" content="2021-06-23T14:45:05.403Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="bind">
 <meta name="twitter:description" content="简介BIND（Berkeley Internet Name Domain），是现今互联网上最常使用的DNS软件，使用BIND作为服务器软件的DNS服务器约占所有DNS服务器的九成。BIND现在由互联网系统协会（Internet Systems Consortium）负责开发与维护。 主从的作用： 1、共同解析域名——如master与slave任何一端dns服务断掉，也可以通过从另外一端来解析域名。">
@@ -484,9 +484,9 @@
 </ol>
 <p>本文详细介绍catalog zone目录区域的配置。</p>
 <h4 id="方案-传统手动方式"><a href="#方案-传统手动方式" class="headerlink" title="方案-传统手动方式"></a>方案-传统手动方式</h4><p>主机</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">主机手动添加到named.rfc1912.zones：</span><br><span class="line">zone &quot;my_zone.com&quot; &#123;</span><br><span class="line">    type master;</span><br><span class="line">    file &quot;/etc/bind/db.my_zone.com&quot;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">主机手动添加到named.rfc1912.zones（最终include到named.conf）：</span><br><span class="line">zone &quot;my_zone.com&quot; &#123;</span><br><span class="line">    type master;</span><br><span class="line">    file &quot;/etc/bind/db.my_zone.com&quot;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>从机</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">从机手动添加到named.rfc1912.zones：</span><br><span class="line">zone &quot;my_zone.com&quot; &#123;</span><br><span class="line">    type slave;</span><br><span class="line">    file &quot;db.my_zone.com&quot;;</span><br><span class="line">    masters &#123; master_ip_address; &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">从机手动添加到named.rfc1912.zones（最终include到named.conf）：</span><br><span class="line">zone &quot;my_zone.com&quot; &#123;</span><br><span class="line">    type slave;</span><br><span class="line">    file &quot;db.my_zone.com&quot;;</span><br><span class="line">    masters &#123; master_ip_address; &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <h4 id="方案-用户编写脚本"><a href="#方案-用户编写脚本" class="headerlink" title="方案-用户编写脚本"></a>方案-用户编写脚本</h4><p>Left to the user to create a script or process for maintaining slave zone lists</p>
 <p>用户编写脚本运行示意图：</p>
 <img src="/want/2021/06/02/bind/user_script.png" title="user_script">
