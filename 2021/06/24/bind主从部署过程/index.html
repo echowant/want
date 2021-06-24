@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/want/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/want/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/want/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/want/images/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/want/images/favicon-16x16.png?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="系统及部署环境获取操作系统命令  uname -sr cat /etc/redhat-release  设置机器信息及主备关系    主机 主备 操作系统 bind版本     fnc05 10.154.5.163 主机master CentOS Linux release 7.9.2009 (Core) / Linux 3.10.0-1160.11.1.el7.x86_64 BIND 9.16.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bind主从部署过程">
+<meta property="og:url" content="https://echowant.github.io/want/2021/06/24/bind主从部署过程/index.html">
+<meta property="og:site_name" content="不周山">
+<meta property="og:description" content="系统及部署环境获取操作系统命令  uname -sr cat /etc/redhat-release  设置机器信息及主备关系    主机 主备 操作系统 bind版本     fnc05 10.154.5.163 主机master CentOS Linux release 7.9.2009 (Core) / Linux 3.10.0-1160.11.1.el7.x86_64 BIND 9.16.">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://echowant.github.io/want/2021/06/24/bind主从部署过程/exporter.png">
+<meta property="og:image" content="https://echowant.github.io/want/2021/06/24/bind主从部署过程/prometheus.png">
+<meta property="og:image" content="https://echowant.github.io/want/2021/06/24/bind主从部署过程/prometheus_setting.png">
+<meta property="og:image" content="https://echowant.github.io/want/2021/06/24/bind主从部署过程/Grafana_import.png">
+<meta property="og:image" content="https://echowant.github.io/want/2021/06/24/bind主从部署过程/Grafana_import_detail.png">
+<meta property="og:image" content="https://echowant.github.io/want/2021/06/24/bind主从部署过程/grafana_dashboards.png">
+<meta property="og:image" content="https://echowant.github.io/want/2021/06/24/bind主从部署过程/node_exporter.png">
+<meta property="og:updated_time" content="2021-06-24T05:52:03.268Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="bind主从部署过程">
+<meta name="twitter:description" content="系统及部署环境获取操作系统命令  uname -sr cat /etc/redhat-release  设置机器信息及主备关系    主机 主备 操作系统 bind版本     fnc05 10.154.5.163 主机master CentOS Linux release 7.9.2009 (Core) / Linux 3.10.0-1160.11.1.el7.x86_64 BIND 9.16.">
+<meta name="twitter:image" content="https://echowant.github.io/want/2021/06/24/bind主从部署过程/exporter.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/want/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://echowant.github.io/want/2021/06/24/bind主从部署过程/">
+
+
+
+
+
+  <title>bind主从部署过程 | 不周山</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/want/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">不周山</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Keep It Simple Stupid</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/want/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/want/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/want/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/want/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://echowant.github.io/want/want/2021/06/24/bind主从部署过程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="luxia">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/want/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不周山">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">bind主从部署过程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-06-24T09:25:30+08:00">
+                2021-06-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/want/2021/06/24/bind主从部署过程/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/want/2021/06/24/bind主从部署过程/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/want/2021/06/24/bind主从部署过程/" class="leancloud_visitors" data-flag-title="bind主从部署过程">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  5k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="系统及部署环境"><a href="#系统及部署环境" class="headerlink" title="系统及部署环境"></a>系统及部署环境</h3><p>获取操作系统命令</p>
+<ol>
+<li>uname -sr</li>
+<li>cat /etc/redhat-release</li>
+</ol>
+<p>设置机器信息及主备关系</p>
+<table>
+<thead>
+<tr>
+<th>主机</th>
+<th>主备</th>
+<th>操作系统</th>
+<th>bind版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fnc05 10.154.5.163</td>
+<td>主机master</td>
+<td>CentOS Linux release 7.9.2009 (Core) / Linux 3.10.0-1160.11.1.el7.x86_64</td>
+<td>BIND 9.16.17 (Stable Release)</td>
+</tr>
+<tr>
+<td>fnc04 10.154.5.162</td>
+<td>从机slave</td>
+<td>CentOS Linux release 7.8.2003 (Core) / Linux 3.10.0-1127.18.2.el7.x86_64</td>
+<td>BIND 9.16.16 (Stable Release)</td>
+</tr>
+<tr>
+<td>fnc03 10.154.5.214</td>
+<td>从机slave</td>
+<td>BigCloud Enterprise Linux For LDK release 7.6.1906 (Core) / Linux 4.19.25-200.1.el7.bclinux.x86_64</td>
+<td>BIND 9.16.17 (Stable Release)</td>
+</tr>
+</tbody>
+</table>
+<p>上述主备机仍需注意如下配置：</p>
+<ol>
+<li>确保防火墙的规则不会拦截Bind的监听端口，默认为53</li>
+<li>确保主从服务器的时钟一致</li>
+<li>确保named用户拥有操作相关目录的权限（默认安装后就有了）</li>
+</ol>
+<h3 id="bind9-16安装配置"><a href="#bind9-16安装配置" class="headerlink" title="bind9.16安装配置"></a>bind9.16安装配置</h3><h4 id="9-16安装"><a href="#9-16安装" class="headerlink" title="9.16安装"></a>9.16安装</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/yum.repos.d/</span><br><span class="line"></span><br><span class="line">vim bind.repo</span><br><span class="line">[copr:copr.fedorainfracloud.org:isc:bind]</span><br><span class="line">name=Copr repo for bind owned by isc</span><br><span class="line">baseurl=https://download.copr.fedorainfracloud.org/results/isc/bind/epel-7-$basearch/</span><br><span class="line">type=rpm-md</span><br><span class="line">skip_if_unavailable=True</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=https://download.copr.fedorainfracloud.org/results/isc/bind/pubkey.gpg</span><br><span class="line">repo_gpgcheck=0</span><br><span class="line">enabled=1</span><br><span class="line">enabled_metadata=1</span><br><span class="line"></span><br><span class="line">yum list isc-bind*</span><br><span class="line"></span><br><span class="line">yum install isc-bind-bind isc-bind-bind-utils isc-bind-bind-libs -y</span><br><span class="line"></span><br><span class="line">守护进程文件位置：/etc/opt/isc/isc-bind/sysconfig/named</span><br><span class="line">配置文件位置：/etc/opt/isc/isc-bind/named.conf</span><br><span class="line">发现有如下内容：</span><br><span class="line">options &#123;</span><br><span class="line">        directory "/var/opt/isc/isc-bind/named/data";</span><br><span class="line">        listen-on &#123; 127.0.0.1; &#125;;</span><br><span class="line">        listen-on-v6 &#123; ::1; &#125;;</span><br><span class="line">        dnssec-validation auto;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">logging &#123;</span><br><span class="line">        channel default_debug &#123;</span><br><span class="line">                file "named.run";</span><br><span class="line">                print-time yes;</span><br><span class="line">                severity dynamic;</span><br><span class="line">        &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">尝试启动，发现成功</span></span><br><span class="line">systemctl start isc-bind-named</span><br><span class="line">systemctl enable isc-bind-named</span><br><span class="line">systemctl status isc-bind-named</span><br></pre></td></tr></table></figure>
+<p>安装过程可能确实某些安装包，可以自行安装：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">wget http://mirror.centos.org/centos/7/os/x86_64/Packages/scl-utils-20130529-19.el7.x86_64.rpm</span><br><span class="line"></span><br><span class="line">yum install scl-utils-build-20130529-19.el7.x86_64.rpm -y</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> iso-codes</span></span><br><span class="line">wget http://mirror.centos.org/centos/7/os/x86_64/Packages/iso-codes-3.46-2.el7.noarch.rpm</span><br><span class="line">yum install iso-codes-3.46-2.el7.noarch.rpm -y</span><br></pre></td></tr></table></figure>
+<p>安装包下载网站</p>
+<ol>
+<li><p><a href="https://pkgs.org/download/iso-codes" target="_blank" rel="noopener">Iso-codes Download (APK, DEB, EOPKG, RPM, TGZ, TXZ, XZ, ZST) (pkgs.org)</a></p>
+</li>
+<li><p><a href="https://centos.pkgs.org/7/centos-x86_64/scl-utils-20130529-19.el7.x86_64.rpm.html" target="_blank" rel="noopener">scl-utils-20130529-19.el7.x86_64.rpm CentOS 7 Download (pkgs.org)</a></p>
+</li>
+</ol>
+<h4 id="9-16配置"><a href="#9-16配置" class="headerlink" title="9.16配置"></a>9.16配置</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">在物理机/etc/profile.d/⽬录下创建isc-bind-named.sh⽂件。并输⼊以下内容，保存。</span></span><br><span class="line"><span class="meta">#</span><span class="bash">然后重启物理机即可。</span></span><br><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">source scl_source enable isc-bind</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">或临时方案，不重启主机</span></span><br><span class="line">scl enable isc-bind bash</span><br><span class="line">rndc</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">获取<span class="built_in">bind</span>版本命令发，发现是9.16</span></span><br><span class="line">named -v</span><br><span class="line"><span class="meta">#</span><span class="bash">如若不是所安装的9.16版本，停止当前版本</span></span><br><span class="line">systemctl stop named</span><br></pre></td></tr></table></figure>
+<h5 id="配置rndc-confgen"><a href="#配置rndc-confgen" class="headerlink" title="配置rndc-confgen"></a>配置rndc-confgen</h5><p>主从都可照着此步骤配置（但从机可以不用配置，因为从机仅同步查询数据，不做维护）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">rndc-confgen -r  /dev/urandom  &gt; /etc/opt/isc/isc-bind/rndc.conf</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">生成rndc.conf文件，内容如下。</span></span><br><span class="line"><span class="meta">#</span><span class="bash">将得到的内容，key和controls挪到named.conf中</span></span><br><span class="line"><span class="meta">#</span><span class="bash">将得到的内容，key和算法，放到python程序的config.yml中</span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#bind_algorithm: md5</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#bind_secret: rf27GDGjr6J2rRK5Ljsq2Q==</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> Start of rndc.conf</span></span><br><span class="line">key "rndc-key" &#123;</span><br><span class="line">        algorithm hmac-md5;</span><br><span class="line">        secret "rf27GDGjr6J2rRK5Ljsq2Q==";</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">options &#123;</span><br><span class="line">        default-key "rndc-key";</span><br><span class="line">        default-server 127.0.0.1;</span><br><span class="line">        default-port 953;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="meta">#</span><span class="bash"> End of rndc.conf</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> Use with the following <span class="keyword">in</span> named.conf, adjusting the allow list as needed:</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> key <span class="string">"rndc-key"</span> &#123;</span></span><br><span class="line"><span class="meta">#</span><span class="bash">       algorithm hmac-md5;</span></span><br><span class="line"><span class="meta">#</span><span class="bash">       secret <span class="string">"rf27GDGjr6J2rRK5Ljsq2Q=="</span>;</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> &#125;;</span></span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> controls &#123;</span></span><br><span class="line"><span class="meta">#</span><span class="bash">       inet 127.0.0.1 port 953</span></span><br><span class="line"><span class="meta">#</span><span class="bash">               allow &#123; 127.0.0.1; &#125; keys &#123; <span class="string">"rndc-key"</span>; &#125;;</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> &#125;;</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> End of named.conf</span></span><br></pre></td></tr></table></figure>
+<h5 id="配置transfer-key"><a href="#配置transfer-key" class="headerlink" title="配置transfer-key"></a>配置transfer-key</h5><h6 id="主机生成密钥"><a href="#主机生成密钥" class="headerlink" title="主机生成密钥"></a>主机生成密钥</h6><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">生成一个主机名称为dnssec-transfer的128位HMAC-MD5算法的密钥文件（公钥+私钥）</span></span><br><span class="line">dnssec-keygen -a HMAC-MD5 -b 128 -n HOST  dnssec-transfer</span><br><span class="line"><span class="meta">#</span><span class="bash">得到Kdnssec-transfer.+157+54187</span></span><br><span class="line"></span><br><span class="line">ls -al Kdnssec-transfer.+157+54187.*</span><br><span class="line"><span class="meta">#</span><span class="bash">-rw------- 1 root root  59 Jun 18 16:05 Kdnssec-transfer.+157+54187.key <span class="comment">#公钥</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash">-rw------- 1 root root 165 Jun 18 16:05 Kdnssec-transfer.+157+54187.private <span class="comment">#私钥</span></span></span><br><span class="line"></span><br><span class="line">cat Kdnssec-transfer.+157+54187.private</span><br><span class="line"><span class="meta">#</span><span class="bash">复制key参数</span></span><br><span class="line"><span class="meta">#</span><span class="bash">Key: /y7HAkwBH0KP9g9M+jADJg==</span></span><br></pre></td></tr></table></figure>
+<p>将私钥key放到一个新的文件中，并将这个文件引入到named.conf中</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/opt/isc/isc-bind/ 或 cd /etc/  #密钥验证文件在/etc目录(与named.conf同一个目录下)</span><br><span class="line"></span><br><span class="line">vim transfer.key</span><br><span class="line">key "dnssec-transfer" &#123;                                     #密钥名称</span><br><span class="line">    algorithm hmac-md5;                                      #加密算法</span><br><span class="line">    secret "/y7HAkwBH0KP9g9M+jADJg==";                       #私钥加密字符串</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">chown root:named transfer.key                            #把文件所属组改为named，降低权限</span><br><span class="line">chmod 640 transfer.key </span><br><span class="line"></span><br><span class="line">vim /etc/named.conf</span><br><span class="line">include "/etc/transfer.key";</span><br><span class="line">allow-transfer &#123; key dnssec-transfer; &#125;;  #只允许拥有该密钥验证文件的人进行同步</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart named</span><br></pre></td></tr></table></figure>
+<h6 id="从机引用密钥"><a href="#从机引用密钥" class="headerlink" title="从机引用密钥"></a>从机引用密钥</h6><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">scp /etc/transfer.key root@从机ip地址:/etc/opt/isc/isc-bind/transfer.key</span><br><span class="line"></span><br><span class="line">scp /etc/transfer.key root@10.154.5.214:/etc/opt/isc/isc-bind/transfer.key</span><br><span class="line">scp /etc/transfer.key root@10.154.5.162:/etc/opt/isc/isc-bind/transfer.key</span><br><span class="line"></span><br><span class="line">chown root:named transfer.key</span><br><span class="line">chmod 640 transfer.key</span><br></pre></td></tr></table></figure>
+<p>named.conf文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">include "/etc/opt/isc/isc-bind/transfer.key";</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">不属于全局options</span></span><br><span class="line">server 10.154.5.163 &#123; # 主机ip地址</span><br><span class="line"> 	keys &#123; dnssec-transfer; &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>重启从服务器的Bind服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart isc-bind-named</span><br></pre></td></tr></table></figure>
+<p>发现已经同步过来了。</p>
+<h5 id="配置catalog"><a href="#配置catalog" class="headerlink" title="配置catalog"></a>配置catalog</h5><h6 id="主机"><a href="#主机" class="headerlink" title="主机"></a>主机</h6><ol>
+<li>打开目录<code>/var/opt/isc/isc-bind/named/data</code>，新建catalog目录文件（后缀名可以为.db或者.zone）</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cd /var/opt/isc/isc-bind/named/data</span><br><span class="line"></span><br><span class="line">vim catalog.default.zone</span><br><span class="line"><span class="meta">$</span><span class="bash">TTL 3600</span></span><br><span class="line">@       IN SOA . . 1 86400 3600 86400 3600</span><br><span class="line">@       IN NS  nop.</span><br><span class="line">version IN TXT "1"</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">修改权限</span></span><br><span class="line">chown named.named catalog.default.zone</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>将catalog目录文件引入到named.conf中</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">options &#123;</span><br><span class="line"><span class="meta">	#</span><span class="bash">...</span></span><br><span class="line">	allow-new-zones yes; # RNDC动态维护zones</span><br><span class="line">	notify yes; # 主动通知从机更新,而不需要等待轮询时间进行更新</span><br><span class="line"> 	also-notify &#123; 10.154.5.162; &#125;; # 被主动通知的从机地址，可多个地址</span><br><span class="line"> 	allow-transfer &#123; 10.154.5.162; 10.154.5.163; &#125;; # 只允许列表中的主机传递主域名服务器的数据,为了方便扩展可以设置为key</span><br><span class="line">    allow-update &#123; any; &#125;; #允许向主zone文件发送动态更新的匹配列表，如果设置为none，则无法使用update命令（更新记录zone等）</span><br><span class="line">    allow-query  &#123; any; &#125;; #添加允许访问DNS的地址段</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">zone "catalog.default" &#123;</span><br><span class="line">          type master;</span><br><span class="line">          file "catalog.default.zone";</span><br><span class="line">          #also-notify &#123; 10.154.5.162; &#125;; </span><br><span class="line">          #allow-transfer &#123; 10.154.5.162; 10.154.5.163; &#125;;</span><br><span class="line">          #allow-update &#123; any; &#125;; </span><br><span class="line">          #allow-query &#123; any; &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">named-checkzone catalog.default catalog.default.zone</span><br></pre></td></tr></table></figure>
+<h6 id="从机"><a href="#从机" class="headerlink" title="从机"></a>从机</h6><p>named.conf配置catalog目录，与主机建立关联。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">options &#123;</span><br><span class="line"><span class="meta">	#</span><span class="bash">...</span></span><br><span class="line">	listen-on port 53 &#123; 127.0.0.1; 10.154.5.162; 10.154.5.163; &#125;; # 主机</span><br><span class="line">	allow-new-zones yes; # RNDC动态维护zones</span><br><span class="line">	masterfile-format text; #从机乱码问题</span><br><span class="line">	catalog-zones &#123;</span><br><span class="line">                zone "catalog.default"  default-masters &#123; 10.154.5.163; &#125;;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line">zone "catalog.default" &#123;</span><br><span class="line">          type slave;</span><br><span class="line">          file "catalog.default.zone";</span><br><span class="line">          masters &#123; 10.154.5.163; &#125;; // 主机ip</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h6 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h6><p>至此完成catalog目录的配置。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">主机、从机都重启</span></span><br><span class="line">systemctl restart named 或</span><br><span class="line">systemctl restart isc-bind-named</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">在主机上验证主从是否搭建catalog成功</span></span><br><span class="line">dig +short @10.154.5.163 soa catalog.default</span><br><span class="line">dig +short @10.154.5.162 soa catalog.default</span><br></pre></td></tr></table></figure>
+<h5 id="配置日志"><a href="#配置日志" class="headerlink" title="配置日志"></a>配置日志</h5><h6 id="生成日志存储文件"><a href="#生成日志存储文件" class="headerlink" title="生成日志存储文件"></a>生成日志存储文件</h6><p>cd /var/opt/isc/isc-bind/log/</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> vim namelist.txt</span></span><br><span class="line">default.log</span><br><span class="line">general.log</span><br><span class="line">database.log</span><br><span class="line">security.log</span><br><span class="line">config.log</span><br><span class="line">resolver.log</span><br><span class="line">xfer-in.log</span><br><span class="line">xfer-out.log</span><br><span class="line">notify.log</span><br><span class="line">client.log</span><br><span class="line">unmatched.log</span><br><span class="line">queries.log</span><br><span class="line">network.log</span><br><span class="line">update.log</span><br><span class="line">dispatch.log</span><br><span class="line">dnssec.log</span><br><span class="line">lame-servers.log</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"></span><br><span class="line">printf "*************************************\n"</span><br><span class="line">echo " cat file whiel read line"</span><br><span class="line">cat namelist.txt |while read line</span><br><span class="line">do</span><br><span class="line">echo $line;</span><br><span class="line"></span><br><span class="line">touch $line;</span><br><span class="line"></span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">chown named.named -R ../log</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash createlog.sh</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">发送到从机</span></span><br><span class="line">scp /var/opt/isc/isc-bind/log/namelist.txt  root@10.154.5.162:/var/opt/isc/isc-bind/log/namelist.txt</span><br><span class="line">scp /var/opt/isc/isc-bind/log/createlog.sh  root@10.154.5.162:/var/opt/isc/isc-bind/log/createlog.sh</span><br><span class="line">bash createlog.sh</span><br></pre></td></tr></table></figure>
+<h6 id="named-conf配置"><a href="#named-conf配置" class="headerlink" title="named.conf配置"></a>named.conf配置</h6><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre></td><td class="code"><pre><span class="line">​```shell</span><br><span class="line">logging &#123;</span><br><span class="line"> channel default_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/default.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel general_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/general.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel database_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/database.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel security_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/security.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel config_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/config.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel resolver_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/resolver.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel xfer-in_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/xfer-in.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel xfer-out_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/xfer-out.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel notify_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/notify.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel client_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/client.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel unmatched_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/unmatched.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel queries_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/queries.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel network_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/network.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel update_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/update.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel dispatch_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/dispatch.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel dnssec_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/dnssec.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel lame-servers_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/lame-servers.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    category default &#123; default_file; &#125;;</span><br><span class="line">    category general &#123; general_file; &#125;;</span><br><span class="line">    category database &#123; database_file; &#125;;</span><br><span class="line">    category security &#123; security_file; &#125;;</span><br><span class="line">    category config &#123; config_file; &#125;;</span><br><span class="line">    category resolver &#123; resolver_file; &#125;;</span><br><span class="line">    category xfer-in &#123; xfer-in_file; &#125;;</span><br><span class="line">    category xfer-out &#123; xfer-out_file; &#125;;</span><br><span class="line">    category notify &#123; notify_file; &#125;;</span><br><span class="line">    category client &#123; client_file; &#125;;</span><br><span class="line">    category unmatched &#123; unmatched_file; &#125;;</span><br><span class="line">    category queries &#123; queries_file; &#125;;</span><br><span class="line">    category network &#123; network_file; &#125;;</span><br><span class="line">    category update &#123; update_file; &#125;;</span><br><span class="line">    category dispatch &#123; dispatch_file; &#125;;</span><br><span class="line">    category dnssec &#123; dnssec_file; &#125;;</span><br><span class="line">    category lame-servers &#123; lame-servers_file; &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>主从机都配置！</p>
+<h5 id="最终主机配置"><a href="#最终主机配置" class="headerlink" title="最终主机配置"></a>最终主机配置</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br></pre></td><td class="code"><pre><span class="line">key rndc-key &#123;</span><br><span class="line">        algorithm hmac-md5;</span><br><span class="line">        secret "rf27GDGjr6J2rRK5Ljsq2Q==";</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">include "/etc/opt/isc/isc-bind/transfer.key";</span><br><span class="line">options &#123;</span><br><span class="line">	directory "/var/opt/isc/isc-bind/named/data";</span><br><span class="line">	listen-on port 53 &#123; 127.0.0.1; 10.154.5.163; &#125;;</span><br><span class="line"><span class="meta">	#</span><span class="bash">listen-on-v6 &#123; ::1; &#125;;</span></span><br><span class="line">	dnssec-enable yes;</span><br><span class="line">	dnssec-validation yes;</span><br><span class="line"></span><br><span class="line">	allow-query &#123; any; &#125;;</span><br><span class="line">        allow-update &#123; any; &#125;;</span><br><span class="line">	allow-transfer &#123; 10.154.5.163; key dnssec-transfer; &#125;;</span><br><span class="line">	notify yes;</span><br><span class="line"><span class="meta">	#</span><span class="bash">notify-to-soa yes;</span></span><br><span class="line">	also-notify &#123; 10.154.5.162; 10.154.5.214; &#125;;</span><br><span class="line">	allow-new-zones yes;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">statistics-channels &#123;</span><br><span class="line">      inet 127.0.0.1 port 8888 allow &#123; any; &#125;;</span><br><span class="line">      inet 10.154.5.163 port 8889 allow &#123; any; &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">controls &#123;</span><br><span class="line">       inet * port 953</span><br><span class="line">       allow &#123; any; &#125; keys &#123; "rndc-key"; &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">logging &#123;</span><br><span class="line">	channel default_debug &#123;</span><br><span class="line">		file "named.run";</span><br><span class="line">		print-time yes;</span><br><span class="line">		severity dynamic;</span><br><span class="line">	&#125;;</span><br><span class="line">   channel default_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/default.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel general_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/general.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel database_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/database.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel security_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/security.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel config_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/config.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel resolver_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/resolver.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel xfer-in_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/xfer-in.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel xfer-out_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/xfer-out.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel notify_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/notify.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel client_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/client.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel unmatched_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/unmatched.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel queries_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/queries.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel network_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/network.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel update_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/update.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel dispatch_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/dispatch.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel dnssec_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/dnssec.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel lame-servers_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/lame-servers.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    category default &#123; default_file; &#125;;</span><br><span class="line">    category general &#123; general_file; &#125;;</span><br><span class="line">    category database &#123; database_file; &#125;;</span><br><span class="line">    category security &#123; security_file; &#125;;</span><br><span class="line">    category config &#123; config_file; &#125;;</span><br><span class="line">    category resolver &#123; resolver_file; &#125;;</span><br><span class="line">    category xfer-in &#123; xfer-in_file; &#125;;</span><br><span class="line">    category xfer-out &#123; xfer-out_file; &#125;;</span><br><span class="line">    category notify &#123; notify_file; &#125;;</span><br><span class="line">    category client &#123; client_file; &#125;;</span><br><span class="line">    category unmatched &#123; unmatched_file; &#125;;</span><br><span class="line">    category queries &#123; queries_file; &#125;;</span><br><span class="line">    category network &#123; network_file; &#125;;</span><br><span class="line">    category update &#123; update_file; &#125;;</span><br><span class="line">    category dispatch &#123; dispatch_file; &#125;;</span><br><span class="line">    category dnssec &#123; dnssec_file; &#125;;</span><br><span class="line">    category lame-servers &#123; lame-servers_file; &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">zone "catalog.default" &#123;</span><br><span class="line">        type master;</span><br><span class="line">        file "catalog.default.zone";</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">named-checkconf 验证配置</span><br><span class="line">systemctl restart isc-bind-named</span><br></pre></td></tr></table></figure>
+<h5 id="最终从机配置"><a href="#最终从机配置" class="headerlink" title="最终从机配置"></a>最终从机配置</h5><p>从机配置同步数据所在目录slaves</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /var/opt/isc/isc-bind/named/data</span><br><span class="line">mkdir slaves</span><br><span class="line">chown named.named slaves</span><br></pre></td></tr></table></figure>
+<p>named</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br></pre></td><td class="code"><pre><span class="line">key "rndc-key" &#123;</span><br><span class="line">        algorithm hmac-sha256;</span><br><span class="line">        secret "bshuXqh379VDuCYQqWJY68F1rkCEsf5LLfc274USvZQ=";</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">options &#123;</span><br><span class="line">	directory "/var/opt/isc/isc-bind/named/data/slaves";</span><br><span class="line">	listen-on port 53 &#123; 127.0.0.1; 10.154.5.214; 10.154.5.163; &#125;;</span><br><span class="line"><span class="meta">	#</span><span class="bash">listen-on-v6 &#123; ::1; &#125;;</span></span><br><span class="line">	dnssec-validation auto;</span><br><span class="line"></span><br><span class="line">	allow-query &#123; any; &#125;;</span><br><span class="line">        allow-update &#123; any; &#125;;</span><br><span class="line">        allow-transfer &#123;any;&#125;;</span><br><span class="line">	allow-new-zones yes;</span><br><span class="line">	masterfile-format text;</span><br><span class="line">	catalog-zones &#123;</span><br><span class="line">                zone "catalog.default"  default-masters &#123; 10.154.5.163; &#125;;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">statistics-channels &#123;</span><br><span class="line">      inet 127.0.0.1 port 8888 allow &#123; any; &#125;;</span><br><span class="line">      inet 10.154.5.214 port 8889 allow &#123; any; &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"> controls &#123;</span><br><span class="line">       inet 127.0.0.1 port 953</span><br><span class="line">               allow &#123; 127.0.0.1; &#125; keys &#123; "rndc-key"; &#125;;</span><br><span class="line"> &#125;;</span><br><span class="line"></span><br><span class="line">logging &#123;</span><br><span class="line">	channel default_debug &#123;</span><br><span class="line">		file "named.run";</span><br><span class="line">		print-time yes;</span><br><span class="line">		severity dynamic;</span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line"> channel default_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/default.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel general_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/general.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel database_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/database.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel security_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/security.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel config_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/config.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel resolver_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/resolver.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel xfer-in_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/xfer-in.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel xfer-out_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/xfer-out.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel notify_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/notify.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel client_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/client.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel unmatched_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/unmatched.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel queries_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/queries.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel network_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/network.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel update_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/update.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel dispatch_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/dispatch.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel dnssec_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/dnssec.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line">    channel lame-servers_file &#123;</span><br><span class="line">        file "/var/opt/isc/isc-bind/log/lame-servers.log" versions 3 size 5m;</span><br><span class="line">        severity dynamic;</span><br><span class="line">        print-time yes;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    category default &#123; default_file; &#125;;</span><br><span class="line">    category general &#123; general_file; &#125;;</span><br><span class="line">    category database &#123; database_file; &#125;;</span><br><span class="line">    category security &#123; security_file; &#125;;</span><br><span class="line">    category config &#123; config_file; &#125;;</span><br><span class="line">    category resolver &#123; resolver_file; &#125;;</span><br><span class="line">    category xfer-in &#123; xfer-in_file; &#125;;</span><br><span class="line">    category xfer-out &#123; xfer-out_file; &#125;;</span><br><span class="line">    category notify &#123; notify_file; &#125;;</span><br><span class="line">    category client &#123; client_file; &#125;;</span><br><span class="line">    category unmatched &#123; unmatched_file; &#125;;</span><br><span class="line">    category queries &#123; queries_file; &#125;;</span><br><span class="line">    category network &#123; network_file; &#125;;</span><br><span class="line">    category update &#123; update_file; &#125;;</span><br><span class="line">    category dispatch &#123; dispatch_file; &#125;;</span><br><span class="line">    category dnssec &#123; dnssec_file; &#125;;</span><br><span class="line">    category lame-servers &#123; lame-servers_file; &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">zone "catalog.default" &#123;</span><br><span class="line">        type slave;</span><br><span class="line">        file "catalog.default.zone";</span><br><span class="line">        masters &#123; 10.154.5.163; &#125;;</span><br><span class="line">&#125;;</span><br><span class="line">include "/etc/opt/isc/isc-bind/transfer.key";</span><br><span class="line"></span><br><span class="line">server 10.154.5.163 &#123;</span><br><span class="line"> 	keys &#123; dnssec-transfer; &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart isc-bind-named</span><br></pre></td></tr></table></figure>
+<h3 id="性能监控"><a href="#性能监控" class="headerlink" title="性能监控"></a>性能监控</h3><img src="/want/2021/06/24/bind主从部署过程/exporter.png" title="exporter">
+<h4 id="Bind基本配置"><a href="#Bind基本配置" class="headerlink" title="Bind基本配置"></a>Bind基本配置</h4><p>用于获取监控数据</p>
+<p>vim /etc/opt/isc/isc-bind/named.conf</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">statistics-channels &#123;</span><br><span class="line">      inet 127.0.0.1 port 8888 allow &#123; any; &#125;;</span><br><span class="line">      inet 10.154.5.162 port 8889 allow &#123; any; &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>打开浏览器访问10.154.5.162:8889</p>
+<p><strong>注意端口号8889</strong></p>
+<h4 id="bind-exporter"><a href="#bind-exporter" class="headerlink" title="bind_exporter"></a>bind_exporter</h4><p>用于图形化展现。</p>
+<p>bind_exporter基于statistics-channels记录的统计数据，并对数据统计分析并输出到Prometheus</p>
+<h5 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h5><p>查看linux版本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># cat /proc/version</span><br><span class="line">Linux version 3.10.0-1127.18.2.el7.x86_64 (mockbuild@kbuilder.bsys.centos.org) (gcc version 4.8.5 20150623 (Red Hat 4.8.5-39) (GCC) ) #1 SMP Sun Jul 26 15:27:06 UTC 2020</span><br></pre></td></tr></table></figure>
+<p>根据版本下载</p>
+<p><a href="https://github.com/prometheus-community/bind_exporter/releases" target="_blank" rel="noopener">https://github.com/prometheus-community/bind_exporter/releases</a></p>
+<p>如上图，linux是86_64，则下载版本</p>
+<p>bind_exporter-0.4.0.linux-amd64.tar.gz</p>
+<h5 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h5><p>解压到/usr/local/bin/</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"> tar -xvf bind_exporter-0.4.0.linux-amd64.tar.gz</span><br><span class="line"> </span><br><span class="line"> cd /usr/local/bin/</span><br><span class="line">-rwxr-xr-x 1 3434 3434 15762489 Jan 14 22:55 bind_exporter</span><br><span class="line">-rw-r--r-- 1 3434 3434    11357 Jan 14 23:57 LICENSE</span><br><span class="line">-rw-r--r-- 1 3434 3434      252 Jan 14 23:57 NOTICE</span><br></pre></td></tr></table></figure>
+<p>创建⼀个systemd配置⽂件以运⾏bind_exporter</p>
+<ol>
+<li>–web.listen-address为对外暴露的metric地址和端⼝，Prometheus从此处抓取bind_exporter的metrics；即对外提供数据的端口。</li>
+<li>– bind.stats-url为本地bind服务绑定的地址和IP。即获取bind数据的地址。</li>
+</ol>
+<p>注意此处的⽤⼾和组可以使⽤与named程序相同的⽤⼾和组“named”，也可 以使⽤root。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/systemd/system/bind_exporter.service</span><br><span class="line"></span><br><span class="line">[Unit]</span><br><span class="line">Description=bind_exporter</span><br><span class="line">Documentation=https://github.com/prometheus-community/bind_exporter</span><br><span class="line">Wants=network-online.target</span><br><span class="line">After=network-online.target</span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">User=root</span><br><span class="line">Group=root</span><br><span class="line">ExecReload=/bin/kill -HUP $MAINPID</span><br><span class="line">ExecStart=/usr/local/bin/bind_exporter \</span><br><span class="line">--bind.pid-file=/var/opt/isc/isc-bind/run/named/named.pid \</span><br><span class="line">--bind.timeout=20s \</span><br><span class="line">--web.listen-address=0.0.0.0:9154 \</span><br><span class="line">--web.telemetry-path=/metrics \</span><br><span class="line">--bind.stats-url=http://10.154.5.162:8889/ \</span><br><span class="line">--bind.stats-groups=server,view,tasks</span><br><span class="line">Restart=always</span><br><span class="line">[Install]</span><br><span class="line">WantedBy=default.target</span><br></pre></td></tr></table></figure>
+<p><strong>注意端口号9154</strong></p>
+<p>加载并启动bind_export</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl restart bind_exporter.service</span><br></pre></td></tr></table></figure>
+<h4 id="Prometheus-Server"><a href="#Prometheus-Server" class="headerlink" title="Prometheus Server"></a>Prometheus Server</h4><p>Prometheus基于Go编写，编译后的软件包，不依赖于任何的第三⽅依赖。只需要下载对应平台的⼆进制包，解压并且添加基本 的配置即可正常启Prometheus Server。</p>
+<p>Prometheus Server负责定时在目标上抓取Metrics数据，每个抓取目标都需要暴露一个HTTP服务接口用于Prometheus定时抓取。</p>
+<p>这种调用被监控对象获取监控数据的方式被称为Pull。Pull方式体现了Prometheus独特的设计哲学与大多数采用了Push方式的监控系统不同。</p>
+<p>但某些现有系统是通过push方式实现的，为了接入这个系统，Prometheus提供对PushGateway的支持，这些系统主动推送metrics到PushGateway，而Prometheus只是定时去Gateway上抓取数据。</p>
+<p>AlertManager是独立于Prometheus的一个组件，在触发了预先设置在Prometheus中的高级规则后，Prometheus便会推送告警信息到AlertManager。</p>
+<p>根据版本下载：</p>
+<p><a href="https://prometheus.io/download/" target="_blank" rel="noopener">Download | Prometheus</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar -xf prometheus-2.27.1.linux-amd64.tar.gz</span><br><span class="line">mv prometheus-2.27.1.linux-amd64 /usr/local/</span><br><span class="line">ln -s /usr/local/prometheus-2.27.1.linux-amd64/ /usr/local/prometheus</span><br></pre></td></tr></table></figure>
+<p>创建Prometheus的⽤⼾(此处用户prometheus)及数据存储⽬录（/data/prometheus）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> useradd -s /sbin/nologin -M prometheus</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> mkdir /data/prometheus -p</span></span><br><span class="line"><span class="meta">#</span><span class="bash">修改⽬录属主</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> chown -R prometheus:prometheus /usr/<span class="built_in">local</span>/prometheus/</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> chown -R prometheus:prometheus /data/prometheus/</span></span><br></pre></td></tr></table></figure>
+<p>配置/usr/local/prometheus/promethes.yml</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp prometheus.yml prometheus.yml-default #备份一下默认配置</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> my global config</span></span><br><span class="line">global:</span><br><span class="line">  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.</span><br><span class="line">  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.</span><br><span class="line"><span class="meta">  #</span><span class="bash"> scrape_timeout is <span class="built_in">set</span> to the global default (10s).</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> Alertmanager configuration</span></span><br><span class="line">alerting:</span><br><span class="line">  alertmanagers:</span><br><span class="line">  - static_configs:</span><br><span class="line">    - targets: ["localhost:9093"]</span><br><span class="line">      # - alertmanager:9093</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> Load rules once and periodically evaluate them according to the global <span class="string">'evaluation_interval'</span>.</span></span><br><span class="line">rule_files:</span><br><span class="line"><span class="meta">  #</span><span class="bash"> - <span class="string">"first_rules.yml"</span></span></span><br><span class="line"><span class="meta">  #</span><span class="bash"> - <span class="string">"second_rules.yml"</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> A scrape configuration containing exactly one endpoint to scrape:</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Here it<span class="string">'s Prometheus itself.</span></span></span><br><span class="line">scrape_configs:</span><br><span class="line"><span class="meta">  #</span><span class="bash"> The job name is added as a label `job=&lt;job_name&gt;` to any timeseries scraped from this config.</span></span><br><span class="line">  - job_name: 'prometheus'</span><br><span class="line"></span><br><span class="line">    # metrics_path defaults to '/metrics'</span><br><span class="line">    # scheme defaults to 'http'.</span><br><span class="line">	scrape_interval: 5s</span><br><span class="line">    static_configs:</span><br><span class="line">    - targets: ['localhost:9090'] #浏览器访问9090打开管理界面</span><br><span class="line">   </span><br><span class="line">  - job_name: 'bind-fnc04'</span><br><span class="line">	scrape_interval: 5s</span><br><span class="line">    static_configs:</span><br><span class="line">    - targets: ['10.154.5.162:9154'] #监听bind_exporter</span><br></pre></td></tr></table></figure>
+<p>默认启动后的端口为9090。</p>
+<p>启动方式1</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/prometheus</span><br><span class="line">./prometheus --version</span><br><span class="line">./prometheus &amp;</span><br></pre></td></tr></table></figure>
+<p>启动方式2</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/systemd/system/prometheus.service</span><br><span class="line"></span><br><span class="line">[Unit]</span><br><span class="line">Description=Prometheus</span><br><span class="line">Documentation=https://prometheus.io/</span><br><span class="line">After=network.target</span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">User=prometheus</span><br><span class="line">ExecStart=/usr/local/prometheus/prometheus --config.file=/usr/local/prometheus/prometheus.yml --storage.tsdb.path=/data/prometheus</span><br><span class="line">Restart=on-failure</span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+<p>如此可以用命令启动服务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl enable prometheus</span><br><span class="line">systemctl start prometheus</span><br></pre></td></tr></table></figure>
+<p>浏览器访问<a href="http://10.154.5.162:9090/targets" target="_blank" rel="noopener">http://10.154.5.162:9090/targets</a></p>
+<h4 id="Grafana"><a href="#Grafana" class="headerlink" title="Grafana"></a>Grafana</h4><p>一个数据分析统计可视化报表，⽤来展⽰ prometheus收集到的数据</p>
+<p><a href="https://zhuanlan.zhihu.com/p/351995351" target="_blank" rel="noopener">Grafana+Prometheus的详解以及使用 - 知乎 (zhihu.com)</a></p>
+<p>下载</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://dl.grafana.com/oss/release/grafana-7.5.7.linux-amd64.tar.gz</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar -xzvf grafana-7.5.7.linux-amd64.tar.gz</span><br><span class="line">mv grafana-7.5.7 /usr/local/</span><br><span class="line">ln -s /usr/local/grafana-7.5.7/ /usr/local/grafana</span><br></pre></td></tr></table></figure>
+<p>创建grafana⽤⼾及数据存放⽬录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">useradd -s /sbin/nologin -M grafana</span><br><span class="line">mkdir /data/grafana</span><br><span class="line">chown -R grafana:grafana /usr/local/grafana/</span><br><span class="line">chown -R grafana:grafana /data/grafana</span><br></pre></td></tr></table></figure>
+<p>修改目录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> cd /usr/local/grafana/conf/</span><br><span class="line"> cp defaults.ini defaults.ini-default 先备份</span><br><span class="line"> </span><br><span class="line"> vim defaults.ini</span><br><span class="line">data = /data/grafana/data</span><br><span class="line">logs = /data/grafana/log</span><br><span class="line">plugins = /data/grafana/plugins</span><br><span class="line">provisioning = /data/grafana/conf/provisioning</span><br></pre></td></tr></table></figure>
+<p>新增 grafana-server.service ⽂件，使⽤systemd来管理grafana服务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/systemd/system/grafana-server.service</span><br><span class="line"></span><br><span class="line">[Unit]</span><br><span class="line">Description=Grafana</span><br><span class="line">After=network.target</span><br><span class="line">[Service]</span><br><span class="line">User=grafana</span><br><span class="line">Group=grafana</span><br><span class="line">Type=notify</span><br><span class="line">ExecStart=/usr/local/grafana/bin/grafana-server -homepath /usr/local/grafana</span><br><span class="line">Restart=on-failure</span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl start grafana-server</span><br><span class="line">systemctl status grafana-server</span><br><span class="line">systemctl enable grafana-server</span><br></pre></td></tr></table></figure>
+<p>打开浏览器访问</p>
+<p><a href="http://10.154.5.162:3000/login" target="_blank" rel="noopener">http://10.154.5.162:3000/login</a></p>
+<p>默认的账号密码 admin/admin</p>
+<p>把grafana和prometheus关联起来，也就是在 grafana中添加添加数据源——</p>
+<p>在配置⻚⾯点击添加数据源，然后选择prometheus，输⼊prometheus服务的参数即可。</p>
+<img src="/want/2021/06/24/bind主从部署过程/prometheus.png" title="prometheus">
+<img src="/want/2021/06/24/bind主从部署过程/prometheus_setting.png" title="prometheus_setting">
+<h5 id="Grafana三种方式导入Dashboard"><a href="#Grafana三种方式导入Dashboard" class="headerlink" title="Grafana三种方式导入Dashboard"></a>Grafana三种方式导入Dashboard</h5><img src="/want/2021/06/24/bind主从部署过程/Grafana_import.png" title="Grafana_import">
+<img src="/want/2021/06/24/bind主从部署过程/Grafana_import_detail.png" title="Grafana_import_detail">
+<img src="/want/2021/06/24/bind主从部署过程/grafana_dashboards.png" title="grafana_dashboards">
+<p>参考：</p>
+<ol>
+<li><a href="https://blog.csdn.net/y368769/article/details/108514720" target="_blank" rel="noopener">Grafana三种方式导入Dashboard_y368769的博客-CSDN博客_grafana import</a></li>
+<li><a href="https://grafana.com/grafana/dashboards" target="_blank" rel="noopener">https://grafana.com/grafana/dashboards</a></li>
+</ol>
+<h4 id="Node-Exporter"><a href="#Node-Exporter" class="headerlink" title="Node Exporter"></a>Node Exporter</h4><p><a href="https://prometheus.io/download/" target="_blank" rel="noopener">https://prometheus.io/download/</a></p>
+<img src="/want/2021/06/24/bind主从部署过程/node_exporter.png" title="node_exporter">
+<p>采集主机的运⾏指标如CPU，内存，磁盘等信息。可以使⽤Node Exporter</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/prometheus/node_exporter/releases/download/v1.1.2/node_exporter-1.1.2.linux-amd64.tar.gz</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ln -s  node_exporter-1.1.2.linux-amd64/  node_exporter</span><br><span class="line"></span><br><span class="line">启动，默认会启动9100端⼝</span><br><span class="line">nohup /usr/local/prometheus_exporter/node_exporter/node_exporter &gt;/dev/null 2&gt;&amp;1 &amp;</span><br><span class="line">或</span><br><span class="line">/usr/local/prometheus_exporter/node_exporter/node_exporter</span><br></pre></td></tr></table></figure>
+<p>​        </p>
+<p>开机启动</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup /usr/local/prometheus_exporter/node_exporter/node_exporter &gt;/dev/null 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+<h5 id="加入prometheus"><a href="#加入prometheus" class="headerlink" title="加入prometheus"></a>加入prometheus</h5><p>编辑prometheus.yml⽂件，增加后⾯4⾏.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">scrape_configs:</span><br><span class="line"><span class="meta">  #</span><span class="bash"> The job name is added as a label `job=&lt;job_name&gt;` to any timeseries scraped from this config.</span></span><br><span class="line">  - job_name: 'prometheus'</span><br><span class="line"></span><br><span class="line">    # metrics_path defaults to '/metrics'</span><br><span class="line">    # scheme defaults to 'http'.</span><br><span class="line">    scrape_interval: 5s</span><br><span class="line">    static_configs:</span><br><span class="line">    - targets: ['localhost:9090']</span><br><span class="line"></span><br><span class="line">  - job_name: 'bind-fnc04'</span><br><span class="line">    scrape_interval: 5s</span><br><span class="line">    static_configs:</span><br><span class="line">    - targets: ['10.154.5.162:9154'] #监听bind_exporter</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  - job_name: 'node'</span><br><span class="line">    static_configs:</span><br><span class="line">    - targets: ['localhost:9100']</span><br></pre></td></tr></table></figure>
+<p>重启</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart prometheus.service</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+	
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">
+		-------------Keep It Simple Stupid-------------
+		</div>
+    
+</div>
+	  
+	</div>
+	
+    
+    
+    
+	
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/want/2021/06/02/bind/" rel="next" title="bind">
+                <i class="fa fa-chevron-left"></i> bind
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/want/images/avatar.jpg" alt="luxia">
+            
+              <p class="site-author-name" itemprop="name">luxia</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/want/archives/">
+              
+                  <span class="site-state-item-count">55</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/want/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#系统及部署环境"><span class="nav-number">1.</span> <span class="nav-text">系统及部署环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bind9-16安装配置"><span class="nav-number">2.</span> <span class="nav-text">bind9.16安装配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#9-16安装"><span class="nav-number">2.1.</span> <span class="nav-text">9.16安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-16配置"><span class="nav-number">2.2.</span> <span class="nav-text">9.16配置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#配置rndc-confgen"><span class="nav-number">2.2.1.</span> <span class="nav-text">配置rndc-confgen</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置transfer-key"><span class="nav-number">2.2.2.</span> <span class="nav-text">配置transfer-key</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#主机生成密钥"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">主机生成密钥</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#从机引用密钥"><span class="nav-number">2.2.2.2.</span> <span class="nav-text">从机引用密钥</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置catalog"><span class="nav-number">2.2.3.</span> <span class="nav-text">配置catalog</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#主机"><span class="nav-number">2.2.3.1.</span> <span class="nav-text">主机</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#从机"><span class="nav-number">2.2.3.2.</span> <span class="nav-text">从机</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#验证"><span class="nav-number">2.2.3.3.</span> <span class="nav-text">验证</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置日志"><span class="nav-number">2.2.4.</span> <span class="nav-text">配置日志</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#生成日志存储文件"><span class="nav-number">2.2.4.1.</span> <span class="nav-text">生成日志存储文件</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#named-conf配置"><span class="nav-number">2.2.4.2.</span> <span class="nav-text">named.conf配置</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#最终主机配置"><span class="nav-number">2.2.5.</span> <span class="nav-text">最终主机配置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#最终从机配置"><span class="nav-number">2.2.6.</span> <span class="nav-text">最终从机配置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#性能监控"><span class="nav-number">3.</span> <span class="nav-text">性能监控</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Bind基本配置"><span class="nav-number">3.1.</span> <span class="nav-text">Bind基本配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bind-exporter"><span class="nav-number">3.2.</span> <span class="nav-text">bind_exporter</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#下载"><span class="nav-number">3.2.1.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置"><span class="nav-number">3.2.2.</span> <span class="nav-text">配置</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Prometheus-Server"><span class="nav-number">3.3.</span> <span class="nav-text">Prometheus Server</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Grafana"><span class="nav-number">3.4.</span> <span class="nav-text">Grafana</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Grafana三种方式导入Dashboard"><span class="nav-number">3.4.1.</span> <span class="nav-text">Grafana三种方式导入Dashboard</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Node-Exporter"><span class="nav-number">3.5.</span> <span class="nav-text">Node Exporter</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#加入prometheus"><span class="nav-number">3.5.1.</span> <span class="nav-text">加入prometheus</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">luxia</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">120.1k</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/want/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/want/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/want/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/want/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/want/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/want/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: true,
+        notify: true,
+        appId: 'h9Jehf4VaeDG22nDbzEpkHnt-gzGzoHsz',
+        appKey: 'GPvy0xbbxNb0Ao6DM6oRFSoG',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/want/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('-1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("h9Jehf4VaeDG22nDbzEpkHnt-gzGzoHsz", "GPvy0xbbxNb0Ao6DM6oRFSoG");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+  	 <!-- custom analytics part create by lux -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("h9Jehf4VaeDG22nDbzEpkHnt-gzGzoHsz", "GPvy0xbbxNb0Ao6DM6oRFSoG");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = $(document.getElementById(url)).text() + ': 0';
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = $(document.getElementById(url)).text() + ': ' + object.get('time');
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content = $(document.getElementById(url)).text() + ': ' + counter.get('time');
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = $(document.getElementById(url)).text() + ': ' + newcounter.get('time');
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+});
+</script>
+  
+<script src="/want/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/want/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"position":"right","width":100,"height":200,"hOffset":0,"vOffset":160},"mobile":{"show":true,"scale":0.05}});</script></body>
+</html>
