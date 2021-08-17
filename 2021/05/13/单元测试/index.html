@@ -90,7 +90,7 @@
 <meta property="og:image" content="c:/Users/Lenovo/AppData/Roaming/Typora/typora-user-images/image-20210513144223695.png">
 <meta property="og:image" content="c:/Users/Lenovo/AppData/Roaming/Typora/typora-user-images/image-20210513144313023.png">
 <meta property="og:image" content="c:/Users/Lenovo/AppData/Roaming/Typora/typora-user-images/image-20210524162554542.png">
-<meta property="og:updated_time" content="2021-06-11T12:30:12.706Z">
+<meta property="og:updated_time" content="2021-08-17T07:43:41.719Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="单元测试">
 <meta name="twitter:description" content="单元测试单元测试（unit testing），是指对软件中的最小可测试单元进行检查和验证。在Java中单元测试的最小单元是类。 为什么写单元测试？  保证或验证实现功能。 保护已经实现的功能不被破坏。  只针对某一个功能点写测试，比如独立测试某类中的某个方法。但这个类和方法本身不是独立的，可能会去调用其他的类或方法。我们可以采用Mockito和PowerMock两种工具，来虚拟那些外部的、不容易构">
@@ -596,7 +596,7 @@
 <p>即可完成调用私有方法。</p>
 <p>maven依赖：</p>
 <p><dependency><br>      <groupid>org.springframework</groupid><br>      <artifactid>spring-test</artifactid><br>      <version>4.1.6.RELEASE</version><br>      <scope>test</scope><br>    </dependency><br>————————————————<br>版权声明：本文为CSDN博主「lijie2049」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。<br>原文链接：<a href="https://blog.csdn.net/lijie2049/article/details/84732723" target="_blank" rel="noopener">https://blog.csdn.net/lijie2049/article/details/84732723</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Unexpected exception, expected&lt;com.chinamobile.cmss.fnc.cdns.exception.DomainException&gt; but was&lt;java.lang.reflect.InvocationTargetException&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Unexpected exception, expected&lt;exception.DomainException&gt; but was&lt;java.lang.reflect.InvocationTargetException&gt;</span><br></pre></td></tr></table></figure>
 <p>反射，异常处理</p>
 <p><a href="https://www.baeldung.com/java-lang-reflect-invocationtargetexception" target="_blank" rel="noopener">What Causes java.lang.reflect.InvocationTargetException? | Baeldung</a></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">val targetClass = DomainServiceImpl::class.java</span><br><span class="line">val method: Method = targetClass.getDeclaredMethod(</span><br><span class="line">    &quot;handleExitedParentsDomainName&quot;,</span><br><span class="line">    String::class.java</span><br><span class="line">)</span><br><span class="line">method.setAccessible(true)</span><br><span class="line">val exception: Exception = assertThrows(InvocationTargetException::class.java) &#123;</span><br><span class="line">    method.invoke(domainService, domainName)</span><br><span class="line">&#125;</span><br><span class="line">Assertions.assertThat(exception.cause!!.javaClass).isEqualTo(DomainException::class.java)</span><br></pre></td></tr></table></figure>
@@ -742,7 +742,7 @@
               
                 <a href="/want/archives/">
               
-                  <span class="site-state-item-count">55</span>
+                  <span class="site-state-item-count">58</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -822,7 +822,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">120.5k</span>
+    <span title="Site words total count">143.2k</span>
   
 </div>
 

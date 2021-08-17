@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/want/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/want/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/want/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/want/images/favicon-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/want/images/favicon-16x16.png?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="简介Knot ，High-performance authoritative-only DNS server BIND VS Knot DNS - compare differences &amp;amp; reviews? (saashub.com)  一个开源DNS软件   The first public release of Knot DNS (0.8) was published in 2011">
+<meta property="og:type" content="article">
+<meta property="og:title" content="knotdns">
+<meta property="og:url" content="https://echowant.github.io/want/2021/07/26/knotdns/index.html">
+<meta property="og:site_name" content="不周山">
+<meta property="og:description" content="简介Knot ，High-performance authoritative-only DNS server BIND VS Knot DNS - compare differences &amp;amp; reviews? (saashub.com)  一个开源DNS软件   The first public release of Knot DNS (0.8) was published in 2011">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="c:/Users/Lenovo/AppData/Roaming/Typora/typora-user-images/image-20210802113606027.png">
+<meta property="og:image" content="c:/Users/Lenovo/AppData/Roaming/Typora/typora-user-images/image-20210805110115421.png">
+<meta property="og:image" content="c:/Users/Lenovo/AppData/Roaming/Typora/typora-user-images/image-20210805110820737.png">
+<meta property="og:updated_time" content="2021-08-17T06:32:08.232Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="knotdns">
+<meta name="twitter:description" content="简介Knot ，High-performance authoritative-only DNS server BIND VS Knot DNS - compare differences &amp;amp; reviews? (saashub.com)  一个开源DNS软件   The first public release of Knot DNS (0.8) was published in 2011">
+<meta name="twitter:image" content="c:/Users/Lenovo/AppData/Roaming/Typora/typora-user-images/image-20210802113606027.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/want/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://echowant.github.io/want/2021/07/26/knotdns/">
+
+
+
+
+
+  <title>knotdns | 不周山</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/want/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">不周山</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Keep It Simple Stupid</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/want/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/want/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/want/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/want/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://echowant.github.io/want/want/2021/07/26/knotdns/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="luxia">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/want/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="不周山">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">knotdns</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-07-26T17:31:29+08:00">
+                2021-07-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/want/2021/07/26/knotdns/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/want/2021/07/26/knotdns/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/want/2021/07/26/knotdns/" class="leancloud_visitors" data-flag-title="knotdns">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  7.9k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>Knot ，High-performance authoritative-only DNS server</p>
+<p><a href="https://www.saashub.com/compare-bind-vs-knot-dns?ref=dropdown" target="_blank" rel="noopener">BIND VS Knot DNS - compare differences &amp; reviews? (saashub.com)</a></p>
+<ol>
+<li>一个开源DNS软件</li>
+</ol>
+<ul>
+<li>The first public release of Knot DNS (0.8) was published in <strong>2011</strong></li>
+</ul>
+<ol start="2">
+<li><p>号称第3个支持完全RFC标准的DNS服务器(另外2个为: BIND &amp; NSD)</p>
+<ul>
+<li><p>more speed, less memory used, better security</p>
+</li>
+<li><p>由运营 .CZ 顶级域名的团队 CZ.NIC（捷克） 创建，Knot DNS 也为 .CZ TLD 提供支持</p>
+</li>
+</ul>
+</li>
+<li><p>一个高性能的权威 DNS 服务器</p>
+<ul>
+<li>3500K的QPS</li>
+<li>每秒处理超过 50 万个查询</li>
+<li>内存使用量保持在 BIND 9 以下</li>
+<li>knot 3.0.0开始 支持 高性能XDP (AF_XDP) 模式, 可以显着提高 UDP 响应性能,但是需升级内核到 4.18.x(推荐使用 5.x 内核).</li>
+<li>Knot 利用 userspace-rcu 库(Linux Kernel Read-Copy-Update (RCU) 用户空间实现版本) 技术消耗更多的内存来加速DNS响应:</li>
+</ul>
+</li>
+</ol>
+<p>授权协议: GPL / 操作系统: Linux / 开发语言: C</p>
+<p>Both Knot DNS / Knot Resolver are <strong>open source</strong> and are completely <strong>free to download and use</strong>. The source code is available under <strong>GPL license</strong>.</p>
+<p>Knot Resolver 是一个缓存 DNS 解析器，可以加速和保护 Linux 工作站上的 DNS 解析。</p>
+<p>日志：<a href="http://dnstap.info/" target="_blank" rel="noopener">dnstap</a></p>
+<p> Catalog Zones:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">knot DNS has processing of DNS Catalog Zones since Knot DNS Version 3.0.0, which was released on September 9, 2020.</span><br></pre></td></tr></table></figure>
+<h3 id="简化的yaml语法："><a href="#简化的yaml语法：" class="headerlink" title="简化的yaml语法："></a>简化的yaml语法：</h3><ol>
+<li>如果value包含空格或其他特殊字符，则需要将value放在双引号””中</li>
+<li>注释<strong>#</strong></li>
+<li>多个值[]</li>
+<li>可在当前文件的顶层引入其他的配置文件<ul>
+<li>文件路径可以是相对、绝对路径</li>
+<li>文件路径可以使用正则表达式，eg. dir/*.conf</li>
+<li><code>include: otherfilepath</code></li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">address: [10.0.0.1, 10.0.0.2]</span><br><span class="line"></span><br><span class="line">或</span><br><span class="line">address: 10.0.0.1</span><br><span class="line">address: 10.0.0.2</span><br></pre></td></tr></table></figure>
+<h3 id="knot-conf文件"><a href="#knot-conf文件" class="headerlink" title="knot.conf文件"></a>knot.conf文件</h3><p>There are 14 fixed sections ，Module sections are prefixed with the <strong>mod-</strong> prefix (e.g. <strong>mod-stats</strong>).</p>
+<p><strong>module</strong>, </p>
+<p><strong>server</strong>,</p>
+<p><strong>key</strong>, </p>
+<p><strong>acl</strong>, </p>
+<p><strong>control</strong>, </p>
+<p><strong>statistics</strong>, </p>
+<p><strong>database</strong>,</p>
+<p><strong>keystore</strong>,</p>
+<p><strong>submission</strong>, </p>
+<p><strong>policy</strong>,</p>
+<p><strong>remote</strong>, </p>
+<p><strong>template</strong>,</p>
+<p> <strong>zone</strong>,</p>
+<p> <strong>log</strong></p>
+<h3 id="沟通交流"><a href="#沟通交流" class="headerlink" title="沟通交流"></a>沟通交流</h3><ol>
+<li>Knot DNS官网<br>–<a href="http://www.knot-dns.cz/" target="_blank" rel="noopener">http://www.knot-dns.cz/</a></li>
+<li>Issue tracking and source code<br>–<a href="https://gitlab.nic.cz/knot/knot-dns" target="_blank" rel="noopener">Knot projects / Knot DNS · GitLab (nic.cz)</a></li>
+<li>Mailing list<br><a href="mailto:knot-dns-users@lists.nic.cz" target="_blank" rel="noopener">knot-dns-users@lists.nic.cz</a></li>
+</ol>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>下载地址：<a href="https://www.knot-dns.cz/download/" target="_blank" rel="noopener">Download – Knot DNS (knot-dns.cz)</a></p>
+<p>安装knot</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/yum.repos.d/</span><br><span class="line"></span><br><span class="line">vim knot.repo</span><br><span class="line">[copr:copr.fedorainfracloud.org:group_cznic:knot-dns-latest]</span><br><span class="line">name=Copr repo for knot-dns-latest owned by @cznic</span><br><span class="line">baseurl=https://download.copr.fedorainfracloud.org/results/@cznic/knot-dns-latest/epel-7-$basearch/</span><br><span class="line">type=rpm-md</span><br><span class="line">skip_if_unavailable=True</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=https://download.copr.fedorainfracloud.org/results/@cznic/knot-dns-latest/pubkey.gpg</span><br><span class="line">repo_gpgcheck=0</span><br><span class="line">enabled=1</span><br><span class="line">enabled_metadata=1</span><br><span class="line"></span><br><span class="line">yum list knot-*</span><br><span class="line"></span><br><span class="line">repotrack knot knot-utils knot-resolver -p /data/knot</span><br><span class="line">(yum install knot knot-utils knot-resolver -y)</span><br><span class="line"></span><br><span class="line">rpm -Uvh --force --nodeps *.rpm</span><br></pre></td></tr></table></figure>
+<p>knot-utils——kdig等</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kdig +short @localhost . NS</span><br></pre></td></tr></table></figure>
+<p>knotdns下载地址</p>
+<p><a href="https://copr-be.cloud.fedoraproject.org/results/%40cznic/knot-dns-latest/" target="_blank" rel="noopener">Index of /results/@cznic/knot-dns-latest/ (copr-be.cloud.fedoraproject.org)</a></p>
+<h4 id="源码安装"><a href="#源码安装" class="headerlink" title="源码安装"></a>源码安装</h4><p>下载地址：<a href="https://www.knot-dns.cz/download" target="_blank" rel="noopener">Download – Knot DNS (knot-dns.cz)</a></p>
+<p>选择SourceCode Tarball</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf knot-3.0.8.tar.xz</span><br><span class="line">configure</span><br><span class="line">make</span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line">#可能需要一些其他的依赖</span><br></pre></td></tr></table></figure>
+<h4 id="centos7在线安装"><a href="#centos7在线安装" class="headerlink" title="centos7在线安装"></a>centos7在线安装</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install knot</span><br></pre></td></tr></table></figure>
+<h4 id="基础配置"><a href="#基础配置" class="headerlink" title="基础配置"></a>基础配置</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">knotd -v #查看版本号</span><br><span class="line"></span><br><span class="line">systemctl enable knot # 开机启动</span><br></pre></td></tr></table></figure>
+<h4 id="master配置"><a href="#master配置" class="headerlink" title="master配置"></a>master配置</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">备份默认配置</span></span><br><span class="line">cat /etc/knot/knot.conf</span><br><span class="line">cp /etc/knot/knot.conf /etc/knot/knot.conf-default</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">去编辑配置文件</span></span><br><span class="line">vim /etc/knot/knot.conf</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">手动生成域名zone文件</span></span><br><span class="line">vim /var/lib/knot/run.com.zone</span><br><span class="line">chown knot:knot run.com.zone</span><br><span class="line">chmod 640 run.com.zone</span><br><span class="line"><span class="meta">#</span><span class="bash">chown root:knot run.com.zone</span></span><br><span class="line">kzonecheck /var/lib/knot/run.com.zone</span><br><span class="line"></span><br><span class="line">systemctl restart knot</span><br><span class="line">systemctl status knot</span><br><span class="line"></span><br><span class="line">kdig @127.0.0.1 dns1.run.com -p 58</span><br><span class="line">kdig @10.154.5.163 dns1.run.com -p 58</span><br><span class="line">kdig dns1.run.com -p 58 #不可执行。。。</span><br></pre></td></tr></table></figure>
+<p>Knot 配置文件 /etc/knot/knot.conf 使用简化的 YAML 格式。缩进4个空格。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> This is a sample of a minimal configuration file <span class="keyword">for</span> Knot DNS.</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> See knot.conf(5) or refer to the server documentation.</span></span><br><span class="line"></span><br><span class="line">server:</span><br><span class="line">    rundir: "/run/knot"</span><br><span class="line">    user: knot:knot #安装Knot时自动创建了用户knot</span><br><span class="line">    listen: [ 127.0.0.1@53, ::1@53 ]</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> TSIG，keygen 生成</span></span><br><span class="line">key:</span><br><span class="line">  - id: tsigkey1.</span><br><span class="line">    algorithm: hmac-sha256</span><br><span class="line">    secret: base64-keyvalue</span><br><span class="line"></span><br><span class="line">log:</span><br><span class="line">  - target: syslog # syslog，stdout，stderr 或 文件名</span><br><span class="line">    any: info</span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="built_in">log</span>:</span></span><br><span class="line"><span class="meta">#</span><span class="bash">  - target: stdout</span></span><br><span class="line"><span class="meta">#</span><span class="bash">    any: debug</span></span><br><span class="line"></span><br><span class="line">database:</span><br><span class="line">    storage: "/var/lib/knot"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">  authorized slaves ，定义备机</span></span><br><span class="line"><span class="meta">#</span><span class="bash">请注意，master接受多个remote列表。第一个remote具有最高优先级，其他remote用于故障转移。当服务器从列出的远程接收区域update通知时，该远程将是后续传输的首选。</span></span><br><span class="line">remote:</span><br><span class="line">  - id: slave1</span><br><span class="line">    address: 192.168.1.1@53</span><br><span class="line">    key: tsigkey1.</span><br><span class="line">  - id: slave2</span><br><span class="line">    address: 192.168.2.1@53</span><br><span class="line">    key: tsigkey1.</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> the server<span class="string">'s access control lists (ACLs),若无ACL规则，则zone的所有行为都被拒绝</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 如果一个zone配置了多个acl,以第一个acl优先级最高</span></span><br><span class="line">acl:</span><br><span class="line">  - id: acl_axfr</span><br><span class="line">    action: transfer #用于接收来自slave的 AXFR 请求</span><br><span class="line">    key: tsigkey1. #Access based just on TSIG key</span><br><span class="line">  - id: acl_upme</span><br><span class="line">    address: 127.0.0.0/24</span><br><span class="line">    action: update #促进源自本地主机的 nsupdate 请求</span><br><span class="line">    key: tsigkey1.</span><br><span class="line">  - id: acl_primary</span><br><span class="line">    address: [ 127.0.0.0/24, 172.28.1.20 ]</span><br><span class="line">    action: [transfer, notify]</span><br><span class="line">  - id: deny_rule</span><br><span class="line">    address: 192.168.2.100</span><br><span class="line">    action: transfer #no action specified and deny on implies denial of all actions</span><br><span class="line">    deny: on </span><br><span class="line">  - id: owner_type_rule</span><br><span class="line">    action: update</span><br><span class="line">    update-type: [A, AAAA, MX] # Updates are only allowed to update records of the specified types</span><br><span class="line">    update-owner: name         # The allowed owners are specified by the list on the next line</span><br><span class="line">    update-owner-name: [a, b.example.com.] # Non-FQDN names are relative to the effective zone name</span><br><span class="line">    update-owner-match: equal  # The owners of records in an update must be exactly equal to the names in the list</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">可以添加多个模板。模板必须存在于 knot.conf 中，否则Knot启动时报错。</span></span><br><span class="line">template:</span><br><span class="line">  - id: default</span><br><span class="line">    storage: "/var/lib/knot"</span><br><span class="line">    file: "%s.zone"</span><br><span class="line">  - id: slave</span><br><span class="line">    storage: "/var/lib/knot/slave"</span><br><span class="line"></span><br><span class="line">zone:</span><br><span class="line"><span class="meta">#</span><span class="bash">    <span class="comment"># Primary zone</span></span></span><br><span class="line">  - domain: example.com</span><br><span class="line">  	file: "cpu-chow-local.zone" #可以没有file，若有，不允许是路径（template提供路径）</span><br><span class="line">    notify: slave1</span><br><span class="line">    acl: acl_axfr</span><br><span class="line">	acl: acl_upme</span><br><span class="line"><span class="meta">#</span><span class="bash">	template: template-id <span class="comment">#可以手动指定template</span></span></span><br><span class="line">	semantic-checks: on #语义检查，对zone文件进行额外的语法检查</span><br><span class="line">	disable-any: on #a -t ANY query to prevent DNS zone-reflection attacks</span><br><span class="line">    serial-policy: increment #确保动态更新将触发zone的序列号增量。</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">    <span class="comment"># Secondary zone</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash">  - domain: example.net</span></span><br><span class="line"><span class="meta">#</span><span class="bash">    master: primary</span></span><br><span class="line"><span class="meta">#</span><span class="bash">    acl: acl_primary</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> Configuration <span class="built_in">export</span> (Knot DNS 3.0.8)</span></span><br><span class="line"></span><br><span class="line">server:</span><br><span class="line">    rundir: "/run/knot"</span><br><span class="line">    user: "knot:knot"</span><br><span class="line">    listen: [ "127.0.0.1@53", "100.71.9.148@53", "100.73.9.148@53" ]</span><br><span class="line">    tcp-workers: 100</span><br><span class="line">    background-workers: 100</span><br><span class="line">    udp-workers: 100</span><br><span class="line">log:</span><br><span class="line">  - target: "syslog"</span><br><span class="line">    any: "info"</span><br><span class="line"></span><br><span class="line">database:</span><br><span class="line">    storage: "/var/lib/knot/confdb"</span><br><span class="line"></span><br><span class="line">mod-stats:</span><br><span class="line">  - id: custom</span><br><span class="line">    request-protocol: on</span><br><span class="line">    server-operation: on</span><br><span class="line">    request-bytes: off</span><br><span class="line">    response-bytes: off</span><br><span class="line"><span class="meta">#</span><span class="bash">    edns-presence: on</span></span><br><span class="line"><span class="meta">#</span><span class="bash">    flag-presence: on</span></span><br><span class="line">    response-code: on</span><br><span class="line"><span class="meta">#</span><span class="bash">    request-edns-option: on</span></span><br><span class="line"><span class="meta">#</span><span class="bash">    response-edns-option: on</span></span><br><span class="line">    reply-nodata: on</span><br><span class="line">    query-type: on</span><br><span class="line"><span class="meta">#</span><span class="bash">    query-size: on</span></span><br><span class="line"><span class="meta">#</span><span class="bash">    reply-size: on</span></span><br><span class="line"></span><br><span class="line">statistics:</span><br><span class="line">    timer: 1</span><br><span class="line">    file: "/var/lib/knot/stats.yaml"</span><br><span class="line">    append: on</span><br><span class="line"></span><br><span class="line">template:</span><br><span class="line">  - id: "default"</span><br><span class="line">    storage: "/var/lib/knot"</span><br><span class="line">    file: "%s.zone"</span><br><span class="line">    global-module: mod-stats/custom</span><br><span class="line"></span><br><span class="line">zone:</span><br><span class="line">  - domain: "yx1.com."</span><br><span class="line"></span><br><span class="line">  - domain: "example.com."</span><br><span class="line"></span><br><span class="line">  - domain: "mascotdokky.com."</span><br></pre></td></tr></table></figure>
+<h4 id="slave配置"><a href="#slave配置" class="headerlink" title="slave配置"></a>slave配置</h4><p>第二个 Knot 实例，需要创建第二个运行目录和存储位置。</p>
+<p>利用/usr/sbin/knotc来启动运行指定配置文件的实例</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/usr/sbin/knotc -c config-file [ command ]</span><br><span class="line">/usr/sbin/knotc -c /etc/knot/slave.conf</span><br><span class="line">/usr/sbin/knotd -c /etc/knot/knot.conf</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">启动、停服</span></span><br><span class="line">knotd -d -c /etc/knot/knot.conf</span><br><span class="line">knotc -c knot.conf stop</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /run/snot /var/lib/snot</span><br><span class="line">chown knot:knot /run/snot /var/lib/snot</span><br><span class="line">chmod 755 /run/snot /var/lib/snot</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/knot/slave.conf</span><br><span class="line"></span><br><span class="line">server:</span><br><span class="line">    listen: slaveIp@53</span><br><span class="line">    user: knot:knot</span><br><span class="line">    rundir: /run/snot</span><br><span class="line"></span><br><span class="line">key:</span><br><span class="line">  - id: tsigkey1.</span><br><span class="line">    algorithm: hmac-sha256</span><br><span class="line">    secret: base64-keyvalue</span><br><span class="line"></span><br><span class="line">template:</span><br><span class="line">  - id: default</span><br><span class="line">    storage: /var/lib/snot</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">slave必须设置。</span></span><br><span class="line">remote:</span><br><span class="line">  - id: master1 #自定义</span><br><span class="line">    address: 127.0.0.9@53</span><br><span class="line">    key: tsigkey1.</span><br><span class="line"></span><br><span class="line">acl:</span><br><span class="line">  - id: notify_from_master</span><br><span class="line">    address: 主机ip</span><br><span class="line">    action: notify #</span><br><span class="line">    key: tsigkey1.</span><br><span class="line"></span><br><span class="line">log:</span><br><span class="line">  - target: stdout</span><br><span class="line">    any: debug</span><br><span class="line"></span><br><span class="line">zone:</span><br><span class="line">  - domain: example.com</span><br><span class="line">    master: master1 #masterId</span><br><span class="line">    acl: notify_from_master</span><br></pre></td></tr></table></figure>
+<h4 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail -f /var/log/syslog</span><br></pre></td></tr></table></figure>
+<p>### </p>
+<h3 id="GeoIP"><a href="#GeoIP" class="headerlink" title="GeoIP"></a>GeoIP</h3><p>您想为世界各地的许多客户提供您的网站 <a href="http://www.example.com。您可以将站点数据存储在单个服务器上，供所有客户端访问。或者，您可能将站点的多个副本存储在世界各地的多个数据服务器上。" target="_blank" rel="noopener">www.example.com。您可以将站点数据存储在单个服务器上，供所有客户端访问。或者，您可能将站点的多个副本存储在世界各地的多个数据服务器上。</a></p>
+<p>当客户端请求服务器的 IP 地址时，选择离客户端最近的服务器，从而节省路由时间并最大程度地减少延迟不是很好吗？</p>
+<p>BIND、PowerDNS 和 Knot DNS等DNS 服务器中的 GeoIP，就是一种可以做到这一点的机制。</p>
+<h4 id="Knot-DNS的GeoIP模块"><a href="#Knot-DNS的GeoIP模块" class="headerlink" title="Knot DNS的GeoIP模块"></a>Knot DNS的GeoIP模块</h4><p>两种不同的运行模式：</p>
+<ol>
+<li>subnet模式：在子网模式下，根据client源地址是属于 IPv4 还是 IPv6 地址的特定子网来选择适当的响应。不需要任何外部数据库，使用较为简单。</li>
+<li>geodb模式：在 geodb 模式下，根据client地址关联的地理数据进行响应，这些数据是从一个 MaxMind 格式的外部 GeoIP 数据库中检索的，例如 GeoIP2 或免费的 GeoLite2。根据数据库，或模块的配置情况，响应的选择可以考虑客户的大陆、经济、城市、自治系统编号 (ASN)、互联网服务提供商 (ISP) 等因素。</li>
+</ol>
+<p>GeoIP模块支持DNSSEC。</p>
+<h4 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h4><ol>
+<li><p>为了测试geodb模式，需要下载解压免费的<a href="http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz" target="_blank" rel="noopener">GeoLite2 City</a>数据库。</p>
+</li>
+<li><p>vim example.com.zone</p>
+</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash">ORIGIN example.com.</span></span><br><span class="line"><span class="meta">$</span><span class="bash">TTL 3600</span></span><br><span class="line">@    SOA    dns1.example.com. hostmaster.example.com. (</span><br><span class="line">            2010111213  ; serial</span><br><span class="line">            6h          ; refresh</span><br><span class="line">            1h          ; retry</span><br><span class="line">            1w          ; expire</span><br><span class="line">            1d )        ; minimum</span><br><span class="line"></span><br><span class="line">     NS     dns1</span><br><span class="line">dns1 A      192.0.2.1</span><br><span class="line">www  A      203.0.113.50</span><br><span class="line">     TXT    "default server"</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>配置文件</li>
+</ol>
+<pre class="mermaid">graph TB
+A(配置文件) --主配置-->B(/etc/knot/knot.conf)
+A --subnet mode--> C(net.conf)
+A --geodb mode--> D(geo.conf)</pre>
+
+<h5 id="knot-conf"><a href="#knot-conf" class="headerlink" title="knot.conf"></a>knot.conf</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">server:</span><br><span class="line">    listen: 127.0.0.1@53</span><br><span class="line">    edns-client-subnet: on #启用 EDNS 客户端子网选项</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 子网模式</span></span><br><span class="line">mod-geoip:</span><br><span class="line">  - id: net </span><br><span class="line">    config-file: "/path/to/net.conf"</span><br><span class="line">    mode: subnet</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> geodb模式</span></span><br><span class="line">mod-geoip:</span><br><span class="line">  - id: geo </span><br><span class="line">    config-file: "/path/to/geo.conf"</span><br><span class="line">    mode: geodb</span><br><span class="line">    geodb-file: "/path/to/GeoLite2-City.mmdb"</span><br><span class="line">    geodb-key: [country/iso_code, city/names/en] #specifies a list of database keys，据此返回合适的response。Here we use the client’s economy referred to by its ISO code, and if available, their city specified by its name in English (note that the order in which the keys are given is important).</span><br><span class="line"></span><br><span class="line">zone:</span><br><span class="line">  - domain: example.com.</span><br><span class="line">    file: "/path/to/example.com.zone"</span><br><span class="line">    module: mod-geoip/net</span><br><span class="line">    module: mod-geoip/geo</span><br></pre></td></tr></table></figure>
+<h5 id="net-conf"><a href="#net-conf" class="headerlink" title="net.conf"></a>net.conf</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">www.example.com: </span><br><span class="line">  - net: 192.0.2.0/24 </span><br><span class="line">    A: 192.0.2.50 </span><br><span class="line">  - net: 198.51.100.0/24 </span><br><span class="line">    A: 198.51.100.50</span><br></pre></td></tr></table></figure>
+<p>如果客户端从 192.0.2.0-192.0.2.255 范围内的地址查询域 <a href="http://www.example.com" target="_blank" rel="noopener">www.example.com</a> 的 A 记录，Knot 将响应 192.0.2.50，类似地使用第二个选项。如果客户端从其他地址发送查询，将收到来自 example.com 区域的默认的A记录返回值。</p>
+<h5 id="geo-conf"><a href="#geo-conf" class="headerlink" title="geo.conf"></a>geo.conf</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">www.example.com: </span><br><span class="line">  - geo: &quot;CZ;Prague&quot; </span><br><span class="line">    A: 192.0.2.0 </span><br><span class="line">    TXT: &quot;Prague&quot; </span><br><span class="line">  - geo: &quot;CZ;Brno&quot; </span><br><span class="line">    A: 192.0.2.1 </span><br><span class="line">    TXT: &quot;Brno&quot;</span><br><span class="line">  - geo: &quot;CZ;*&quot;</span><br><span class="line">    A: 192.0.2.2</span><br><span class="line">    TXT: &quot;Czechia&quot;</span><br></pre></td></tr></table></figure>
+<p>如果客户从Prague或Brno查询，将要返回指定的 A 和 TXT 记录。如果客户在捷克共和国CZ上述两个城市之外的地方进行查询，则适用第三个选项。 * 代表“任何城市”。最后，如果客户端从其他地方查询，则返回区域中的默认记录。</p>
+<p>启动项目：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl start knot</span><br><span class="line">或</span><br><span class="line">knotd -c /etc/knot/knot.conf</span><br></pre></td></tr></table></figure>
+<p>子网模式示例</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kdig @127.0.0.1 A www.example.com +subnet=192.0.2.66</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">得到192.0.2.50 </span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">+subnet:specify different <span class="built_in">source</span> addresses and</span></span><br></pre></td></tr></table></figure>
+<p>geodb模式示例</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kdig @127.0.0.1 TXT www.example.com +subnet=88.146.42.14</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">得到Brno</span></span><br></pre></td></tr></table></figure>
+<h3 id="Knot-Resolver"><a href="#Knot-Resolver" class="headerlink" title="Knot Resolver"></a>Knot Resolver</h3><p> DNS 缓存解析器（caching DNS resolver）,可以帮助加速、保证安全的DNS解析。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kresd -h</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">默认监察localhost:53端口（通过kresd.conf修改ip:port），且一核cpu</span></span><br><span class="line">systemctl start kresd@1.service #single instance of kresd, responding on localhost</span><br><span class="line">systemctl status kresd@1.service</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">开启及重启（reboot后启动）</span></span><br><span class="line">systemctl enable --now kresd@1.service</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">使用手册</span></span><br><span class="line">man kresd.systemd</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">多核cpu-start和<span class="built_in">enable</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash">如果您希望 kresd 在共享cache和sockets的同时利用所有可用内核的优势，您应该启用和启动与内核数量一样多的 kresd@.service 实例。</span></span><br><span class="line"><span class="meta">#</span><span class="bash">通常，每个实例都只是命名为 kresd@N.service，其中 N 是十进制数。例如，启用和启动 3 个并发守护进程</span></span><br><span class="line">systemctl start kresd@1.service kresd@2.service kresd@3.service</span><br><span class="line">systemctl enable --now kresd@1.service kresd@2.service kresd@3.service</span><br><span class="line"><span class="meta">#</span><span class="bash">或者，bash &#123;&#125;批量start / <span class="built_in">enable</span></span></span><br><span class="line">systemctl enable --now kresd@&#123;1..4&#125;.service</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">或者批量start所有的enabled kresd daemons</span></span><br><span class="line">systemctl start kresd.target</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">The systemd-managed kresd service <span class="built_in">set</span> is grouped <span class="keyword">in</span> the system-kresd.slice slice.  The slice includes all running daemons (instances of kresd@.service).</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">多核restart (这个glob表达式不能用在start或<span class="built_in">enable</span>上)</span></span><br><span class="line">systemctl restart 'kresd@*'</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">systemd 管理的 kresd 服务集合 利用 system-kresd.slice 切片进行分组</span></span><br><span class="line"><span class="meta">#</span><span class="bash">该切片包括所有正在运行的守护进程（kresd@.service 的实例）。</span></span><br></pre></td></tr></table></figure>
+<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/knot-resolver/kresd.conf</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">示例文件/usr/share/doc/knot-resolver-5.3.2/examples/</span></span><br><span class="line"></span><br><span class="line">-- SPDX-License-Identifier: CC0-1.0</span><br><span class="line">-- vim:syntax=lua:set ts=4 sw=4:</span><br><span class="line">-- Refer to manual: https://knot-resolver.readthedocs.org/en/stable/</span><br><span class="line"></span><br><span class="line">-- Network interface configuration</span><br><span class="line">net.listen('127.0.0.1', 58, &#123; kind = 'dns' &#125;)</span><br><span class="line">net.listen('127.0.0.1', 853, &#123; kind = 'tls' &#125;)</span><br><span class="line">--net.listen('127.0.0.1', 443, &#123; kind = 'doh2' &#125;)</span><br><span class="line">--net.listen('::1', 58, &#123; kind = 'dns', freebind = true &#125;)</span><br><span class="line">--net.listen('::1', 853, &#123; kind = 'tls', freebind = true &#125;)</span><br><span class="line">--net.listen('::1', 443, &#123; kind = 'doh2' &#125;)</span><br><span class="line"></span><br><span class="line">-- Load useful modules</span><br><span class="line">modules = &#123;</span><br><span class="line">        'hints &gt; iterate',  -- Load /etc/hosts and allow custom root hints</span><br><span class="line">        'stats',            -- Track internal statistics</span><br><span class="line">        'predict',          -- Prefetch expiring/frequent records</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-- Cache size</span><br><span class="line">cache.size = 100 * MB</span><br></pre></td></tr></table></figure>
+<p>##### </p>
+<blockquote>
+<p>两种DNS加密协议：</p>
+<p>DoT：DNS-over-TLS， TCP port 853</p>
+<p>DoH：DNS-over-HTTPS</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">net.listen(&apos;192.0.2.1&apos;) # 53port,udp,unencrypted DNS queries</span><br><span class="line">net.listen(&apos;2001:db8::1&apos;)</span><br><span class="line">net.listen(net.eth0, 853, &#123; kind = &apos;tls&apos; &#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="区域传输"><a href="#区域传输" class="headerlink" title="区域传输"></a>区域传输</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@fnc05 knot]# keymgr -t key_knsupdate</span><br><span class="line"># hmac-sha256:key_knsupdate:LNL9O44NLCGmSkvUH6IIF/7lljBpB2j0kkkbdB33xhA=</span><br><span class="line">key:</span><br><span class="line">  - id: key_knsupdate</span><br><span class="line">    algorithm: hmac-sha256</span><br><span class="line">    secret: LNL9O44NLCGmSkvUH6IIF/7lljBpB2j0kkkbdB33xhA=</span><br></pre></td></tr></table></figure>
+<h3 id="动态更新"><a href="#动态更新" class="headerlink" title="动态更新"></a>动态更新</h3><p>动态更新是临时的（until the server stop）！！！</p>
+<p>要想持久化，必须使用指定的配置database或者初始化默认database。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">knotc conf-init</span><br></pre></td></tr></table></figure>
+<p>Knot DNS 使用zone parser（ Ragel 编写）来实现启动时快速加载zones。</p>
+<h4 id="knotc"><a href="#knotc" class="headerlink" title="knotc"></a>knotc</h4><p>Knot DNS 使用“knotc”来动态的更改配置文件并重新加载服务器，以达到动态添加和删除区域的目的。</p>
+<p>conf配置文件操作</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">knotc conf-init</span><br><span class="line">knotc conf-import /etc/knot/knot.conf （-f 会强制覆盖既有data.mdb。 从conf导出到data.mdb）</span><br><span class="line">knotc conf-export output.conf (从data.mdb导出到output.conf)</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop knotc</span><br><span class="line"></span><br><span class="line">knotc conf-import /etc/knot/knot.conf （-f）</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">生成了/var/lib/knot/confdb</span></span><br><span class="line"></span><br><span class="line">chown knot:knot /var/lib/knot/confdb -R</span><br><span class="line"></span><br><span class="line">systemctl start knotc</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这个配置数据库mdb，无法打开。</p>
+<p>利用mdbtools工具：mdb-tables data.mdb 报错 File does not appear to be an Access database</p>
+<p>利用windows的excel和access都打开失败。</p>
+<p>目前只能： knotc conf-import conf  =》 data.mdb</p>
+<p>然后要看的时候，再从data.mdb =》 conf文件，进行查阅</p>
+</blockquote>
+<h5 id="conf操作"><a href="#conf操作" class="headerlink" title="conf操作"></a>conf操作</h5><p>对conf文件的操作</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">knotc conf-init # 初始化,生成目录文件/var/lib/knot/confdb/data.mdb和/var/lib/knot/confdb/lock.mdb</span><br><span class="line">knotc conf-import knont.conf # con =&gt; db</span><br><span class="line">knotc conf-export knont.conf # db =&gt; conf,得到knont.conf文件</span><br></pre></td></tr></table></figure>
+<h5 id="zone操作"><a href="#zone操作" class="headerlink" title="zone操作"></a>zone操作</h5><h6 id="动态增加want-com示例"><a href="#动态增加want-com示例" class="headerlink" title="动态增加want.com示例"></a>动态增加want.com示例</h6><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@fnc05 knot]# knotc conf-begin</span><br><span class="line">OK</span><br><span class="line">[root@fnc05 knot]# knotc conf-set 'zone[want.com]'</span><br><span class="line">OK</span><br><span class="line">[root@fnc05 knot]# knotc conf-diff</span><br><span class="line">+zone.domain = want.com.</span><br><span class="line">[root@fnc05 knot]# knotc conf-commit</span><br><span class="line">OK</span><br><span class="line">[root@fnc05 knot]# knotc conf-read 'zone.domain'</span><br><span class="line">zone.domain = lu.org.</span><br><span class="line">zone.domain = run.com.</span><br><span class="line">zone.domain = want.com.</span><br><span class="line">zone.domain = example.com.</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">knotc conf-set 'zone[catalog.default].catalog-role' 'interpret'</span><br><span class="line">knotc conf-set 'zone[catalog.default].catalog-template' 'default'</span><br><span class="line"></span><br><span class="line">zone:</span><br><span class="line">  - domain: "catalog.default."</span><br><span class="line">    notify: "slave"</span><br><span class="line">    acl: [ "acl_update", "acl_slave" ]</span><br><span class="line">    semantic-checks: "on"</span><br><span class="line">    catalog-role: "interpret"</span><br><span class="line">    catalog-template: "default"</span><br></pre></td></tr></table></figure>
+<h6 id="动态删除want-com示例"><a href="#动态删除want-com示例" class="headerlink" title="动态删除want.com示例"></a>动态删除want.com示例</h6><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@fnc05 knot]# knotc conf-begin</span><br><span class="line">OK</span><br><span class="line">[root@fnc05 knot]# knotc conf-unset 'zone[want.com]'</span><br><span class="line">OK</span><br><span class="line">[root@fnc05 knot]# knotc conf-diff</span><br><span class="line">-zone.domain = want.com.</span><br><span class="line">[root@fnc05 knot]# knotc conf-commit</span><br><span class="line">OK</span><br><span class="line">[root@fnc05 knot]# knotc conf-read 'zone.domain'</span><br><span class="line">zone.domain = lu.org.</span><br><span class="line">zone.domain = run.com.</span><br><span class="line">zone.domain = example.com.</span><br></pre></td></tr></table></figure>
+<h6 id="安全增删zone"><a href="#安全增删zone" class="headerlink" title="安全增删zone"></a>安全增删zone</h6><p>安全修改zone文件的方法是<strong>首先冻结zone events)</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">knotc -b zone-freeze example.com.</span><br><span class="line">knotc -b zone-flush example.com. #刷新zone文件,对zone调用freeze后，可能还有zone操作（例如signing）在运行，导致冻结挂起。因此，使用阻塞模式来确保操作完成。然后可以将该zone刷新到文件中。</span><br><span class="line"></span><br><span class="line">vim example.com.zone #修改文件</span><br><span class="line"></span><br><span class="line">knotc -b zone-reload example.com. #load被修改的zone</span><br><span class="line">knotc zone-thaw example.com. #解冻</span><br></pre></td></tr></table></figure>
+<h6 id="zone文件-增删解析记录"><a href="#zone文件-增删解析记录" class="headerlink" title="zone文件-增删解析记录"></a>zone文件-增删解析记录</h6><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">knotc conf-begin</span><br><span class="line">knotc conf-set 'zone[yun.com]'</span><br><span class="line">knotc conf-diff</span><br><span class="line">knotc conf-commit</span><br><span class="line">knotc conf-read 'zone.domain'</span><br><span class="line"></span><br><span class="line">vim /var/lib/knot/want.com.zone或者动态添加zone——</span><br><span class="line"><span class="meta">#</span><span class="bash">真正产生zone文件</span></span><br><span class="line">knotc zone-begin yun.com</span><br><span class="line">knotc zone-set yun.com @ 7200 SOA ns1 grover.yun.com. 1 86400 900 691200 3600</span><br><span class="line">knotc zone-set yun.com @ 3600 NS ns1</span><br><span class="line">knotc zone-set yun.com ns1 3600 A 1.1.1.2</span><br><span class="line">knotc zone-set yun.com @ 3600 A 1.1.1.3</span><br><span class="line">knotc zone-set yun.com www 3600 A 1.1.1.4</span><br><span class="line">knotc zone-diff yun.com</span><br><span class="line">knotc zone-commit yun.com</span><br><span class="line"></span><br><span class="line">knotc zone-abort yun.com #终止</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">kdig @127.0.0.1 www.yun.com -p 58 +short</span><br><span class="line">kdig @127.0.0.1 www.yx1.com -p 58 +short</span><br><span class="line">cd /var/lib/knot</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">校验</span></span><br><span class="line">knotc zone-check example.com</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">获取每个zone文件的SOA情况</span></span><br><span class="line">knotc zone-read -- @ SOA</span><br><span class="line"></span><br><span class="line">knotc zone-read --</span><br><span class="line">knotc zone-read example.com</span><br><span class="line">knotc zone-read example.com ns1</span><br><span class="line">knotc zone-read example.com ns1 NS</span><br><span class="line">knotc zone-read example.com dns1 A</span><br></pre></td></tr></table></figure>
+<h6 id="修改解析记录"><a href="#修改解析记录" class="headerlink" title="修改解析记录"></a>修改解析记录</h6><p>增加2条新记录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> knsupdate</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> server 192.168.1.1</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> zone example.com.</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> origin example.com.</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> ttl 3600</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> add test1.example.com. 7200 A 192.168.2.2</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> add test2 TXT <span class="string">"hello"</span></span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> show</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> send</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> answer</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> quit</span></span><br></pre></td></tr></table></figure>
+<p>虽然可以动态更改大多数配置参数或通过配置文件重新加载，但部分服务器中的一些参数需要重新启动服务器，以便更改生效。这些参数是：rundir、user、pidfile、tcp-reuseport、udp-workers、tcp-workers、background-workers 和 listen。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">获取当前服务配置</span></span><br><span class="line">knotc conf-read server</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">重载所有配置</span></span><br><span class="line">knotc reload</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">获取当zones列表</span></span><br><span class="line">knotc conf-read zone.domain</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">获取 lu.com 区域的master</span></span><br><span class="line">knotc conf-read 'zone[lu.com].master'</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">动态添加zone</span></span><br><span class="line">knotc conf-begin #开始</span><br><span class="line"></span><br><span class="line">knotc conf-set 'zone[lu.org]'</span><br><span class="line">knotc conf-set 'zone[lu.org].file' '/var/zones/example.org.zone'</span><br><span class="line">knotc conf-set 'server.identity' 'Knot DNS'</span><br><span class="line">knotc conf-set 'server.listen' '0.0.0.0@53' '::@53'</span><br><span class="line">knotc conf-set 'zone[example.com]'</span><br><span class="line">knotc conf-set 'zone.slave' 'slave2'</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">取消配置</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> knotc conf-unset</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> knotc conf-unset <span class="string">'zone'</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> knotc conf-unset <span class="string">'zone[example.com]'</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> knotc conf-unset <span class="string">'zone[example.com].master'</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> knotc conf-unset <span class="string">'zone[example.com].master'</span> <span class="string">'remote2'</span> <span class="string">'remote5'</span></span></span><br><span class="line"></span><br><span class="line">knotc conf-commit #结束</span><br><span class="line">knotc conf-abort #放弃</span><br></pre></td></tr></table></figure>
+<h3 id="主从同步"><a href="#主从同步" class="headerlink" title="主从同步"></a>主从同步</h3><p><a href="https://datatracker.ietf.org/doc/draft-ietf-dnsop-dns-catalog-zones/" target="_blank" rel="noopener">draft-ietf-dnsop-dns-catalog-zones-02 - DNS Catalog Zones</a></p>
+<p><strong>kcatalogprint</strong> utility is provided to manage the catalog.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">warning: [yun.com.] notify, outgoing, remote 10.154.5.162@58, server responded with error 'NOTAUTH'</span><br></pre></td></tr></table></figure>
+<h3 id="性能测试"><a href="#性能测试" class="headerlink" title="性能测试"></a>性能测试</h3><p><a href="https://zh.omatomeloanhikaku.com/how-to-choose-the-best-and-fastest-alternative-dns-server-12236" target="_blank" rel="noopener">如何选择最佳（和最快）备用DNS服务器 - 如何 - 2021 (omatomeloanhikaku.com)</a></p>
+<p><a href="https://zhangyu.guru/performancetesting/2019/04/13/a-byte-of-performance-testing/" target="_blank" rel="noopener">压力测试简介 (zhangyu.guru)</a></p>
+<p>windows <a href="https://www.grc.com/dns/benchmark.htm" target="_blank" rel="noopener">GRC’s | DNS Nameserver Performance Benchmark</a></p>
+<ol>
+<li>缓存的查询–返回解析器名称缓存中已经存在的域名的时间。</li>
+<li>未缓存的查询–返回尚未在解析器的名称缓存中的子域名的时间。</li>
+<li>Dotcom查找–为域名服务商咨询域名服务器选择的dotcom解析器的时间。</li>
+</ol>
+<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20210802113606027.png" alt="image-20210802113606027"></p>
+<p>并发用户数、响应时间、系统吞吐量间的关系。</p>
+<p>负载的执行时间、传输速度、吞吐量、资源占用率</p>
+<p>QPS（TPS）= 并发数/平均响应时间 或者 并发数 = QPS*平均响应时间</p>
+<ul>
+<li><p>首先需要明确系统的关键指标， 如：</p>
+<ul>
+<li>DNS服务每秒可以响应20W个查询请求</li>
+<li>95%的查询请求响应时间在5ms以内</li>
+<li>当请求量达到25W每秒时，其中的20W请求能正确处理，响应时间波动在5%以内</li>
+</ul>
+<p>其次需要明确资源限制，如：</p>
+<ul>
+<li>硬件：如网口速率，CPU核心数，内存大小，是否SSD，交换机速率等</li>
+<li>OS：如内核版本，是否支持zero copy，是否支持bbr等</li>
+<li>应用软件：如asyncio，coroutine，GIL，是否采用DPDK等</li>
+</ul>
+<p>接下来就需要定义压测的场景，如：</p>
+<ul>
+<li>A类内部DNS请求场景</li>
+<li>A类转发外部DNS请求场景</li>
+<li>AAAA类内部DNS请求场景</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li>基准测试：许多DNS提供商都专注于速度，只有运行基准测试才能告诉您哪种方法最适合您。</li>
+</ol>
+<ol>
+<li>后端性能测试（Back-end Performance Test）<ol>
+<li>性能测试工具模拟大量的并发用户请求，然后获取系统性能的各项指标</li>
+<li>并发用户数、响应时间和系统吞吐量外，还包括各类资源的使用率，比如系统级别的CPU占用率、内存使用率、磁盘I/O和网络I/O等，再比如应用级别以及JVM级别的各类资源使用率指标等。</li>
+<li>模拟的并发用户数，通常在「几百」到「几百万」的数量级，所以选择的性能测试工具，一定不是基于GUI的，而是要采用基于协议的模拟方式，也就是去模拟用户在GUI操作的过程中实际向后端服务发起的请求。</li>
+</ol>
+</li>
+<li>前端性能测试（Front-end Performance Test）</li>
+<li>代码级性能测试（Code-level Performance Test）</li>
+<li>压力测试（Load/Stress Test）<ol>
+<li>一般采用后端性能测试的方法，不断对系统施加压力，并验证系统化处于或长期处于临界饱和阶段的稳定性以及性能指标，并试图找到系统处于临界状态时的主要瓶颈点。所以，压力测试往往被用于系统容量规划的测试。</li>
+</ol>
+</li>
+<li>配置测试（Configuration Test）<ol>
+<li>通过性能基准测试（Performance Benchmark）建立性能基线（Performance Baseline）</li>
+<li>在此基础上，调整配置</li>
+<li>基于同样的性能基准测试，观察不同配置条件下系统性能的差异，根本目的是要找到特定压力模式下的最佳配置。<ol>
+<li>宿主操作系统的配置；</li>
+<li>应用服务器的配置</li>
+<li>数据库的配置</li>
+<li>JVM的配置</li>
+<li>网络环境的配置</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>并发测试（Concurrence Test）</li>
+<li>以及可靠性测试（Reliability Test）</li>
+</ol>
+<p>600万qps</p>
+<p>2s</p>
+<p><strong>生成queries.txt文件</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat want.com.zone  | awk &quot;&#123;print \$1,\$3&#125;&quot; | grep -E &quot;(NS|DS|A|AAAA|PTR|MX|SOA)$&quot; | sort -u -R &gt; queries.txt</span><br></pre></td></tr></table></figure>
+<p><strong>dnsperf测试</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dnsperf -c 1000 -d ./queries.txt -p 58 -s 10.144.85.96</span><br><span class="line">dnsperf -c 1000 -d ./130w.txt -p 58 -s 10.154.5.163</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">-s     用来指定DNS服务器的IP地址，默认值是127.0.0.1</span><br><span class="line">-p     用来指定DNS服务器的端口，默认值是53</span><br><span class="line">-d     用来指定DNS消息的内容文件，该文件中包含要探测的域名和资源记录类型，见下文</span><br><span class="line">-t     用来指定每个请求的超时时间，默认值是3000ms</span><br><span class="line">-Q     用来指定本次压测的最大请求数，默认值是1000 (-q: 请求多少次)</span><br><span class="line">-c     用来指定并发探测数，默认值是100. dnsperf会从-d指定的文件中随机选取100个座位探测域名来发送DNS请求.</span><br><span class="line">-l     用来指定本次压测的时间，默认值是无穷大。</span><br><span class="line">-e     本选项通过EDNS0，在OPT资源记录中运用edns-client-subnet来指定真实的client ip. </span><br><span class="line"></span><br><span class="line">-P     指定用哪个传输层协议发送DNS请求，udp或者tcp。默认值是udp</span><br><span class="line">-f     指定用什么地址类型发送DNS请求，inet或者inet6。默认值是inet</span><br><span class="line">-v     除了标准的输出外，还输出每个相应码的个数。</span><br><span class="line">-h     打印帮助</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">  - domain: &quot;yx1.com.&quot;</span><br><span class="line"></span><br><span class="line">  - domain: &quot;want.com.&quot;</span><br><span class="line">  </span><br><span class="line">www.yx1.com A</span><br><span class="line">www.example.com A</span><br><span class="line">host1.example.com A</span><br><span class="line">www.mascotdokky.com A</span><br></pre></td></tr></table></figure>
+<p><strong>kxdpgun Linux kernel 4.18+ is required.</strong></p>
+<p><a href="https://www.knot-dns.cz/docs/latest/html/man_kxdpgun.html" target="_blank" rel="noopener">kxdpgun – DNS benchmarking tool — Knot DNS 3.1.0 documentation (knot-dns.cz)</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kxdpgun -t 120 -Q 6000000 -i ./queries.txt -b 5 -r -p 58 10.144.85.96</span><br></pre></td></tr></table></figure>
+<p>the famous Winston Churchill’s quote may have come to your mind: “<strong>I only believe in statistics that I doctored myself</strong>“</p>
+<p>通过具有10GbE网络连接的UDP每秒的峰值响应数超过50万。</p>
+<p>We discovered one important thing while benchmarking DNS: <strong>the network card chipset</strong> can make a huge difference. As a rule of thumb, <strong>the Intel server NIC chipsets</strong> are never a bad choice.</p>
+<p>网络芯片，导致巨大的差异。根据经验，英特尔服务器NIC芯片组从来都不是一个坏的选择。</p>
+<p><a href="https://gitlab.nic.cz/knot/dns-benchmarking/-/tree/master" target="_blank" rel="noopener">Files · master · Knot projects / dns-benchmarking · GitLab (nic.cz)</a></p>
+<h6 id="PF-RING"><a href="#PF-RING" class="headerlink" title="PF_RING"></a>PF_RING</h6><p>提高数据包捕获速度。高速数据包捕获库,通过它可以实现将通用 PC 计算机变成一个有效且便宜的<strong>网络测量工具箱</strong>,进行数据包和现网流量的分析和操作。</p>
+<p>现状：CPU的多数时间都被用在把网卡接收到的数据包经过内核的数据结构队列发送到用户空间的过程中。也就是说是从<strong>网卡–&gt;内核</strong>， 再从<strong>内核–&gt;用户空间</strong>，这两个步骤，花去了大量CPU时间，从而导致没有其他时间用来进行数据包的进一步处理。在传输过程中<code>sk_buff</code>结构的多次拷贝，以及涉及用户空间和内核空间的反复系统调用极大的限制了接收报文的效率，尤其是对小报文的接收影响更为明显。</p>
+<p> PF_RING提出的核心解决方案便是减少报文在传输过程中的拷贝次数。</p>
+<p>robdns using PF_RING seems to be able to deliver about 1 million packets per second <em>per core</em>.</p>
+<p>使用 PF_RING 的 robdns 似乎能够每秒每核传输大约 100 万个数据包。</p>
+<p>查看网卡带宽</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ifconfig</span><br><span class="line">ethtool eth0</span><br><span class="line">ethtool bond1</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">Speed: 1000Mb/s</span></span><br></pre></td></tr></table></figure>
+<p>查看内存RAM</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">free -h</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">376G</span></span><br></pre></td></tr></table></figure>
+<p>查看CPU</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lscpu</span><br></pre></td></tr></table></figure>
+<h6 id="Performance-Tuning"><a href="#Performance-Tuning" class="headerlink" title="Performance Tuning"></a>Performance Tuning</h6><ol>
+<li>UDP workers：handle all network requests coming through UDP  protocol</li>
+<li>TCP workers</li>
+<li>Background workers：used to execute background operations (zone loading, zone updates, etc.)</li>
+</ol>
+<p>默认，Knot通过CPU核数来确定各个workers种类的合适数量（well-fitting）。</p>
+<p>用户可以自定义每个workers 数量，通过配置 configuration/server section: <a href="https://www.knot-dns.cz/docs/2.7/html/reference.html#server-udp-workers" target="_blank" rel="noopener">udp-workers</a>, <a href="https://www.knot-dns.cz/docs/2.7/html/reference.html#server-tcp-workers" target="_blank" rel="noopener">tcp-workers</a>, <a href="https://www.knot-dns.cz/docs/2.7/html/reference.html#server-background-workers" target="_blank" rel="noopener">background-workers</a>.</p>
+<p>当服务器落后于预期性能而 CPU 使用率低时，增加工作线程数：用户应该尝试将（相关类型的）worker 的数量稍微增加到 100 以上，如果性能变得更好，他可以决定进一步的精确设置。</p>
+<p>工具：dnsperf</p>
+<p>自变量：the number  of threads/processes</p>
+<p>因变量：queries per second</p>
+<p>多次迭代获取比较稳定的结果</p>
+<p>运行操作系统：Linux 4.19.25-200.1.el7.bclinux.x86_64</p>
+<p>knotd (Knot DNS), version 3.0.8</p>
+<table>
+<thead>
+<tr>
+<th>number of threads</th>
+<th>qps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20210805110115421.png" alt="image-20210805110115421"></p>
+<p>工具：pcap/tcpreplay based （<a href="https://www.yadifa.eu/benchmark" target="_blank" rel="noopener">Benchmark | YADIFA</a>）</p>
+<p>自变量：qps（queries per second）(每秒查询量)</p>
+<p>因变量：percentage of lost queries （丢失查询的百分比）</p>
+<p><img src="C:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20210805110820737.png" alt="image-20210805110820737"></p>
+<h3 id="Sender"><a href="#Sender" class="headerlink" title="Sender"></a>Sender</h3><ul>
+<li>Server: HP ProLiant DL160 G5</li>
+<li>CPU: 2x Quad core (Intel(R) Xeon(R) CPU E5405 @ 2.00GHz)</li>
+<li>Memory: 4x 4GiB DDR2 (FB-DIMM DDR2 FB-DIMM Synchronous 667 MHz (1.5 ns))</li>
+<li>NIC: Broadcom Corporation NetXtreme BCM5722 Gigabit Ethernet PCI Express</li>
+<li>OS: Ubuntu 12.04 kernel 3.2.0 (minimal server install)</li>
+</ul>
+<h3 id="Receiver"><a href="#Receiver" class="headerlink" title="Receiver"></a>Receiver</h3><ul>
+<li>Server: Supermicro X8DTU</li>
+<li>CPU: 2x Quad core HT enabled (Intel(R) Xeon(R) CPU L5630 @ 2.13GHz)</li>
+<li>Memory: 6x 8GiB (DIMM DDR-3-1333 1066 MHz (0.9 ns))</li>
+<li>NIC: Intel Corporation 82576 Gigabit Network Connection</li>
+<li>OS: Ubuntu 12.04 minimal server install or FreeBSD 8.2</li>
+</ul>
+<ol>
+<li>创建具有6 00万个UDP DNS查询报文的单个PCAP文件。</li>
+<li>在客户端上使用tcpreplay，以预置速率发送一些包 packets 到服务器上</li>
+<li>回复率 = 10万qps * 80%的回复率 = 8万aps(answers per second)</li>
+</ol>
+<h1 id="措施"><a href="#措施" class="headerlink" title="措施"></a>措施</h1><ol>
+<li>应尽量增加worker（相关类型的）的数量略高于100％，如果性能有所提升，再具体设置更细的具体数量。</li>
+<li>升级，使用kxdpgun 发包</li>
+</ol>
+<p>10Gb 以太网是主要瓶颈</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@fnc13 bak]# lspci | grep -i 'eth'</span><br><span class="line">06:00.0 Ethernet controller: Intel Corporation 82599ES 10-Gigabit SFI/SFP+ Network Connection (rev 01)</span><br><span class="line">06:00.1 Ethernet controller: Intel Corporation 82599ES 10-Gigabit SFI/SFP+ Network Connection (rev 01)</span><br><span class="line">16:00.0 Ethernet controller: Broadcom Inc. and subsidiaries NetXtreme BCM5719 Gigabit Ethernet PCIe (rev 01)</span><br><span class="line">16:00.1 Ethernet controller: Broadcom Inc. and subsidiaries NetXtreme BCM5719 Gigabit Ethernet PCIe (rev 01)</span><br><span class="line">16:00.2 Ethernet controller: Broadcom Inc. and subsidiaries NetXtreme BCM5719 Gigabit Ethernet PCIe (rev 01)</span><br><span class="line">16:00.3 Ethernet controller: Broadcom Inc. and subsidiaries NetXtreme BCM5719 Gigabit Ethernet PCIe (rev 01)</span><br><span class="line">81:00.0 Ethernet controller: Intel Corporation 82599ES 10-Gigabit SFI/SFP+ Network Connection (rev 01)</span><br><span class="line">81:00.1 Ethernet controller: Intel Corporation 82599ES 10-Gigabit SFI/SFP+ Network Connection (rev 01)</span><br><span class="line"></span><br><span class="line">扩展10G口，82599ES网卡</span><br></pre></td></tr></table></figure>
+<p>网卡队列数64——是否48个队列最好？The number of nameserver threads/processes was set to 128</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ethtool -S ens5f0</span><br><span class="line">ethtool -S ens4f0</span><br><span class="line">队列数64</span><br></pre></td></tr></table></figure>
+<h6 id="Sysctl-和-NIC-网卡-优化"><a href="#Sysctl-和-NIC-网卡-优化" class="headerlink" title="Sysctl 和 NIC (网卡)优化"></a><strong>Sysctl 和 NIC (网卡)优化</strong></h6><p>如果您的 NIC 驱动程序允许（请参阅 /proc/interrupts ），请手动设置 CPU (/proc/irq/$IRQ/smp_affinity)，以便每个 NIC 通道由唯一的 CPU 内核提供服务。您必须先关闭 irqbalance 服务以避免配置覆盖。</p>
+<p><strong>Configure sysctl：</strong></p>
+<p> <em>/etc/sysctl.conf</em> </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">socket_bufsize=1048576</span><br><span class="line">busy_latency=0</span><br><span class="line">backlog=40000</span><br><span class="line">optmem_max=20480</span><br><span class="line"></span><br><span class="line">net.core.wmem_max     = $socket_bufsize #发送窗口的最大大小</span><br><span class="line">net.core.wmem_default = $socket_bufsize #每一个TCP socket默认的用于TCP发送数据的缓存大小，字节</span><br><span class="line">net.core.rmem_max     = $socket_bufsize #每一个TCP socket最大的接收数据缓的最大存</span><br><span class="line">net.core.rmem_default = $socket_bufsize</span><br><span class="line">net.core.busy_read = $busy_latency</span><br><span class="line">net.core.busy_poll = $busy_latency</span><br><span class="line">net.core.netdev_max_backlog = $backlog</span><br><span class="line">net.core.optmem_max = $optmem_max</span><br></pre></td></tr></table></figure>
+<p>Disable huge pages.</p>
+<p>Configure your CPU to “performance” mode. This can be achieved depending on architecture, e.g. in BIOS, or e.g. configuring /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor to “performance”.</p>
+<p><strong>Tune your NIC device with ethtool:</strong></p>
+<p>网卡修改参数</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ethtool -A $dev autoneg off rx off tx off #自协商传输模式关闭</span><br><span class="line">ethtool -K $dev tso off gro off ufo off</span><br><span class="line">ethtool -G $dev rx 4096 tx 4096</span><br><span class="line">ethtool -C $dev rx-usecs 75</span><br><span class="line">ethtool -C $dev tx-usecs 75</span><br><span class="line">ethtool -N $dev rx-flow-hash udp4 sdfn</span><br><span class="line">ethtool -N $dev rx-flow-hash udp6 sdfn</span><br></pre></td></tr></table></figure>
+<h6 id="DNS-Shotgun"><a href="#DNS-Shotgun" class="headerlink" title="DNS Shotgun"></a>DNS Shotgun</h6><p><a href="https://gitlab.labs.nic.cz/knot/shotgun" target="_blank" rel="noopener">https://gitlab.labs.nic.cz/knot/shotgun</a></p>
+<p><a href="https://ripe79.ripe.net/programme/meeting-plan/dns-wg/" target="_blank" rel="noopener">https://ripe79.ripe.net/programme/meeting-plan/dns-wg/</a></p>
+<ol>
+<li>模拟真实的DNS基准Realistic DNS benchmarking</li>
+<li>新的工具集</li>
+</ol>
+<p>DNS Shotgun操作步骤：</p>
+<p>第1阶段：数据准备 </p>
+<p>第2阶段：流量回复</p>
+<p>第3阶段：绘制漂亮图表</p>
+<p><a href="https://zhuanlan.zhihu.com/p/58896031" target="_blank" rel="noopener">「测试」 - 性能 &amp; 性能测试基本方法 - 未完成 - 知乎 (zhihu.com)</a></p>
+<h3 id="knot-exporter"><a href="#knot-exporter" class="headerlink" title="knot_exporter"></a>knot_exporter</h3><p>rpm -ivh libffi-devel-3.0.13-19.el7.x86_64.rpm</p>
+<p>cd Python-3.6.4/</p>
+<p> make &amp;&amp; make install</p>
+<p>pip3 install psutil -i <a href="http://pypi.douban.com/simple/" target="_blank" rel="noopener">http://pypi.douban.com/simple/</a> –trusted-host pypi.douban.com</p>
+<p>python3 -m pip install –upgrade –force pip</p>
+<p> python3 -m pip install –upgrade –force pip -i <a href="http://pypi.douban.com/simple/" target="_blank" rel="noopener">http://pypi.douban.com/simple/</a> –trusted-host pypi.douban.com</p>
+<p> pip3 install libknot -i <a href="http://pypi.douban.com/simple/" target="_blank" rel="noopener">http://pypi.douban.com/simple/</a> –trusted-host pypi.douban.com</p>
+<p>pip3 install prometheus_client -i <a href="http://pypi.douban.com/simple/" target="_blank" rel="noopener">http://pypi.douban.com/simple/</a> –trusted-host pypi.douban.com</p>
+<p> ./knot_exporter –knot-library-path /usr/lib64/libknot.so.11 –web-listen-addr 100.71.9.148</p>
+<h3 id="日志-1"><a href="#日志-1" class="headerlink" title="日志"></a>日志</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kjournalprint -l 5 /var/lib/knot/journal groverchou.com</span><br></pre></td></tr></table></figure>
+<h3 id="响应限速"><a href="#响应限速" class="headerlink" title="响应限速"></a>响应限速</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rate-limit 100; # 限制响应100qps以内</span><br><span class="line"> rate-limit-slip 2;</span><br></pre></td></tr></table></figure>
+<p><a href="https://jpmens.net/2013/03/12/knot-dns-dynamic-updates-and-a-bit-of-rrl/" target="_blank" rel="noopener">Jan-Piet Mens :: Knot-DNS: Dynamic Updates and a bit of RRL (jpmens.net)</a></p>
+<h3 id="tcpreplay"><a href="#tcpreplay" class="headerlink" title="tcpreplay"></a>tcpreplay</h3><p>tcpreplay 用于重放 UDP 流量、速率、 数据包总量。</p>
+<p>在高速率下 tcpreplay 不会 有足够的分辨率来每秒输出请求的数据包，这会导致 X 轴上的条带。相信这对实验影响不大 虽然无法测试中间利率</p>
+<p>抓包</p>
+<p>准备一个 pcap 文件 （UDP IPv4 queries is prepared）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">tcpdump udp -i bond0.1209 -n  -w dump-ip.pcap -v</span><br><span class="line">-i #是指定要抓取的网卡</span><br><span class="line">-w #指定结果保存的位置</span><br><span class="line"></span><br><span class="line">kdig @100.71.9.148 www.yx1.com -p 53 +short</span><br><span class="line">kdig @100.71.9.148 host1.example.com -p 53 +short</span><br><span class="line">kdig @100.71.9.148 www.mascotdokky.com -p 53 +short</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">使用tcpprep区分client和server端，生成cache文件。</span></span><br><span class="line">tcpprep -a client -i dump-ip.pcap -o dump-ip.cache</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">生成目的端口为80的报文缓存文件</span></span><br><span class="line">tcpprep -i dump-ip.pcap -o dump-ip.cache -p 80</span><br></pre></td></tr></table></figure>
+<p> 对包文件进行改写：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">tcprewrite -e 192.85.1.2:192.85.2.2 </span><br><span class="line">--enet-dmac=00:15:17:2b:ca:14,00:15:17:2b:ca:15 </span><br><span class="line">--enet-smac=00:10:f3:19:79:86,00:10:f3:19:79:87 </span><br><span class="line">-c test.cache</span><br><span class="line">-i test.tcpdump </span><br><span class="line">-o 1.pcap</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">把报文的端口修改为80-&gt;8080</span></span><br><span class="line">tcprewrite -r 80:8080 -i dump-ip.pcap -o dump-ip-test.pcap</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tcpreplay-edit #直接回放编辑后的报文，不生成中间文件</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tcpliveplay was designed to work only with TCP connections, as this is</span><br><span class="line">where client is required to send to the server data relevant for its</span><br><span class="line">responses (in regards to SEQ &amp; ACK numbers). This is not needed for UDP.</span><br></pre></td></tr></table></figure>
+<p>该软件默认是线速发包，试验发现会有错误的包和乱序的包。配置为1000个包/s时，不会失序。</p>
+<p>推测失序原因：在高速发包时，特别依赖于网卡，只要网卡有抖动，可能会导致client端和服务器端发送的包在通过DUT时，排序有问题。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">tcpreplay -i bond0.1209 -l 0 -p 100 dump-ip.pcap </span><br><span class="line">tcpreplay -i bond0.1209 -I bond0.1209 -p 1000 -c dump-ip.cache  dump-ip.pcap</span><br><span class="line">tcpreplay -i bond0.1209 -I bond0.1209 -l 0 -p 1000 -c dump-ip.cache  dump-ip.pcap</span><br><span class="line"></span><br><span class="line">tcpreplay-edit --unique-ip -l 1000 -M 1000 -i bond0.1209 dump-ip.pcap</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">以最快的速度循环播放1000次</span></span><br><span class="line">tcpreplay -i bond0.1209 -t -K -l 1000 -M 1000  dump-ip.pcap</span><br><span class="line"><span class="meta">#</span><span class="bash">或者以每秒 100 个数据包的速率继续重播一分钟：</span></span><br><span class="line">tcpreplay -i bond0.1209 -K --pps 100 --duration 60  dump-ip.pcap</span><br><span class="line"></span><br><span class="line">tcpreplay-edit --unique-ip -l 1000 -M 1000 -i bond0.1209 dump-ip.pcap</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">-i : 设置报文回放的出端口，即报文是从这台linux的哪个端口出去的。</span><br><span class="line">-l : 设置报文回放的次数， 1 即为一次， 0 为不断循环回放。</span><br><span class="line">-p: 设置报文回放的速度，每秒多少个包，这里设置为100即为每秒回放100个包。</span><br><span class="line">最后的为指定回放的是哪个pcap 报文。</span><br><span class="line"> </span><br><span class="line">-K的作用就是将数据包预先读取到内存中.发出数据包时就可以不受硬盘读写速度的限制，保证较为稳定的流量。</span><br><span class="line"></span><br><span class="line">由于内存的限制，不可能将很大的PCAP文件读取到内存中，我们可以利用tcpreplay-edit的loop功能配合一些选项，让数据包不断循环回放，从而达到延长测试时间的目的。</span><br><span class="line"></span><br><span class="line">-unique-ip的作用是每一次循环回放时，都修改数据包中的IP地址，从而形成新的流。-l是循环回放PCAP文件。</span><br></pre></td></tr></table></figure>
+<h3 id="DNSSEC"><a href="#DNSSEC" class="headerlink" title="DNSSEC"></a>DNSSEC</h3><h3 id="reuseport"><a href="#reuseport" class="headerlink" title="reuseport"></a>reuseport</h3><p>reuseport是一种套接字复用机制，它允许你将多个套接字bind在同一个IP地址/端口对上，这样一来，就可以建立多个服务来接受到同一个端口的连接。<br>using reuseport for UDP<br>2021-08-06T14:22:32+0800 info: <strong>binding to interface</strong> 127.0.0.1@58<br>2021-08-06T14:22:32+0800 info: <strong>binding to interface</strong> 10.154.5.163@58<br>2021-08-06T14:22:32+0800 info: <strong>binding to interface</strong> ::1@58</p>
+<p>对于不同的内核，处理机制是不一样的，总的说来，reuseport分为两种模式，即热备份模式和负载均衡模式，在早期的内核版本中，即便是加入对reuseport选项的支持，也仅仅为热备份模式，而在3.9内核之后，则全部改为了负载均衡模式，两种模式没有共存</p>
+<p><a href="https://blog.groverchou.com/2020/08/10/Knot-DNS-使用教程/" target="_blank" rel="noopener">Knot DNS 使用教程 (groverchou.com)</a></p>
+<p><a href="https://blog.csdn.net/force_eagle/article/details/108821280" target="_blank" rel="noopener">knot DNS 01 Tips_奋斗中拥有-CSDN博客</a></p>
+<p><a href="https://www.haiyun.me/archives/1398.html" target="_blank" rel="noopener">ubuntu安装Knot 域名权威Authoritative DNS服务器配置ddns动态更新ip - 海运的博客 (haiyun.me)</a></p>
+<p><a href="https://www.linuxjournal.com/content/knot-dns-one-tame-and-sane-authoritative-dns-server" target="_blank" rel="noopener">Knot DNS: One Tame and Sane Authoritative DNS Server | Linux Journal</a></p>
+<p><a href="https://blog.apnic.net/2018/11/14/geoip-in-knot-dns-2-7/" target="_blank" rel="noopener">GeoIP in Knot DNS 2.7 | APNIC Blog</a></p>
+<p><a href="https://www.ctrl.blog/entry/knot-dns-resolver-tutorial.html" target="_blank" rel="noopener">Get faster and more secure DNS resolution with Knot Resolver on Fedora (ctrl.blog)</a></p>
+<p><a href="https://dnsmonitor.com/dns-tutorial-1-the-basics/#Top_1" target="_blank" rel="noopener">DNS Tutorial part 1 – DNS basics – DNS monitor</a></p>
+<p>统计</p>
+<p><a href="https://fossies.org/linux/knot/src/knot/modules/stats/stats.rst" target="_blank" rel="noopener">Knot DNS: src/knot/modules/stats/stats.rst | Fossies</a></p>
+
+      
+    </div>
+	
+	<div>
+	  
+		<div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">
+		-------------Keep It Simple Stupid-------------
+		</div>
+    
+</div>
+	  
+	</div>
+	
+    
+    
+    
+	
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/want/2021/07/07/lvs/" rel="next" title="lvs">
+                <i class="fa fa-chevron-left"></i> lvs
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/want/2021/07/30/DNS/" rel="prev" title="DNS">
+                DNS <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/want/images/avatar.jpg" alt="luxia">
+            
+              <p class="site-author-name" itemprop="name">luxia</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/want/archives/">
+              
+                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/want/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#简化的yaml语法："><span class="nav-number">2.</span> <span class="nav-text">简化的yaml语法：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#knot-conf文件"><span class="nav-number">3.</span> <span class="nav-text">knot.conf文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#沟通交流"><span class="nav-number">4.</span> <span class="nav-text">沟通交流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装"><span class="nav-number">5.</span> <span class="nav-text">安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#源码安装"><span class="nav-number">5.1.</span> <span class="nav-text">源码安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#centos7在线安装"><span class="nav-number">5.2.</span> <span class="nav-text">centos7在线安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基础配置"><span class="nav-number">5.3.</span> <span class="nav-text">基础配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#master配置"><span class="nav-number">5.4.</span> <span class="nav-text">master配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#slave配置"><span class="nav-number">5.5.</span> <span class="nav-text">slave配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#日志"><span class="nav-number">5.6.</span> <span class="nav-text">日志</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GeoIP"><span class="nav-number">6.</span> <span class="nav-text">GeoIP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Knot-DNS的GeoIP模块"><span class="nav-number">6.1.</span> <span class="nav-text">Knot DNS的GeoIP模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实验"><span class="nav-number">6.2.</span> <span class="nav-text">实验</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#knot-conf"><span class="nav-number">6.2.1.</span> <span class="nav-text">knot.conf</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#net-conf"><span class="nav-number">6.2.2.</span> <span class="nav-text">net.conf</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#geo-conf"><span class="nav-number">6.2.3.</span> <span class="nav-text">geo.conf</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Knot-Resolver"><span class="nav-number">7.</span> <span class="nav-text">Knot Resolver</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置"><span class="nav-number">7.1.</span> <span class="nav-text">配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#区域传输"><span class="nav-number">8.</span> <span class="nav-text">区域传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态更新"><span class="nav-number">9.</span> <span class="nav-text">动态更新</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#knotc"><span class="nav-number">9.1.</span> <span class="nav-text">knotc</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#conf操作"><span class="nav-number">9.1.1.</span> <span class="nav-text">conf操作</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#zone操作"><span class="nav-number">9.1.2.</span> <span class="nav-text">zone操作</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#动态增加want-com示例"><span class="nav-number">9.1.2.1.</span> <span class="nav-text">动态增加want.com示例</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#动态删除want-com示例"><span class="nav-number">9.1.2.2.</span> <span class="nav-text">动态删除want.com示例</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#安全增删zone"><span class="nav-number">9.1.2.3.</span> <span class="nav-text">安全增删zone</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#zone文件-增删解析记录"><span class="nav-number">9.1.2.4.</span> <span class="nav-text">zone文件-增删解析记录</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#修改解析记录"><span class="nav-number">9.1.2.5.</span> <span class="nav-text">修改解析记录</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主从同步"><span class="nav-number">10.</span> <span class="nav-text">主从同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#性能测试"><span class="nav-number">11.</span> <span class="nav-text">性能测试</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#PF-RING"><span class="nav-number">11.0.0.1.</span> <span class="nav-text">PF_RING</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Performance-Tuning"><span class="nav-number">11.0.0.2.</span> <span class="nav-text">Performance Tuning</span></a></li></ol></li></ol><li class="nav-item nav-level-3"><a class="nav-link" href="#Sender"><span class="nav-number">12.</span> <span class="nav-text">Sender</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Receiver"><span class="nav-number">13.</span> <span class="nav-text">Receiver</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#措施"><span class="nav-number"></span> <span class="nav-text">措施</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Sysctl-和-NIC-网卡-优化"><span class="nav-number">0.0.0.1.</span> <span class="nav-text">Sysctl 和 NIC (网卡)优化</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#DNS-Shotgun"><span class="nav-number">0.0.0.2.</span> <span class="nav-text">DNS Shotgun</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#knot-exporter"><span class="nav-number">1.</span> <span class="nav-text">knot_exporter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志-1"><span class="nav-number">2.</span> <span class="nav-text">日志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#响应限速"><span class="nav-number">3.</span> <span class="nav-text">响应限速</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tcpreplay"><span class="nav-number">4.</span> <span class="nav-text">tcpreplay</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DNSSEC"><span class="nav-number">5.</span> <span class="nav-text">DNSSEC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reuseport"><span class="nav-number">6.</span> <span class="nav-text">reuseport</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">luxia</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">143.2k</span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize("");
+    }
+  </script>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/want/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/want/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/want/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/want/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/want/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/want/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/want/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: true,
+        notify: true,
+        appId: 'h9Jehf4VaeDG22nDbzEpkHnt-gzGzoHsz',
+        appKey: 'GPvy0xbbxNb0Ao6DM6oRFSoG',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/want/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('-1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("h9Jehf4VaeDG22nDbzEpkHnt-gzGzoHsz", "GPvy0xbbxNb0Ao6DM6oRFSoG");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+  	 <!-- custom analytics part create by lux -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("h9Jehf4VaeDG22nDbzEpkHnt-gzGzoHsz", "GPvy0xbbxNb0Ao6DM6oRFSoG");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = $(document.getElementById(url)).text() + ': 0';
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = $(document.getElementById(url)).text() + ': ' + object.get('time');
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content = $(document.getElementById(url)).text() + ': ' + counter.get('time');
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = $(document.getElementById(url)).text() + ': ' + newcounter.get('time');
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+});
+</script>
+  
+<script src="/want/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/want/live2dw/assets/koharu.model.json"},"display":{"superSample":2,"position":"right","width":100,"height":200,"hOffset":0,"vOffset":160},"mobile":{"show":true,"scale":0.05}});</script></body>
+</html>
